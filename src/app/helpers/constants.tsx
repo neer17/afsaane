@@ -1,1 +1,1 @@
-const APP_NAME = 'Afsaane'
+const APP_NAME = 'Afsaane';

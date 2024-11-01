@@ -1,5 +1,3 @@
-/* NavigationBar.module.css */
-
 .navbar {
   position: fixed;
   top: 0;
@@ -12,7 +10,6 @@
 
 .navbarContainer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 64px;
   padding: 0 16px;
@@ -39,8 +36,15 @@
 }
 
 .brandName {
+  color: black;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.desktopMenu .menuItems {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .mobileMenu {
@@ -101,17 +105,201 @@
 .menuItems {
   display: flex;
   flex-direction: column;
-  margin-top: 16px;
 }
 
 .menuItem {
+  position: relative;
+  display: inline-block;
   padding: 16px;
-  border-bottom: 1px solid #ddd;
   font-size: 1.25rem;
   text-decoration: none;
   color: #333;
+  border: none;
 }
 
-.menuItem:hover {
-  background-color: #f0f0f0;
+.menuItem:hover .underline-animation {
+  width: 100%;
+  left: 0;
+}
+
+.underline-animation {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition:
+    width 0.4s ease,
+    left 0.4s ease;
+}
+
+/* 
+* Desktop
+*/
+@media (min-width: 768px) {
+  .mobileMenuButton {
+    display: none;
+  }
+
+  .mobileMenu {
+    display: none;
+  }
+
+  .desktopMenu {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    align-items: center;
+  }
+
+  /* TODO: The animation form top to bottom sliding is not working */
+  .desktopMenuItemPanel {
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    /* transform: translateY(0px); */
+    transition:
+      max-height 0.5s ease,
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+  .menuItemNameContainer:hover + .desktopMenuItemPanel {
+    max-height: 500px;
+    opacity: 1;
+    /* transform: translateY(20px); */
+  }
+
+  .desktopMenuItemPanel .desktopMenuItemPanelGrid {
+    position: absolute;
+    left: 0;
+    top: 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Four columns */
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto; /* Center content */
+    padding: 20px 20px;
+    background-color: white;
+  }
+  /* Styling for each column */
+  .desktopMenuItemPanel .desktopMenuItemPanelColumn h3 {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #888; /* Light grey for header text */
+    margin-bottom: 10px;
+  }
+
+  .desktopMenuItemPanel .desktopMenuItemPanelColumn ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .desktopMenuItemPanel .desktopMenuItemPanelColumn li {
+    font-size: 16px;
+    margin-bottom: 8px; /* Spacing between list items */
+    color: #333; /* Darker color for list items */
+  }
+
+  /* Image column styling */
+  .desktopMenuItemPanel .desktopMenuItemPanelImageColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .desktopMenuItemPanel .desktopMenuItemPanelFeaturedImage {
+    object-fit: cover;
+  }
+
+  .desktopMenuItemPanel .desktopMenuItemPanelCaption {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+  }
+}
+
+/*
+* Mobile
+*/
+@media (max-width: 767px) {
+  .mobileMenuButton {
+    display: block;
+  }
+  .mobileMenu {
+    display: block;
+  }
+  .desktopMenu {
+    display: none;
+  }
+  .brandName {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mobileMenu .menuItems {
+    overflow-y: auto;
+  }
+
+  .mobileMenuItemExpandablePanel {
+    height: 50vh;
+    margin-top: 20px;
+  }
+
+  .mobileMenuItemExpandablePanel .imagesContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    grid-template-rows: repeat(2, 1fr); /* 2 rows */
+    gap: 10px;
+    justify-items: center; /* Center items horizontally */
+    align-items: center;
+  }
+
+  .mobileMenuItemExpandablePanel .imagesContainer .image {
+    width: 150px;
+    height: 150px;
+    background-color: grey;
+  }
+
+  .mobileMenuItemExpandablePanel .moreFiltersPanel {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns of equal width */
+    gap: 20px; /* Space between columns */
+    padding: 20px;
+  }
+
+  .mobileMenuItemExpandablePanel .moreFiltersPanel .moreFilterContainer h3 {
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  .mobileMenuItemExpandablePanel .moreFiltersPanel .moreFilterContainer h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    width: 50px;
+    height: 1px;
+    background-color: #ccc; /* Line color */
+    margin-left: 10px;
+  }
+
+  .mobileMenuItemExpandablePanel .moreFiltersPanel .moreFilterContainer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobileMenuItemExpandablePanel .moreFiltersPanel .moreFilterContainer li {
+    font-size: 14px;
+    margin-bottom: 5px; /* Space between list items */
+  }
 }
