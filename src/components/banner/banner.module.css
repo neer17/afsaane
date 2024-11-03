@@ -1,0 +1,23 @@
+.bannerContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 48px 24px;
+  margin-bottom: 16px;
+}
+
+.bannerContainer span:last-child {
+  font-size: 48px;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0;
+  color: #111;
+  margin-bottom: 8px;
+  letter-spacing: -0.1rem;
+}
+
+.bannerContainer span:first-child {
+  font-size: 14px;
+  text-align: center;
+  color: #111;
+}
