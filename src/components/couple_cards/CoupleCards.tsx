@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import styles from './coupleCards.module.css';
+import styles from './CoupleCards.module.css';
 
 interface CoupleCardsProps {
   image: string;
