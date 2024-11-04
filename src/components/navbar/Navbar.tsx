@@ -42,7 +42,7 @@ const NavigationBar: React.FC = () => {
     setDesktopMenuItemHovered(menuItemName);
   };
 
-  const handleDesktopMenuItemsMouseOut = (menuItemName: string) => {
+  const handleDesktopMenuItemsMouseOut = () => {
     setDesktopMenuItemHovered(null);
   };
 
@@ -74,7 +74,7 @@ const NavigationBar: React.FC = () => {
                       e.preventDefault();
                       handleDesktopMenuItemsMouseOver(item.name);
                     }}
-                    onMouseLeave={() => handleDesktopMenuItemsMouseOut(item.name)}
+                    onMouseLeave={handleDesktopMenuItemsMouseOut}
                   >
                     <Link href={item.path} className={styles.menuItem}>
                       {item.name}

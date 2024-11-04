@@ -2,7 +2,7 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import Banner from '@/components/banner/banner';
 import Card from '@/components/card/card';
-import CoupleCards from '@/components/couple_cards/CoupleCards';
+import CoupleCards from '@/components/couple_cards/coupleCards';
 
 export default function Home() {
   return (
