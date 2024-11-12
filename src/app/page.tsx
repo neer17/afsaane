@@ -10,15 +10,14 @@ export default function Home() {
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.textContainer}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae ut nobis repellendus accusamus obcaecati
-          reprehenderit adipisci, esse ea. Omnis magnam iure mollitia repellat, nisi eligendi accusantium! Error similique
-          vel facilis.
+          <span>Long heading about the product</span>
+          <span>Long description about the product. Long description about the product.</span>
         </div>
         <Image
           className={styles.heroImage}
           width={0}
           height={0}
-          src="https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          src="https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2"
           alt="Latest Jewellery Collection"
           sizes="(min-width: 1024px) 50vw, 100vw"
         />

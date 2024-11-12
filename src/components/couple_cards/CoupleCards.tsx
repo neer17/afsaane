@@ -21,7 +21,6 @@ const CoupleCards: React.FC<CoupleCardsProps> = ({ image, altText, texts, doReve
               sizes="(max-width: 767px) 100vw, 50vw"
               width={0}
               height={0}
-              fill
             />
         </div>
       )}
