@@ -1,0 +1,97 @@
+.page {
+  --gray-rgb: 0, 0, 0;
+  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
+  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
+
+  --button-primary-hover: #383838;
+  --button-secondary-hover: #f2f2f2;
+  gap: 64px;
+  padding-top: 65px;
+  font-family: var(--font-geist-sans);
+  background-color: white;
+  color: black;
+}
+
+/* Navbar Section */
+.navbar_container {
+  display: flex;
+  width: 100%;
+}
+
+/* Hero Section */
+.heroSection {
+  display: flex;
+  width: 100%;
+  height: 80vh;
+}
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f7f0ea;
+  text-align: center;
+}
+
+.textContainer span:first-child {
+  font-size: 3rem;
+}
+
+.textContainer span:last-child {
+  font-size: 14px;
+}
+
+.heroImage {
+  flex: 1 1 50%;
+  width: 50%;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.discountContainer {
+  flex: 1 1 50%;
+  height: 100%;
+}
+
+/* Best Sellers Section */
+
+.bestSellersSection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 36px;
+}
+
+.bestSellersSection .cardsContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Variety Section */
+.varietySection {
+  width: 100%;
+}
+
+/* Mobile View */
+@media (max-width: 767px) {
+  .bestSellersSection .cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .heroSection {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .heroImage {
+    flex: 1 1 55%;
+    width: 100vw;
+    height: 100%;
+  }
+
+  .textContainer {
+    flex: 1 1 45%;
+  }
+}
