@@ -3,6 +3,7 @@ import styles from './page.module.css';
 import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 import CoupleCards from '@/components/couple_cards/CoupleCards';
+import DetailCard from '@/components/detail_card/DetailCard';
 
 export default function Home() {
   return (
@@ -39,6 +40,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Variety Section */}
       <section className={styles.varietySection}>
         <CoupleCards
           image="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -71,6 +73,21 @@ export default function Home() {
             'Shop Now',
           ]}
         />
+      </section>
+
+      {/* Gifts Section */}
+      <section className={styles.giftsSection}>
+        <Banner title="Mini reasons to" description="Gift Away" />
+        <div className={styles.giftsCardsContainer}>
+          {[1, 2, 3].map((value) => (
+            <DetailCard
+              key={value}
+              imageSrc="https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2"
+              title="Small Leather Gifts"
+              description="Our accessories are as stylish as they are functional—just another reason to gift Away."
+            />
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -1,13 +1,13 @@
 .cardContainer {
-    flex-basis: 20%;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 2.5rem;
+  flex-basis: 20%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2.5rem;
 }
 
-.imageContainer img{
-    width: 100%;
-    height: auto;
+.imageContainer img {
+  width: 100%;
+  height: auto;
 }
 .textContainer {
   display: flex;
@@ -24,14 +24,14 @@
   width: 100%;
   font-size: 12px;
 }
-@media (max-width: 767px) {
-    .cardContainer {
-        flex-basis: 50%;
-        /* display: flex;
+@media (max-width: 1024px) {
+  .cardContainer {
+    flex-basis: 50%;
+    /* display: flex;
         flex-direction: column;
         padding-bottom: 2.5rem;
         height: 436px; */
-    }
+  }
   .textContainer {
     display: flex;
     flex-direction: column;

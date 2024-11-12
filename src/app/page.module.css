@@ -72,8 +72,22 @@
   width: 100%;
 }
 
+/* Gifts Section */
+.giftsSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.giftsCardsContainer {
+  display: flex;
+}
+
+.giftsCardsContainer > div {
+  margin: 0 16px;
+}
+
 /* Mobile View */
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .bestSellersSection .cardsContainer {
     display: flex;
     flex-wrap: wrap;
@@ -93,5 +107,14 @@
 
   .textContainer {
     flex: 1 1 45%;
+  }
+
+  .giftsCardsContainer {
+    flex-direction: column;
+  }
+
+  .giftsCardsContainer > div {
+    margin: 0;
+    margin-bottom: 1rem;
   }
 }
