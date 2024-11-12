@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import Banner from '@/components/banner/Banner.tsx';
+import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 import CoupleCards from '@/components/couple_cards/CoupleCards';
 
