@@ -4,6 +4,8 @@ import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 import CoupleCards from '@/components/couple_cards/CoupleCards';
 import DetailCard from '@/components/detail_card/DetailCard';
+import Footer from '@/components/footer/Footer';
+import ScrollingText from '@/components/scrolling_banner/ScrollingBanner';
 
 export default function Home() {
   return (
@@ -88,6 +90,26 @@ export default function Home() {
             />
           ))}
         </div>
+      </section>
+
+      {/* Shipping Info Section */}
+      <section className={styles.shippingInfoSection}>
+        <span>Free shipping on all luggage. Designed by travelers, for travelers.</span>
+        <span>
+          We want you to love everything about getting Away—which is why we offer free returns and exchanges on unused items
+          for the first 100 days.
+        </span>
+        <span>Exclusions apply. Learn more</span>
+      </section>
+
+      {/* Scrolling Section */}
+      <section>
+        <ScrollingText/>
+      </section>
+
+      {/* Footer Section */}
+      <section>
+        <Footer />
       </section>
     </div>
   );

@@ -12,6 +12,10 @@
   color: black;
 }
 
+.page section {
+  /* margin-bottom: 1rem; */
+}
+
 /* Navbar Section */
 .navbar_container {
   display: flex;
@@ -86,7 +90,29 @@
   margin: 0 16px;
 }
 
-/* Mobile View */
+/* Shipping Info Section */
+.shippingInfoSection {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  padding: 40px 24px;
+}
+
+.shippingInfoSection span {
+  margin-bottom: 1rem;
+}
+
+.shippingInfoSection span:first-child {
+  font-size: 2rem;
+}
+
+.shippingInfoSection span:last-child {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* iPad View */
 @media (max-width: 1024px) {
   .bestSellersSection .cardsContainer {
     display: flex;
@@ -117,4 +143,8 @@
     margin: 0;
     margin-bottom: 1rem;
   }
+}
+
+/* Mobile View */
+@media (max-width: 767px) {
 }
