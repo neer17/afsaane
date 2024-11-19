@@ -1,0 +1,19 @@
+.productCatalogContainer {
+  background-color: white;
+  margin-top: 72px;
+}
+
+.productsContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.productsContainer > div {
+  max-width: 25vw;
+}
+
+@media (max-width: 1024px) {
+  .productsContainer > div {
+    max-width: 50vw;
+  }
+}

@@ -104,7 +104,7 @@ export default function Home() {
 
       {/* Scrolling Section */}
       <section>
-        <ScrollingText/>
+        <ScrollingText />
       </section>
 
       {/* Footer Section */}

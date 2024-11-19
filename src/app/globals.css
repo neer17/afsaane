@@ -1,11 +1,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* For Swiper.js */
+  --swiper-navigation-size: 16px !important;
+  --swiper-navigation-color: white;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #ffffff;
     --foreground: #ededed;
   }
 }

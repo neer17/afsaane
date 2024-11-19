@@ -9,7 +9,7 @@
 }
 
 .signupContainer {
-  flex: 1 1
+  flex: 1 1;
 }
 
 .signupContainer h3 {
@@ -27,7 +27,7 @@
 .emailAddressContainer input {
   flex: 1 1;
   height: 56px;
-  background-color: #F7F0EA;
+  background-color: #f7f0ea;
   border: 1px solid black;
   padding: 0 1rem;
   margin-bottom: 1rem;
@@ -40,7 +40,6 @@
   color: white;
   border: 0px;
 }
-
 
 .infoContainer > div {
   flex: 1 1;
@@ -60,7 +59,6 @@
   margin-bottom: 1rem;
   font-weight: 400;
 }
-
 
 @media screen and (max-width: 1024px) {
   .footerContainer {
