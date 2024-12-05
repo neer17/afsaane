@@ -1,0 +1,90 @@
+.carouselContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.productCard {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+}
+
+.productImage {
+  width: 80vw;
+  height: 250px;
+  overflow: hidden;
+}
+
+.productImage img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/2;
+  object-fit: cover;
+}
+
+.productInfo {
+  padding: 15px;
+}
+
+.productInfo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.price {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c5282;
+}
+
+/* Swiper custom styles */
+.carouselContainer :global(.swiper-button-next),
+.carouselContainer :global(.swiper-button-prev) {
+  color: #2c5282;
+  background: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.carouselContainer :global(.swiper-button-next::after),
+.carouselContainer :global(.swiper-button-prev::after) {
+  font-size: 18px;
+}
+
+.carouselContainer :global(.swiper-pagination-bullet) {
+  background: #2c5282;
+}
+
+.carouselContainer :global(.swiper-pagination-bullet-active) {
+  background: #2c5282;
+}
+
+.carouselContainer :global(.swiper-scrollbar) {
+  background: rgba(44, 82, 130, 0.1);
+  height: 8px !important;
+  border-radius: 4px;
+  margin-top: 60px;
+}
+
+.carouselContainer :global(.swiper-scrollbar-drag) {
+  background: rgba(44, 82, 130, 0.7);
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.carouselContainer :global(.swiper-scrollbar-drag:active) {
+  cursor: grabbing;
+}

@@ -2,7 +2,7 @@
 const nextConfig = {
   // TODO: remove this later
   images: {
-    domains: ['images.pexels.com'],
+    domains: ['images.pexels.com', 'www.nicobar.com'],
   },
 };
 

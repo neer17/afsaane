@@ -55,7 +55,7 @@
 }
 
 @media (max-width: 1024px) {
-  .swiperContainer div:last-child{
+  .swiperContainer div:last-child {
     width: fit-content;
     margin-right: 8px;
     opacity: 1;
