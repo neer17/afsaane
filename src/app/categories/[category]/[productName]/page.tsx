@@ -24,11 +24,23 @@ export default function ProductDetails() {
     return isProductDetailsExpanded ? 'See less' : 'See more';
   };
 
+  const [isDeliveryAndExchangeExpanded, setIsDeliveryAndExchangeExpanded] = useState<boolean>(false);
+
+  const getDeliveryAndExchangeSeeMoreText = () => {
+    return isDeliveryAndExchangeExpanded ? 'See less' : 'See more';
+  };
+
+  const [isReturnAndExchangeExpanded, setIsReturnAndExchangeExpanded] = useState<boolean>(false);
+
+  const getReturnAndExchangeSeeMoreText = () => {
+    return isReturnAndExchangeExpanded ? 'See less' : 'See more';
+  };
+
   return (
     <div className={styles.productDetailsContainer}>
       <div className={styles.imageAndProductDetails}>
         {/* Will be visible on bigger screens > 1024px */}
-        <div className={styles.imageWrapperForLargerScreens}>
+        <div className={styles.imageContainerOnLargerScreens}>
           <div className={styles.imageContainerOnLargerScreensGrid}>
             {images.slice(0, 2).map((imageSrc) => {
               return (
@@ -93,7 +105,7 @@ export default function ProductDetails() {
               MRP <span>{price}</span> inclusive of all taxes
             </p>
           </div>
-          <div className={styles.relatedDetails}>
+          <div className={styles.colorDetails}>
             <p>
               Color: <span>{colorInfo}</span>
             </p>
@@ -137,10 +149,11 @@ export default function ProductDetails() {
             ))}
           </div>
 
+          {/* Product Details */}
           <div className={styles.productDetails}>
-            <div className={styles.fixedContainer}>
+            <div className={styles.fixedContainer} onClick={() => setIsProductDetailsExpanded(!isProductDetailsExpanded)}>
               <h1 className={styles.productDetailsHeading}>Product Details</h1>
-              <a onClick={() => setIsProductDetailsExpanded(!isProductDetailsExpanded)}>{getProductSeeMoreText()}</a>
+              <span>{getProductSeeMoreText()}</span>
             </div>
 
             <div className={isProductDetailsExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
@@ -162,6 +175,46 @@ export default function ProductDetails() {
               <div className={styles.detailsLabel}>
                 <h1 className={styles.productDetailsHeading}>Care Instructions</h1>
                 <p>Hentle machine wash with similar, do not rinse yada yada yada</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery and Payment */}
+          <div className={styles.productDetails}>
+            <div
+              className={styles.fixedContainer}
+              onClick={() => setIsDeliveryAndExchangeExpanded(!isDeliveryAndExchangeExpanded)}
+            >
+              <h1 className={styles.productDetailsHeading}>Delivery & Payment</h1>
+              <span>{getDeliveryAndExchangeSeeMoreText()}</span>
+            </div>
+
+            <div className={isDeliveryAndExchangeExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
+              <div>
+                <ul>
+                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
+                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Return & Exchange */}
+          <div className={styles.productDetails}>
+            <div
+              className={styles.fixedContainer}
+              onClick={() => setIsReturnAndExchangeExpanded(!isReturnAndExchangeExpanded)}
+            >
+              <h1 className={styles.productDetailsHeading}>Return & Exchange</h1>
+              <span>{getReturnAndExchangeSeeMoreText()}</span>
+            </div>
+
+            <div className={isReturnAndExchangeExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
+              <div>
+                <ul>
+                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
+                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
+                </ul>
               </div>
             </div>
           </div>
