@@ -1,13 +1,16 @@
 .cardContainer {
-  flex-basis: 20%;
+  width: 100%;
+  /* flex-basis: 20%; */
   display: flex;
   flex-direction: column;
-  padding-bottom: 2.5rem;
+  /* padding-bottom: 2.5rem; */
 }
 
 .imageContainer img {
   width: 100%;
   height: auto;
+  border-radius: 2px;
+  overflow: hidden;
 }
 .textContainer {
   display: flex;
@@ -17,7 +20,7 @@
 .productDescription {
   width: 100%;
   font-size: 1rem;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .productPrice {
@@ -26,7 +29,8 @@
 }
 @media (max-width: 1024px) {
   .cardContainer {
-    flex-basis: 50%;
+    width: 100%;
+    /* flex-basis: 50%; */
     /* display: flex;
         flex-direction: column;
         padding-bottom: 2.5rem;
@@ -39,6 +43,6 @@
   }
 
   .productDescription {
-    font-size: 16px;
+    font-size: 1rem;
   }
 }

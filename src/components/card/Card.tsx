@@ -5,19 +5,16 @@ import Image from 'next/image';
 interface CardProps {
   productDescription: string;
   price: number;
+  imageSrc: string;
+  sizes: string;
+  imageName: string;
 }
 
-const Card: React.FC<CardProps> = ({ productDescription, price }) => {
+const Card: React.FC<CardProps> = ({ productDescription, price, imageSrc, sizes, imageName }) => {
   return (
     <div className={styles.cardContainer}>
       <div className={styles.imageContainer}>
-        <Image
-          width={0}
-          height={0}
-          alt="Product Image"
-          src="https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2"
-          sizes="(max-width: 1024px) 50vw, 25vw;"
-        />
+        <Image width={0} height={0} alt={imageName} src={imageSrc} sizes={sizes} />
       </div>
       <div className={styles.textContainer}>
         <div className={styles.productDescription}>{productDescription}</div>

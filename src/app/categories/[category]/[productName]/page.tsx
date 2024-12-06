@@ -8,8 +8,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import CartSVG from '@/app/svgs/cart.svg';
 
-import { images } from '@/app/helpers/constants';
-import Card from '@/components/similar_products/Card';
+import { dummyProducts, images } from '@/app/helpers/constants';
+import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
+import RegularCard from '@/components/card/Card';
+
 const price = 6000;
 const colorInfo = 'Black & Oatmeal Stripes';
 const materialInfo = '100% Organic Cotton Knit';
@@ -26,17 +28,42 @@ export default function ProductDetails() {
     <div className={styles.productDetailsContainer}>
       <div className={styles.imageAndProductDetails}>
         {/* Will be visible on bigger screens > 1024px */}
-        <div className={styles.imageContainerOnLargerScreens}>
-          {images.map((imageSrc) => {
-            return (
-              <div className={styles.imageWrapper} key={imageSrc}>
-                <Image width={0} height={0} sizes="(min-width: 1024px) 100vw, 50vw" alt="Product Image" src={imageSrc} />
+        <div className={styles.imageWrapperForLargerScreens}>
+          <div className={styles.imageContainerOnLargerScreensGrid}>
+            {images.slice(0, 2).map((imageSrc) => {
+              return (
+                <div className={styles.imageWrapperGridItem} key={imageSrc}>
+                  <Image width={0} height={0} sizes="(min-width: 1024px) 100vw, 50vw" alt="Product Image" src={imageSrc} />
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.shippingDetailsOnLargerScreenGrid}>
+            {[
+              { svgSrc: CartSVG, text: 'Easy Returns' },
+              { svgSrc: CartSVG, text: 'Easy Returns' },
+              { svgSrc: CartSVG, text: 'Easy Returns' },
+              { svgSrc: CartSVG, text: 'Easy Returns' },
+            ].map(({ svgSrc, text }) => (
+              <div className={styles.box} key={text}>
+                <Image src={svgSrc} width={20} height={20} alt={text} />
+                <p>{text}</p>
               </div>
-            );
-          })}
+            ))}
+          </div>
+          <div className={styles.imageContainerOnLargerScreensGridSecond}>
+            {images.slice(2, 5).map((imageSrc) => {
+              return (
+                <div className={styles.imageWrapperGridItem} key={imageSrc}>
+                  <Image width={0} height={0} sizes="(min-width: 1024px) 100vw, 50vw" alt="Product Image" src={imageSrc} />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Will be visible for smaller screens < 1024px */}
+        {/* TODO: Make this a type of card */}
         <div className={styles.imageContainerOnSmallScreens}>
           <Swiper spaceBetween={0} slidesPerView={1.1} className={styles.swiperContainer}>
             {images.map((imageSrc, index) => (
@@ -76,6 +103,9 @@ export default function ProductDetails() {
               Material: <span>{materialInfo}</span>
             </p>
           </div>
+
+          {/* Button for larger screens */}
+          <button className={styles.buttonForLargerScreen}>Add to cart</button>
           <div className={styles.deliveryDetails}>
             <div>
               <Image src={CartSVG} width={25} height={25} alt="cart image" />
@@ -137,9 +167,31 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
-      <div className={styles.moreProducts}>
+
+      {/* TODO: Lazy load this */}
+
+      {/* For larger screen */}
+      <div className={styles.moreProductsLargerScreen}>
         <h1>More from this collection</h1>
-        <Card />
+        <div className={styles.moreProductsCardsWrapper}>
+          {images.map((value) => (
+            <div className={styles.moreProductsCardContainer} key="Image name">
+              <RegularCard
+                productDescription="SeggsY tshirt"
+                price={1000}
+                sizes="20vw"
+                imageName="Image name"
+                imageSrc={value}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* For smaller screen */}
+      <div className={styles.moreProductsSmallerScreen}>
+        <h1>More from this collection</h1>
+        <ScrollbarCarouselCards products={dummyProducts} />
       </div>
     </div>
   );

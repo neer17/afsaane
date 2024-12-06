@@ -1,6 +1,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --value: #424954;
+  --label: #565e6a;
+  --buttonBackgroundDark: #2d333d;
 
   /* For Swiper.js */
   --swiper-navigation-size: 16px !important;
