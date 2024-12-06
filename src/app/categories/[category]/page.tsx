@@ -2,14 +2,14 @@ import ProductCard from '@/components/productCard/ProductCard';
 import React from 'react';
 import styles from './page.module.css';
 
-type Props = {
-  params: {
-    dynamicName: string;
-  };
-};
+// type Props = {
+//   params: {
+//     dynamicName: string;
+//   };
+// };
 
-const ProductCatalog = ({ params }: Props) => {
-  const { dynamicName } = params;
+const ProductCatalog = () => {
+  // const { dynamicName } = params;
 
   const products = [
     {
@@ -66,7 +66,7 @@ const ProductCatalog = ({ params }: Props) => {
   return (
     <div className={styles.productCatalogContainer}>
       <div className={styles.productsContainer}>
-        {products.map(({ productTitle, productPrice, imageSizes, imageSrc }, index) => (
+        {products.map(({ productTitle, productPrice, imageSizes}) => (
           <ProductCard
             key={productTitle}
             images={products.map((value) => value.imageSrc)}
