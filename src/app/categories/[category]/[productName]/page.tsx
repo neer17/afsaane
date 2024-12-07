@@ -11,6 +11,7 @@ import CartSVG from '@/app/svgs/cart.svg';
 import { dummyProducts, images } from '@/app/helpers/constants';
 import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
 import RegularCard from '@/components/card/Card';
+import SlidePopup from '@/components/slide_popup/SlidePopup';
 
 const price = 6000;
 const colorInfo = 'Black & Oatmeal Stripes';
@@ -18,6 +19,8 @@ const materialInfo = '100% Organic Cotton Knit';
 const deliveryDate = '2024-11-20';
 
 export default function ProductDetails() {
+  const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
+
   const [isProductDetailsExpanded, setIsProductDetailsExpanded] = useState<boolean>(true);
 
   const getProductSeeMoreText = () => {
@@ -34,6 +37,10 @@ export default function ProductDetails() {
 
   const getReturnAndExchangeSeeMoreText = () => {
     return isReturnAndExchangeExpanded ? 'See less' : 'See more';
+  };
+
+  const handleAddToCart = () => {
+    setShowCartPopup(!showCartPopup);
   };
 
   return (
@@ -117,7 +124,9 @@ export default function ProductDetails() {
           </div>
 
           {/* Button for larger screens */}
-          <button className={styles.buttonForLargerScreen}>Add to cart</button>
+          <button className={styles.buttonForLargerScreen} onClick={handleAddToCart}>
+            Add to cart
+          </button>
           <div className={styles.deliveryDetails}>
             <div>
               <Image src={CartSVG} width={25} height={25} alt="cart image" />
@@ -246,6 +255,9 @@ export default function ProductDetails() {
         <h1>More from this collection</h1>
         <ScrollbarCarouselCards products={dummyProducts} />
       </div>
+
+      {/* Cart popup */}
+      <SlidePopup isOpen={showCartPopup} backdropClickCallback={() => handleAddToCart()} />
     </div>
   );
 }

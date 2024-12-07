@@ -66,7 +66,7 @@ const ProductCatalog = () => {
   return (
     <div className={styles.productCatalogContainer}>
       <div className={styles.productsContainer}>
-        {products.map(({ productTitle, productPrice, imageSizes}) => (
+        {products.map(({ productTitle, productPrice, imageSizes }) => (
           <ProductCard
             key={productTitle}
             images={products.map((value) => value.imageSrc)}

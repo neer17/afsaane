@@ -33,7 +33,14 @@ export default function Home() {
 
         <div className={styles.cardsContainer}>
           {images.map((value) => (
-            <Card key={value} productDescription="SeggsY tshirt" price={1000} sizes="20vw" imageName="Image name" imageSrc={value} />
+            <Card
+              key={value}
+              productDescription="SeggsY tshirt"
+              price={1000}
+              sizes="20vw"
+              imageName="Image name"
+              imageSrc={value}
+            />
           ))}
         </div>
       </section>
