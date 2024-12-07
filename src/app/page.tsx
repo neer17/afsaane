@@ -6,6 +6,7 @@ import CoupleCards from '@/components/couple_cards/CoupleCards';
 import DetailCard from '@/components/detail_card/DetailCard';
 import Footer from '@/components/footer/Footer';
 import ScrollingText from '@/components/scrolling_banner/ScrollingBanner';
+import { images } from './helpers/constants';
 
 export default function Home() {
   return (
@@ -31,13 +32,8 @@ export default function Home() {
         <Banner title="a few of our" description="Favorites" />
 
         <div className={styles.cardsContainer}>
-          {[
-            { title: 'The Bigger Carry-On', price: 2400 },
-            { title: 'The Bigger Carry-On', price: 2400 },
-            { title: 'The Bigger Carry-On', price: 2400 },
-            { title: 'The Bigger Carry-On', price: 2400 },
-          ].map(({ title, price }) => (
-            <Card key={title} productDescription={title} price={price} />
+          {images.map((value) => (
+            <Card key={value} productDescription="SeggsY tshirt" price={1000} sizes="20vw" imageName="Image name" imageSrc={value} />
           ))}
         </div>
       </section>
