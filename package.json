@@ -12,7 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier:fix": "prettier --write .",
+    "prettier:fix": "prettier -c .prettierrc --ignore-path prettier-ignore --write src",
     "prepare": "husky install"
   },
   "dependencies": {

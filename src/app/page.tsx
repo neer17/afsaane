@@ -99,8 +99,8 @@ export default function Home() {
       <section className={styles.shippingInfoSection}>
         <span>Free shipping on all luggage. Designed by travelers, for travelers.</span>
         <span>
-          We want you to love everything about getting Away—which is why we offer free returns and exchanges on unused items
-          for the first 100 days.
+          We want you to love everything about getting Away—which is why we offer free returns and exchanges on unused
+          items for the first 100 days.
         </span>
         <span>Exclusions apply. Learn more</span>
       </section>

@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
 import CartSVG from '@/app/svgs/cart.svg';
+import { useCart } from '@/providers/CartProvider';
 
 interface MenuItem {
   name: string;
@@ -19,6 +20,8 @@ const menuItems: MenuItem[] = [
 ];
 
 const NavigationBar: React.FC = () => {
+  const { cartData, setCartData } = useCart();
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [mobileMenuItemExpanded, setMobileMenuItemExpanded] = useState<string | null>(null);
   const [desktopMenuItemHovered, setDesktopMenuItemHovered] = useState<string | null>(null);
@@ -45,6 +48,12 @@ const NavigationBar: React.FC = () => {
   const handleDesktopMenuItemsMouseOut = () => {
     setDesktopMenuItemHovered(null);
   };
+
+  useEffect(() => {
+    console.info({
+      cartData,
+    });
+  }, [cartData]);
 
   return (
     <>
@@ -132,7 +141,21 @@ const NavigationBar: React.FC = () => {
             </div>
           </div>
 
-          <div className={styles.cartContainer}>
+          <div
+            className={styles.cartContainer}
+            onClick={() => {
+              setCartData((prev) => [
+                ...prev,
+                {
+                  id: Date.now().toString(),
+                  name: 'Test Product',
+                  category: 'Test',
+                  imageUrl: '',
+                  quantity: 1,
+                },
+              ]);
+            }}
+          >
             <Image src={CartSVG} alt="Cart" width={25} height={25} />
           </div>
         </div>

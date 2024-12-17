@@ -46,22 +46,23 @@ function HorizontalScrollText() {
     <div className={styles.wrapper}>
       <p ref={textRef} className={styles.scrollableText}>
         Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling
-        text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
-        Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling
-        text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
-        Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling
-        text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
-        Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling
-        text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
-        Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling
-        text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
-        Your scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
-        scrolling text here. Your scrolling text here. Your scrolling text here.
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here. Your
+        scrolling text here. Your scrolling text here. Your scrolling text here. Your scrolling text here.
       </p>
     </div>
   );

@@ -1,7 +1,7 @@
-// TODO: make a separate component for these iamges os that the page can be SSR
+// TODO: make a separate component for these images so that the page can be SSR
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,36 +12,71 @@ import { dummyProducts, images } from '@/app/helpers/constants';
 import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
 import RegularCard from '@/components/card/Card';
 import SlidePopup from '@/components/slide_popup/SlidePopup';
+import CartProvider, { useCart } from '@/providers/CartProvider';
+import ExpandableContainer from '@/components/containers/ExpandableContainer';
 
 const price = 6000;
 const colorInfo = 'Black & Oatmeal Stripes';
 const materialInfo = '100% Organic Cotton Knit';
 const deliveryDate = '2024-11-20';
 
-export default function ProductDetails() {
-  const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
+type SlidePopupRef = {
+  addDataToCart: (data: { id: number; name: string; quantity: number; category: string; imageUrl: string }) => void;
+};
 
+export default function ProductDetails() {
+  // const { cartData } = useCart();
+  const cartPopupRef = useRef<SlidePopupRef>();
+
+  const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
   const [isProductDetailsExpanded, setIsProductDetailsExpanded] = useState<boolean>(true);
+  const [isDeliveryAndExchangeExpanded, setIsDeliveryAndExchangeExpanded] = useState<boolean>(false);
+  const [isReturnAndExchangeExpanded, setIsReturnAndExchangeExpanded] = useState<boolean>(false);
 
   const getProductSeeMoreText = () => {
     return isProductDetailsExpanded ? 'See less' : 'See more';
   };
 
-  const [isDeliveryAndExchangeExpanded, setIsDeliveryAndExchangeExpanded] = useState<boolean>(false);
-
   const getDeliveryAndExchangeSeeMoreText = () => {
     return isDeliveryAndExchangeExpanded ? 'See less' : 'See more';
   };
-
-  const [isReturnAndExchangeExpanded, setIsReturnAndExchangeExpanded] = useState<boolean>(false);
 
   const getReturnAndExchangeSeeMoreText = () => {
     return isReturnAndExchangeExpanded ? 'See less' : 'See more';
   };
 
   const handleAddToCart = () => {
+    if (!cartPopupRef.current) {
+      // TODO: make this available to use
+      // TODO: better way to log using a lib
+      console.error('cartPopupRef is unavailable');
+      return;
+    }
+
+    if (cartPopupRef.current) {
+      cartPopupRef.current.addDataToCart({
+        id: 1,
+        name: 'blue pottery ring',
+        quantity: 1,
+        category: 'rings',
+        imageUrl: 'asdsadads',
+      });
+
+      // TODO: PWA: add to indexdb
+    }
+
+    toggleCartPopup();
+  };
+
+  const toggleCartPopup = () => {
     setShowCartPopup(!showCartPopup);
   };
+
+  // useEffect(() => {
+  //   console.info({
+  //     cartData,
+  //   });
+  // }, [cartData]);
 
   return (
     <div className={styles.productDetailsContainer}>
@@ -52,7 +87,13 @@ export default function ProductDetails() {
             {images.slice(0, 2).map((imageSrc) => {
               return (
                 <div className={styles.imageWrapperGridItem} key={imageSrc}>
-                  <Image width={0} height={0} sizes="(min-width: 1024px) 100vw, 50vw" alt="Product Image" src={imageSrc} />
+                  <Image
+                    width={0}
+                    height={0}
+                    sizes="(min-width: 1024px) 100vw, 50vw"
+                    alt="Product Image"
+                    src={imageSrc}
+                  />
                 </div>
               );
             })}
@@ -74,7 +115,13 @@ export default function ProductDetails() {
             {images.slice(2, 5).map((imageSrc) => {
               return (
                 <div className={styles.imageWrapperGridItem} key={imageSrc}>
-                  <Image width={0} height={0} sizes="(min-width: 1024px) 100vw, 50vw" alt="Product Image" src={imageSrc} />
+                  <Image
+                    width={0}
+                    height={0}
+                    sizes="(min-width: 1024px) 100vw, 50vw"
+                    alt="Product Image"
+                    src={imageSrc}
+                  />
                 </div>
               );
             })}
@@ -103,8 +150,8 @@ export default function ProductDetails() {
           <div className={styles.productDescription}>
             <h1>Stripefront Sweater - Black & Oatmeal Stripes</h1>
             <h4>
-              Sober and sophisticated in equal measure, the Stripe Front Sweater stands out all day long. Its comfy fit and
-              clean lines can do it all - from a hot drink on a cold night to a sunny afternoon picnic.
+              Sober and sophisticated in equal measure, the Stripe Front Sweater stands out all day long. Its comfy fit
+              and clean lines can do it all - from a hot drink on a cold night to a sunny afternoon picnic.
             </h4>
           </div>
           <div className={styles.priceDetails}>
@@ -124,9 +171,7 @@ export default function ProductDetails() {
           </div>
 
           {/* Button for larger screens */}
-          <button className={styles.buttonForLargerScreen} onClick={handleAddToCart}>
-            Add to cart
-          </button>
+          {/* <AddToCartButton /> */}
           <div className={styles.deliveryDetails}>
             <div>
               <Image src={CartSVG} width={25} height={25} alt="cart image" />
@@ -160,73 +205,49 @@ export default function ProductDetails() {
 
           {/* Product Details */}
           <div className={styles.productDetails}>
-            <div className={styles.fixedContainer} onClick={() => setIsProductDetailsExpanded(!isProductDetailsExpanded)}>
-              <h1 className={styles.productDetailsHeading}>Product Details</h1>
-              <span>{getProductSeeMoreText()}</span>
-            </div>
-
-            <div className={isProductDetailsExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
-              <div>
-                <ul>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                </ul>
-              </div>
-
-              <div className={styles.detailsLabel}>
-                <h1 className={styles.productDetailsHeading}>Size & Fit</h1>
-                <ul>
-                  <li>Fit: Regular</li>
-                  <li>Fit: Regular</li>
-                </ul>
-              </div>
-
-              <div className={styles.detailsLabel}>
-                <h1 className={styles.productDetailsHeading}>Care Instructions</h1>
-                <p>Hentle machine wash with similar, do not rinse yada yada yada</p>
-              </div>
-            </div>
+            <ExpandableContainer
+              title={'Product Details'}
+              contents={[
+                '100% Organic cotton yarn in black and oatmeal keeps you snug',
+                '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+              ]}
+              isExpandable
+              isExpandedInitially
+            >
+              <ExpandableContainer
+                title={'Size & Fit'}
+                contents={['Fit: Slim fit', 'Fit: Regular']}
+                isExpandable={false}
+                isExpandedInitially
+              />
+              <ExpandableContainer
+                title={'Details'}
+                contents={['Gentle wash and care']}
+                isExpandable={false}
+                isExpandedInitially
+              />
+            </ExpandableContainer>
           </div>
 
           {/* Delivery and Payment */}
-          <div className={styles.productDetails}>
-            <div
-              className={styles.fixedContainer}
-              onClick={() => setIsDeliveryAndExchangeExpanded(!isDeliveryAndExchangeExpanded)}
-            >
-              <h1 className={styles.productDetailsHeading}>Delivery & Payment</h1>
-              <span>{getDeliveryAndExchangeSeeMoreText()}</span>
-            </div>
-
-            <div className={isDeliveryAndExchangeExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
-              <div>
-                <ul>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <ExpandableContainer
+            title={'Delivery Details'}
+            contents={[
+              '100% Organic cotton yarn in black and oatmeal keeps you snug',
+              '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+            ]}
+            isExpandable
+          />
 
           {/* Return & Exchange */}
-          <div className={styles.productDetails}>
-            <div
-              className={styles.fixedContainer}
-              onClick={() => setIsReturnAndExchangeExpanded(!isReturnAndExchangeExpanded)}
-            >
-              <h1 className={styles.productDetailsHeading}>Return & Exchange</h1>
-              <span>{getReturnAndExchangeSeeMoreText()}</span>
-            </div>
-
-            <div className={isReturnAndExchangeExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
-              <div>
-                <ul>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                  <li>100% Organic cotton yarn in black and oatmeal keeps you snug and comfy</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <ExpandableContainer
+            title={'Return & Exchange'}
+            contents={[
+              '100% Organic cotton yarn in black and oatmeal keeps you snug',
+              '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+            ]}
+            isExpandable
+          />
         </div>
       </div>
 
@@ -257,7 +278,42 @@ export default function ProductDetails() {
       </div>
 
       {/* Cart popup */}
-      <SlidePopup isOpen={showCartPopup} backdropClickCallback={() => handleAddToCart()} />
+      <CartProvider>
+        <SlidePopup isOpen={showCartPopup} backdropClickCallback={handleAddToCart} ref={cartPopupRef} />
+      </CartProvider>
     </div>
   );
 }
+
+// Components used in the above page
+
+type AddToCartButtonProps = {
+  onClickCallback: () => void;
+};
+const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onClickCallback }) => {
+  'use client';
+
+  const { setCartData } = useCart();
+
+  return (
+    <button
+      className={styles.buttonForLargerScreen}
+      onClick={() => {
+        setCartData((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            name: 'Test Product',
+            category: 'Test',
+            imageUrl: '',
+            quantity: 1,
+          },
+        ]);
+
+        onClickCallback();
+      }}
+    >
+      Add to cart
+    </button>
+  );
+};

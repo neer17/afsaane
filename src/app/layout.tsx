@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/navbar/Navbar';
 import SlidingBanner from '@/components/banner/SlidingBanner';
+import CartProvider from '@/providers/CartProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -28,11 +29,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div>
-          <SlidingBanner />
-          <Navbar />
-        </div>
-        {children}
+        <CartProvider>
+          <div>
+            <SlidingBanner />
+
+            <Navbar />
+          </div>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
