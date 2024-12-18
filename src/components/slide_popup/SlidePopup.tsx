@@ -1,21 +1,15 @@
 import React, { useEffect, useContext, useImperativeHandle, forwardRef } from 'react';
 import styles from './SlidePopup.module.css';
 import CrossButton from '../buttons/Cross';
-import { CartContext, CartObject } from '@/providers/CartProvider';
+import { useCart } from '@/providers/CartProvider';
 
 interface SlidePopupProps {
   isOpen: boolean;
   backdropClickCallback: () => void;
 }
 
-const SlidePopup = forwardRef(({ isOpen, backdropClickCallback }: SlidePopupProps, ref) => {
-  const cartContext = useContext(CartContext);
-
-  if (!cartContext) {
-    throw new Error('CartContext must be used within a CartProvider');
-  }
-
-  const { cartData, setCartData } = cartContext;
+const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }) => {
+  const { cartData, setCartData } = useCart();
 
   useEffect(() => {
     if (isOpen) {
@@ -29,19 +23,8 @@ const SlidePopup = forwardRef(({ isOpen, backdropClickCallback }: SlidePopupProp
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    console.info({
-      cartData,
-    });
-  }, [cartData]);
-
-  const _addDataToCart = (newData: CartObject) => {
-    setCartData((prevCartData) => [...prevCartData, newData]);
-  };
-
-  useImperativeHandle(ref, () => ({
-    addDataToCart: _addDataToCart,
-  }));
+  // useEffect(() => {
+  // }, [cartData]);
 
   return (
     <>
@@ -56,6 +39,6 @@ const SlidePopup = forwardRef(({ isOpen, backdropClickCallback }: SlidePopupProp
       </div>
     </>
   );
-});
+};
 
 export default SlidePopup;

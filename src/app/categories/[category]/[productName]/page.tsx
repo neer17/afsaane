@@ -1,7 +1,7 @@
 // TODO: make a separate component for these images so that the page can be SSR
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,63 +20,16 @@ const colorInfo = 'Black & Oatmeal Stripes';
 const materialInfo = '100% Organic Cotton Knit';
 const deliveryDate = '2024-11-20';
 
-type SlidePopupRef = {
-  addDataToCart: (data: { id: number; name: string; quantity: number; category: string; imageUrl: string }) => void;
-};
-
 export default function ProductDetails() {
-  // const { cartData } = useCart();
-  const cartPopupRef = useRef<SlidePopupRef>();
-
   const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
-  const [isProductDetailsExpanded, setIsProductDetailsExpanded] = useState<boolean>(true);
-  const [isDeliveryAndExchangeExpanded, setIsDeliveryAndExchangeExpanded] = useState<boolean>(false);
-  const [isReturnAndExchangeExpanded, setIsReturnAndExchangeExpanded] = useState<boolean>(false);
-
-  const getProductSeeMoreText = () => {
-    return isProductDetailsExpanded ? 'See less' : 'See more';
-  };
-
-  const getDeliveryAndExchangeSeeMoreText = () => {
-    return isDeliveryAndExchangeExpanded ? 'See less' : 'See more';
-  };
-
-  const getReturnAndExchangeSeeMoreText = () => {
-    return isReturnAndExchangeExpanded ? 'See less' : 'See more';
-  };
 
   const handleAddToCart = () => {
-    if (!cartPopupRef.current) {
-      // TODO: make this available to use
-      // TODO: better way to log using a lib
-      console.error('cartPopupRef is unavailable');
-      return;
-    }
-
-    if (cartPopupRef.current) {
-      cartPopupRef.current.addDataToCart({
-        id: 1,
-        name: 'blue pottery ring',
-        quantity: 1,
-        category: 'rings',
-        imageUrl: 'asdsadads',
-      });
-
-      // TODO: PWA: add to indexdb
-    }
-
     toggleCartPopup();
   };
 
   const toggleCartPopup = () => {
     setShowCartPopup(!showCartPopup);
   };
-
-  // useEffect(() => {
-  //   console.info({
-  //     cartData,
-  //   });
-  // }, [cartData]);
 
   return (
     <div className={styles.productDetailsContainer}>
@@ -171,7 +124,10 @@ export default function ProductDetails() {
           </div>
 
           {/* Button for larger screens */}
-          {/* <AddToCartButton /> */}
+          <CartProvider>
+            <AddToCartButton onClickCallback={handleAddToCart} />
+          </CartProvider>
+
           <div className={styles.deliveryDetails}>
             <div>
               <Image src={CartSVG} width={25} height={25} alt="cart image" />
@@ -279,7 +235,7 @@ export default function ProductDetails() {
 
       {/* Cart popup */}
       <CartProvider>
-        <SlidePopup isOpen={showCartPopup} backdropClickCallback={handleAddToCart} ref={cartPopupRef} />
+        <SlidePopup isOpen={showCartPopup} backdropClickCallback={handleAddToCart} />
       </CartProvider>
     </div>
   );
@@ -299,16 +255,14 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onClickCallback }) =>
     <button
       className={styles.buttonForLargerScreen}
       onClick={() => {
-        setCartData((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            name: 'Test Product',
-            category: 'Test',
-            imageUrl: '',
-            quantity: 1,
-          },
-        ]);
+        setCartData({
+          id: '123',
+          name: 'Test Product',
+          category: 'Test',
+          imageUrl: '',
+          quantity: 1,
+          price: 1000
+        })
 
         onClickCallback();
       }}
