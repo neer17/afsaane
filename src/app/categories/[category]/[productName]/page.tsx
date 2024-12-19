@@ -1,7 +1,7 @@
 // TODO: make a separate component for these images so that the page can be SSR
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -19,6 +19,15 @@ const price = 6000;
 const colorInfo = 'Black & Oatmeal Stripes';
 const materialInfo = '100% Organic Cotton Knit';
 const deliveryDate = '2024-11-20';
+
+const dummyCartData = {
+  id: '123',
+  name: 'Test Product',
+  category: 'Test',
+  imageUrl: images[0],
+  quantity: 1,
+  price: 1000
+}
 
 export default function ProductDetails() {
   const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
@@ -255,14 +264,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onClickCallback }) =>
     <button
       className={styles.buttonForLargerScreen}
       onClick={() => {
-        setCartData({
-          id: '123',
-          name: 'Test Product',
-          category: 'Test',
-          imageUrl: '',
-          quantity: 1,
-          price: 1000
-        })
+        setCartData(dummyCartData)
 
         onClickCallback();
       }}
