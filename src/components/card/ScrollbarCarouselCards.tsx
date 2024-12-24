@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import Image from 'next/image';
 import { Product } from '@/app/helpers/types';
+import { v4 as uuid } from 'uuid';
 
 interface ScrollbarCarouselCardsProps {
   products: Product[];
@@ -35,7 +36,7 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({ product
         }}
       >
         {products.map((product) => (
-          <SwiperSlide key={product.name}>
+          <SwiperSlide key={uuid()}>
             <div className={styles.productCard}>
               <div className={styles.productImage}>
                 <Image src={product.imageSrc} alt={product.name} width={0} height={0} sizes={product.imageSizes} />

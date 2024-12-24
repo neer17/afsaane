@@ -1,6 +1,7 @@
 import ProductCard from '@/components/productCard/ProductCard';
 import React from 'react';
 import styles from './page.module.css';
+import { v4 as uuid } from 'uuid';
 
 // type Props = {
 //   params: {
@@ -68,7 +69,7 @@ const ProductCatalog = () => {
       <div className={styles.productsContainer}>
         {products.map(({ productTitle, productPrice, imageSizes }) => (
           <ProductCard
-            key={productTitle}
+            key={uuid()}
             images={products.map((value) => value.imageSrc)}
             productTitle={productTitle}
             imageSizes={imageSizes}

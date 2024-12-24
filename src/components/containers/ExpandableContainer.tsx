@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from './ExpandableContainer.module.css';
+import { v4 as uuid } from 'uuid';
 
 interface ExpandableContainerProps {
   title: string;
@@ -30,9 +31,7 @@ const ExpandableContainer: React.FC<ExpandableContainerProps> = ({
 
   return (
     <>
-      <div
-        className={styles.headingContainer}
-      >
+      <div className={styles.headingContainer}>
         <h1 className={styles.containerHeading}>{title}</h1>
         {isExpandable && <span onClick={handleExpandContainer}>{getSpanValue()}</span>}
       </div>
@@ -41,7 +40,7 @@ const ExpandableContainer: React.FC<ExpandableContainerProps> = ({
         <div className={styles.ownContent}>
           <ul>
             {contents.map((text) => (
-              <li key={text}>{text}</li>
+              <li key={uuid()}>{text}</li>
             ))}
           </ul>
         </div>

@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
 import CartSVG from '@/app/svgs/cart.svg';
 import { useCart } from '@/providers/CartProvider';
+import { v4 as uuid } from 'uuid';
 
 interface MenuItem {
   name: string;
@@ -55,6 +56,10 @@ const NavigationBar: React.FC = () => {
     });
   }, [cartData]);
 
+  console.info({
+    cartData,
+  });
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -76,7 +81,7 @@ const NavigationBar: React.FC = () => {
           <div className={styles.desktopMenu}>
             <div className={styles.menuItems}>
               {menuItems.map((item) => (
-                <span className={styles.menuItemContainer} key={item.name}>
+                <span className={styles.menuItemContainer} key={uuid()}>
                   <div
                     className={styles.menuItemNameContainer}
                     onMouseEnter={(e) => {
@@ -144,16 +149,14 @@ const NavigationBar: React.FC = () => {
           <div
             className={styles.cartContainer}
             onClick={() => {
-              setCartData((prev) => [
-                ...prev,
-                {
-                  id: Date.now().toString(),
-                  name: 'Test Product',
-                  category: 'Test',
-                  imageUrl: '',
-                  quantity: 1,
-                },
-              ]);
+              setCartData({
+                id: Date.now().toString(),
+                name: 'Test Product',
+                category: 'Test',
+                imageUrl: '',
+                quantity: 1,
+                price: 1000,
+              });
             }}
           >
             <Image src={CartSVG} alt="Cart" width={25} height={25} />
@@ -173,7 +176,7 @@ const NavigationBar: React.FC = () => {
 
         <div className={styles.menuItems}>
           {menuItems.map((item) => (
-            <span key={item.name} className={styles.menuItem} onClick={() => handleMobileMenuItemsExpand(item.name)}>
+            <span key={uuid()} className={styles.menuItem} onClick={() => handleMobileMenuItemsExpand(item.name)}>
               <div className={styles.mobileMenuItem}>
                 <div>
                   <span>{item.name} &#9660;</span>

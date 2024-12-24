@@ -7,6 +7,8 @@ import DetailCard from '@/components/detail_card/DetailCard';
 import Footer from '@/components/footer/Footer';
 import ScrollingText from '@/components/scrolling_banner/ScrollingBanner';
 import { images } from './helpers/constants';
+// TODO: UUID remove all occurences
+import { v4 as uuid } from 'uuid';
 
 export default function Home() {
   return (
@@ -34,7 +36,7 @@ export default function Home() {
         <div className={styles.cardsContainer}>
           {images.map((value) => (
             <Card
-              key={value}
+              key={uuid()}
               productDescription="SeggsY tshirt"
               price={1000}
               sizes="20vw"
