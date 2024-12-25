@@ -134,6 +134,30 @@
     left 0.4s ease;
 }
 
+.wishlistContainer {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.cartContainer {
+  position: relative;
+}
+.cartItemsIndicator {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
 /* 
 * Desktop
 */

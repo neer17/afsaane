@@ -1,0 +1,94 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.crossButtonContainer {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  opacity: 0.5;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: auto;
+}
+
+.addToCartButtonContainer {
+  position: relative;
+  bottom: 3rem;
+  margin: 0 8px 0 8px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.addToCartButtonContainer button {
+  width: 100%;
+  padding: 8px 8px 8px 8px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.detailsWrapper {
+  position: relative;
+  bottom: 10px;
+  display: flex;
+  color: black;
+}
+
+.detailsContainer {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailsContainer h5 {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.quantityContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+  border: 0.5px solid grey;
+  padding: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: 700;
+}
+
+.quantityContainer span {
+  cursor: pointer;
+}
+.quantityContainer span:nth-child(2) {
+  padding-left: 2em;
+  padding-right: 2rem;
+  cursor: auto;
+}
+
+/* For Mobile Screens */
+@media (max-width: 767px) {
+}

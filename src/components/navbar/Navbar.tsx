@@ -5,7 +5,8 @@ import Image from 'next/image';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
 import CartSVG from '@/app/svgs/cart.svg';
-import { useCart } from '@/providers/CartProvider';
+import WishlistSVG from '@/app/svgs/wishlist.svg';
+import { useCart, useWishlist } from '@/providers/CartProvider';
 import { v4 as uuid } from 'uuid';
 
 interface MenuItem {
@@ -21,7 +22,8 @@ const menuItems: MenuItem[] = [
 ];
 
 const NavigationBar: React.FC = () => {
-  const { cartData, setCartData } = useCart();
+  const { cartData } = useCart();
+  const { wishlistData } = useWishlist();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [mobileMenuItemExpanded, setMobileMenuItemExpanded] = useState<string | null>(null);
@@ -49,16 +51,6 @@ const NavigationBar: React.FC = () => {
   const handleDesktopMenuItemsMouseOut = () => {
     setDesktopMenuItemHovered(null);
   };
-
-  useEffect(() => {
-    console.info({
-      cartData,
-    });
-  }, [cartData]);
-
-  console.info({
-    cartData,
-  });
 
   return (
     <>
@@ -146,20 +138,14 @@ const NavigationBar: React.FC = () => {
             </div>
           </div>
 
-          <div
-            className={styles.cartContainer}
-            onClick={() => {
-              setCartData({
-                id: Date.now().toString(),
-                name: 'Test Product',
-                category: 'Test',
-                imageUrl: '',
-                quantity: 1,
-                price: 1000,
-              });
-            }}
-          >
+          <Link href="/wishlist" className={styles.wishlistContainer}>
+            <Image src={WishlistSVG} alt="Cart" width={25} height={25} />
+            <span className={styles.cartItemsIndicator}>{wishlistData.size}</span>
+          </Link>
+
+          <div className={styles.cartContainer}>
             <Image src={CartSVG} alt="Cart" width={25} height={25} />
+            <span className={styles.cartItemsIndicator}>{cartData.size}</span>
           </div>
         </div>
       </nav>

@@ -13,7 +13,7 @@ const Cross: React.FC<CrossProps> = ({ width = '20px', height = '20px', onClickC
       aria-label="Close"
       role="button"
       style={{ width: width, height: height }}
-      onClick={() => onClickCallback()}
+      onClick={onClickCallback}
     ></div>
   );
 };

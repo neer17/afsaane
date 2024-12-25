@@ -1,0 +1,33 @@
+.wishlistPageContainer {
+  margin-top: var(--pageTopMargin);
+  padding-top: 24px;
+}
+
+.wishlistPageContainer h3 {
+  color: black;
+  border-bottom: 1px solid black;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding-left: 1rem;
+}
+
+.productsContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.productCardWrapper {
+  width: 29vw;
+  padding-top: 24px;
+}
+
+@media (max-width: 767px) {
+  .productCardWrapper {
+    width: 49vw;
+    padding-top: 24px;
+  }
+}
