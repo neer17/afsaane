@@ -3,6 +3,8 @@ import styles from './SlidePopup.module.css';
 import CrossButton from '../buttons/Cross';
 import { CartObject, useCart } from '@/providers/CartProvider';
 import Image from 'next/image';
+import CardProductCard from '../card/CartProductCard';
+import CartProductCard from '../card/CartProductCard';
 
 interface SlidePopupProps {
   isOpen: boolean;
@@ -28,8 +30,14 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
     await deleteCartData(itemId);
   };
 
-  const handleIncrementItemQuantity = async (cartItem: CartObject) => {
-    await setCartData(cartItem);
+  const handleIncrementItemQuantity = async (id: string) => {
+    const item = cartData.get(id)
+    if (item === undefined) {
+      console.error(`Item does not exists for id: ${id}`)
+      return
+    }
+
+    await setCartData(item);
   };
 
   const handleDecrementItemQuantity = async (itemId: string) => {
@@ -53,26 +61,7 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
 
         <div className={styles.productsList}>
           {Array.from(cartData.values()).map(({ id, name, price, quantity, imageUrl, category }) => (
-            <div key={id} className={styles.contentsContainer}>
-              <div className={styles.imageContainer}>
-                <Image width={0} height={0} src={imageUrl} alt={name} sizes="10vw" />
-              </div>
-              <div className={styles.detailsContainer}>
-                <h5>{name}</h5>
-                <h5>{price}</h5>
-                <div className={styles.quantityButtonContainer}>
-                  <span onClick={() => handleIncrementItemQuantity({ id, name, quantity, price, category, imageUrl })}>
-                    +
-                  </span>
-                  <h5>{quantity}</h5>
-                  <span onClick={() => handleDecrementItemQuantity(id)}>-</span>
-                </div>
-              </div>
-
-              <div className={styles.crossButtonContainerSecond}>
-                <CrossButton onClickCallback={() => handleDeleteCartItem(id)} />
-              </div>
-            </div>
+            <CartProductCard key={id} id={id} name={name} price={price} quantity={quantity} imageSrc={imageUrl} category={category} incrementCallback={handleIncrementItemQuantity} decrementCallback={handleDecrementItemQuantity} deleteCartItem={handleDeleteCartItem} imageSizes='10vw'/>
           ))}
         </div>
 
