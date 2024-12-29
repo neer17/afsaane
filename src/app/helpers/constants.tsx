@@ -17,6 +17,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fca',
@@ -24,6 +26,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcb',
@@ -31,6 +35,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcc',
@@ -38,6 +44,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcd',
@@ -45,6 +53,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fce',
@@ -52,6 +62,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcg',
@@ -59,6 +71,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fch',
@@ -66,6 +80,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fci',
@@ -73,6 +89,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcj',
@@ -80,6 +98,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fck',
@@ -87,6 +107,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcl',
@@ -94,6 +116,8 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
   {
     id: '7937358f-78b8-4a59-9dae-221a6e876fcm',
@@ -101,5 +125,7 @@ export const dummyProducts: Product[] = [
     price: 1000,
     imageSrc: 'https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425',
     imageSizes: '(max-width: 1024px) 100vw, 50vw',
+    quantity: 1,
+    category: 'rings'
   },
 ];

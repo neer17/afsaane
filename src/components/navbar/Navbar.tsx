@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
@@ -143,10 +143,10 @@ const NavigationBar: React.FC = () => {
             <span className={styles.cartItemsIndicator}>{wishlistData.size}</span>
           </Link>
 
-          <div className={styles.cartContainer}>
+          <Link href="/cart" className={styles.cartContainer}>
             <Image src={CartSVG} alt="Cart" width={25} height={25} />
             <span className={styles.cartItemsIndicator}>{cartData.size}</span>
-          </div>
+          </Link>
         </div>
       </nav>
 

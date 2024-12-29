@@ -13,7 +13,7 @@ import { dummyProducts, images } from '@/app/helpers/constants';
 import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
 import RegularCard from '@/components/card/Card';
 import SlidePopup from '@/components/slide_popup/SlidePopup';
-import { useCart, useWishlist } from '@/providers/CartProvider';
+import { useCart } from '@/providers/CartProvider';
 import ExpandableContainer from '@/components/containers/ExpandableContainer';
 
 const price = 6000;
@@ -249,27 +249,26 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onClickCallback }) =>
   'use client';
 
   const { setCartData } = useCart();
-  const { addWishlistItem } = useWishlist();
 
   return (
     <button
       className={styles.buttonForLargerScreen}
       onClick={() => {
-        setCartData({
-          id: '1239',
-          name: 'Test Product',
-          category: 'Test',
-          imageUrl: images[1],
-          quantity: 1,
-          price: 1000,
-        });
+        // setCartData({
+        //   id: '1239',
+        //   name: 'Test Product',
+        //   category: 'Test',
+        //   imageSrc: images[1],
+        //   quantity: 1,
+        //   price: 1000,
+        // });
         for (let i = 0; i < 100; i++) {
-          addWishlistItem({
+          setCartData({
             id: i.toString(),
             // id: '1234',
             name: 'Test Product',
             category: 'Test',
-            imageUrl: images[1],
+            imageSrc: images[1],
             quantity: 1,
             price: 1000,
           });

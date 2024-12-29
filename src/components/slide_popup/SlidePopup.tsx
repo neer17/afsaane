@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './SlidePopup.module.css';
 import CrossButton from '../buttons/Cross';
-import { CartObject, useCart } from '@/providers/CartProvider';
-import Image from 'next/image';
-import CardProductCard from '../card/CartProductCard';
+import { useCart } from '@/providers/CartProvider';
 import CartProductCard from '../card/CartProductCard';
 
 interface SlidePopupProps {
@@ -31,10 +29,10 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
   };
 
   const handleIncrementItemQuantity = async (id: string) => {
-    const item = cartData.get(id)
+    const item = cartData.get(id);
     if (item === undefined) {
-      console.error(`Item does not exists for id: ${id}`)
-      return
+      console.error(`Item does not exists for id: ${id}`);
+      return;
     }
 
     await setCartData(item);
@@ -60,8 +58,20 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
         </div>
 
         <div className={styles.productsList}>
-          {Array.from(cartData.values()).map(({ id, name, price, quantity, imageUrl, category }) => (
-            <CartProductCard key={id} id={id} name={name} price={price} quantity={quantity} imageSrc={imageUrl} category={category} incrementCallback={handleIncrementItemQuantity} decrementCallback={handleDecrementItemQuantity} deleteCartItem={handleDeleteCartItem} imageSizes='10vw'/>
+          {Array.from(cartData.values()).map(({ id, name, price, quantity, imageSrc, category }) => (
+            <CartProductCard
+              key={id}
+              id={id}
+              name={name}
+              price={price}
+              quantity={quantity}
+              imageSrc={imageSrc}
+              category={category}
+              incrementCallback={handleIncrementItemQuantity}
+              decrementCallback={handleDecrementItemQuantity}
+              deleteCartItem={handleDeleteCartItem}
+              imageSizes="10vw"
+            />
           ))}
         </div>
 

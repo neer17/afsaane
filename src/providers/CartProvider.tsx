@@ -3,35 +3,16 @@
 import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
+import { Product } from '@/app/helpers/types';
+
 // Props for the CartProvider
 interface CartProviderProps {
   children: ReactNode;
 }
 
-// Type for individual cart items
-export type CartObject = {
-  id: string;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  quantity: number;
-};
-
-// Type for individual wishlist items
-export type WishlistObject = {
-  id: string;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  quantity: number;
-};
-
-// Context type for Cart
 interface CartContextType {
-  cartData: Map<string, CartObject>;
-  setCartData: (cartObject: CartObject) => Promise<void>;
+  cartData: Map<string, Product>;
+  setCartData: (cartObject: Product) => Promise<void>;
   removeCartData: (itemId: string) => Promise<void>;
   deleteCartData: (itemId: string) => Promise<void>;
   getTotalPrice: () => number;
@@ -39,8 +20,8 @@ interface CartContextType {
 
 // Context type for Wishlist
 interface WishlistContextType {
-  wishlistData: Map<string, WishlistObject>;
-  addWishlistItem: (wishlistObject: WishlistObject) => Promise<void>;
+  wishlistData: Map<string, Product>;
+  addWishlistItem: (wishlistObject: Product) => Promise<void>;
   removeWishlistItem: (itemId: string) => Promise<void>;
 }
 
@@ -48,11 +29,11 @@ interface WishlistContextType {
 interface CartDB extends DBSchema {
   cartStore: {
     key: string;
-    value: CartObject;
+    value: Product;
   };
   wishlistStore: {
     key: string;
-    value: WishlistObject;
+    value: Product;
   };
 }
 
@@ -72,8 +53,8 @@ if (typeof window !== 'undefined') {
 }
 
 export default function CartProvider({ children }: CartProviderProps) {
-  const [cartData, setCartDataState] = useState<Map<string, CartObject>>(new Map());
-  const [wishlistData, setWishlistDataState] = useState<Map<string, WishlistObject>>(new Map());
+  const [cartData, setCartDataState] = useState<Map<string, Product>>(new Map());
+  const [wishlistData, setWishlistDataState] = useState<Map<string, Product>>(new Map());
 
   useEffect(() => {
     console.info({
@@ -89,7 +70,7 @@ export default function CartProvider({ children }: CartProviderProps) {
       try {
         const db = await dbPromise;
         const allCartItems = await db.getAll('cartStore');
-        const initialCartData = new Map<string, CartObject>();
+        const initialCartData = new Map<string, Product>();
         allCartItems.forEach((item) => initialCartData.set(item.id, item));
         setCartDataState(initialCartData);
         console.info('Cart data loaded from IndexedDB');
@@ -104,7 +85,7 @@ export default function CartProvider({ children }: CartProviderProps) {
       try {
         const db = await dbPromise;
         const allWishlistItems = await db.getAll('wishlistStore');
-        const initialWishlistData = new Map<string, WishlistObject>();
+        const initialWishlistData = new Map<string, Product>();
         allWishlistItems.forEach((item) => initialWishlistData.set(item.id, item));
         setWishlistDataState(initialWishlistData);
         console.info('Wishlist data loaded from IndexedDB');
@@ -117,7 +98,7 @@ export default function CartProvider({ children }: CartProviderProps) {
     loadWishlistData();
   }, []);
 
-  const setCartData = async (cartItem: CartObject) => {
+  const setCartData = async (cartItem: Product) => {
     if (!dbPromise) return;
 
     try {
@@ -186,7 +167,7 @@ export default function CartProvider({ children }: CartProviderProps) {
     }, 0);
   };
 
-  const addWishlistItem = async (wishlistItem: WishlistObject) => {
+  const addWishlistItem = async (wishlistItem: Product) => {
     if (!dbPromise) return;
 
     console.info({

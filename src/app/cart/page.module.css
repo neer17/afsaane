@@ -1,0 +1,133 @@
+.cartDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--pageTopMargin);
+  padding: 4rem 10rem 0 10rem;
+}
+
+.productsContainer {
+  flex: 1 1;
+  margin-right: 2rem;
+}
+
+.checkoutContainer {
+  width: 30%;
+}
+
+.shippingDetailsContainer {
+  width: 100%;
+  height: 50px;
+  background-color: #f7f7f8;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+.orderDetailsContainer {
+  width: 100%;
+  background-color: #f7f7f8;
+  margin-bottom: 1rem;
+  color: black;
+  padding: 1rem 2rem 1rem 2rem;
+}
+
+.totalPriceContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkoutButton {
+  width: 100%;
+  padding: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: white;
+  text-transform: uppercase;
+  background-color: black;
+  border: none;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+.queryContainer {
+  width: 100%;
+  height: 150px;
+  background-color: #f7f7f8;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+.checkoutContainerMobile {
+  display: none;
+}
+
+.goBackToShoppingContainer {
+  display: flex;
+  align-items: center;
+  color: black;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+.goBackToShoppingContainer img {
+  margin-right: 1rem;
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .cartDetailsContainer {
+    padding: 2rem 5rem 0 5rem;
+  }
+
+  .checkoutContainerMobile {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .cartDetailsContainer {
+    flex-direction: column;
+    background-color: white;
+    padding: 0;
+    padding-top: 1.5rem;
+    height: calc(100vh - 194px);
+  }
+
+  .productsContainer {
+    padding: 0 1rem 0 1rem;
+  }
+
+  .checkoutContainer {
+    display: none;
+  }
+
+  .checkoutContainerMobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    padding: 2rem;
+    border-top: 1px solid grey;
+    z-index: 999;
+  }
+
+  .checkoutContainerMobile > span {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .checkoutButton {
+    width: 50%;
+    height: fit-content;
+    font-size: 13px;
+    padding: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 0;
+  }
+}

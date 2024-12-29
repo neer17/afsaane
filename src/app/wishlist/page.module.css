@@ -25,9 +25,25 @@
   padding-top: 24px;
 }
 
+.goBackToShoppingContainer {
+  display: flex;
+  align-items: center;
+  color: black;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+.goBackToShoppingContainer img {
+  margin-right: 1rem;
+}
+
+/* For Mobile */
 @media (max-width: 767px) {
   .productCardWrapper {
-    width: 49vw;
+    width: 44vw;
     padding-top: 24px;
   }
 }

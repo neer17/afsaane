@@ -33,16 +33,16 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
         <QuantityButton
           id={id}
           quantity={quantity}
-          incrementCallback={incrementCallback}
-          decrementCallback={decrementCallback}
+          incrementCallback={() => incrementCallback(id)}
+          decrementCallback={() => decrementCallback(id)}
         />
       </div>
 
-      <div>
+      <div className={styles.crossButtonContainer}>
         <CrossButton onClickCallback={() => deleteCartItem(id)} />
       </div>
     </div>
   );
 };
 
-export default CartProductCard
+export default CartProductCard;

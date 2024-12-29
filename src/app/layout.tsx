@@ -32,7 +32,6 @@ export default function RootLayout({
         <CartProvider>
           <div>
             <SlidingBanner />
-
             <Navbar />
           </div>
           {children}
