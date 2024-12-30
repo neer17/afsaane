@@ -14,12 +14,13 @@
   --swiper-navigation-color: white;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Media query for dark mode */
+/* @media (prefers-color-scheme: dark) {
   :root {
-    --background: #ffffff;
-    --foreground: #ededed;
+    --background: #1a1a1a;    
+    --foreground: #2a2a2a;
   }
-}
+} */
 
 html,
 body {
