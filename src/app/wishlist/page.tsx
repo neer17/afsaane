@@ -4,7 +4,7 @@
 
 import React from 'react';
 import styles from './page.module.css';
-import { useCart, useWishlist } from '@/providers/CartProvider';
+import { useCart, useWishlist } from '@/context/CartContext';
 import WishlistCard from '@/components/card/WishlistCard';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

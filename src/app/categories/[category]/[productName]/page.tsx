@@ -13,7 +13,7 @@ import { dummyProducts, images } from '@/app/helpers/constants';
 import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
 import RegularCard from '@/components/card/Card';
 import SlidePopup from '@/components/slide_popup/SlidePopup';
-import { useCart } from '@/providers/CartProvider';
+import { useCart } from '@/context/CartContext';
 import ExpandableContainer from '@/components/containers/ExpandableContainer';
 
 const price = 6000;

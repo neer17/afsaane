@@ -6,7 +6,7 @@ import styles from './Navbar.module.css';
 import Link from 'next/link';
 import CartSVG from '@/app/svgs/cart.svg';
 import WishlistSVG from '@/app/svgs/wishlist.svg';
-import { useCart, useWishlist } from '@/providers/CartProvider';
+import { useCart, useWishlist } from '@/context/CartContext';
 import { v4 as uuid } from 'uuid';
 
 interface MenuItem {

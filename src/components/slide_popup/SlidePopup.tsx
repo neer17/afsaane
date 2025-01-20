@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './SlidePopup.module.css';
 import CrossButton from '../buttons/Cross';
-import { useCart } from '@/providers/CartProvider';
+import { useCart } from '@/context/CartContext';
 import CartProductCard from '../card/CartProductCard';
 
 interface SlidePopupProps {
