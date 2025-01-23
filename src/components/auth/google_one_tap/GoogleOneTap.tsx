@@ -1,7 +1,16 @@
 'use client';
-import { useEffect } from 'react';
+
+import React, { useEffect } from 'react';
 import { auth } from '../../../../lib/firebase/config';
-import { GoogleAuthProvider, signInWithCredential, signOut } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  signOut,
+  setPersistence,
+  browserLocalPersistence,
+  linkWithCredential,
+  onAuthStateChanged
+} from 'firebase/auth';
 
 declare global {
   interface Window {
@@ -53,8 +62,16 @@ export default function GoogleOneTap() {
             console.log('Received response from Google:', response);
             try {
               const credential = GoogleAuthProvider.credential(response.credential);
-              await signInWithCredential(auth, credential);
-              console.log('Successfully signed in');
+              await setPersistence(auth, browserLocalPersistence);
+              const user = auth.currentUser;
+
+              if (user) {
+                await linkWithCredential(user, credential);
+                console.log('Google account linked to the existing user');
+              } else {
+                await signInWithCredential(auth, credential);
+                console.log('Successfully signed in with Google');
+              }
             } catch (error) {
               console.error('Error signing in:', error);
             }
@@ -63,37 +80,13 @@ export default function GoogleOneTap() {
           cancel_on_tap_outside: false,
           prompt_parent_id: 'google-one-tap',
           context: 'signin',
-          itp_support: false, // Added to handle ITP issues
-          use_fedcm_for_prompt: true, // Added to explicitly enable FedCM
+          itp_support: false,
+          use_fedcm_for_prompt: true,
           native_callback: (response: any) => {
-            // Added native callback
             console.log('Native callback response:', response);
           },
-        });
-
-        // Render a button as fallback
-        const buttonElement = document.getElementById('google-signin-button');
-        if (buttonElement) {
-          window.google.accounts.id.renderButton(buttonElement, {
-            theme: 'outline',
-            size: 'large',
-            type: 'standard',
-          });
-        }
-
-        // Modified prompt timing and error handling
-        window.google.accounts.id.prompt((notification: any) => {
-          if (notification.isNotDisplayed()) {
-            console.log('One Tap not displayed:', notification.getNotDisplayedReason());
-            // Fallback to button if One Tap isn't displayed
-            const buttonElement = document.getElementById('google-signin-button');
-            if (buttonElement) {
-              buttonElement.style.display = 'block';
-            }
-          } else if (notification.isSkippedMoment()) {
-            console.log('One Tap skipped:', notification.getSkippedReason());
-          } else if (notification.isDismissedMoment()) {
-            console.log('One Tap dismissed:', notification.getDismissedReason());
+          error: (error: any) => {
+            console.error('Google One Tap error:', error);
           }
         });
       } catch (error) {
@@ -101,16 +94,40 @@ export default function GoogleOneTap() {
       }
     };
 
-    // Check for Google script loading with retry mechanism
     let retryCount = 0;
     const maxRetries = 3;
+    let timeoutId: NodeJS.Timeout;
 
     const checkAndInitialize = () => {
       if (window.google?.accounts?.id) {
         initializeGoogleOneTap();
+        
+        // Only show the prompt for non-authenticated users
+        onAuthStateChanged(auth, (user) => {
+          if (!user) {
+            window.google.accounts.id.prompt((notification: any) => {
+              if (notification.isNotDisplayed()) {
+                console.log('One Tap not displayed:', notification.getNotDisplayedReason());
+                const buttonElement = document.getElementById('google-signin-button');
+                if (buttonElement) {
+                  buttonElement.style.display = 'block';
+                  window.google.accounts.id.renderButton(buttonElement, {
+                    theme: 'outline',
+                    size: 'large',
+                    type: 'standard',
+                  });
+                }
+              } else if (notification.isSkippedMoment()) {
+                console.log('One Tap skipped:', notification.getSkippedReason());
+              } else if (notification.isDismissedMoment()) {
+                console.log('One Tap dismissed:', notification.getDismissedReason());
+              }
+            });
+          }
+        });
       } else if (retryCount < maxRetries) {
         retryCount++;
-        setTimeout(checkAndInitialize, 1000);
+        timeoutId = setTimeout(checkAndInitialize, 1000);
       } else {
         console.error('Failed to load Google One Tap after multiple retries');
       }
@@ -120,6 +137,9 @@ export default function GoogleOneTap() {
 
     return () => {
       window.google?.accounts?.id?.cancel();
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, []);
 

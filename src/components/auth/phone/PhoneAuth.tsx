@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { auth } from '../../../../lib/firebase/config';
 import {
@@ -6,6 +7,10 @@ import {
   signInWithPhoneNumber,
   PhoneAuthProvider,
   signInWithCredential,
+  linkWithCredential,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
 } from 'firebase/auth';
 
 declare global {
@@ -20,10 +25,12 @@ const PhoneAuth: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationId, setVerificationId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Cleanup function for previous reCAPTCHA instances
+    console.info('PhoneAuth.tsx', 'useEffect', 'auth: currentUser', auth.currentUser);
+
     const cleanup = () => {
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear();
@@ -31,7 +38,6 @@ const PhoneAuth: React.FC = () => {
       }
     };
 
-    // Initialize reCAPTCHA
     const initRecaptcha = () => {
       cleanup();
       try {
@@ -43,10 +49,9 @@ const PhoneAuth: React.FC = () => {
           'expired-callback': () => {
             setError('reCAPTCHA expired. Please try again.');
             cleanup();
-          }
+          },
         });
         window.recaptchaVerifier = verifier;
-        // Render the reCAPTCHA widget
         verifier.render();
       } catch (error) {
         console.error('reCAPTCHA initialization error:', error);
@@ -54,18 +59,38 @@ const PhoneAuth: React.FC = () => {
       }
     };
 
-    // Initialize only if the container is mounted
     if (recaptchaContainerRef.current) {
       initRecaptcha();
     }
 
-    // Cleanup on component unmount
-    return cleanup;
+    // Set persistence to local storage
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        console.log('Persistence set to local storage');
+      })
+      .catch((error) => {
+        console.error('Error setting persistence:', error);
+      });
+
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        console.log('User is signed in:', currentUser);
+      } else {
+        console.log('No user is signed in');
+      }
+    });
+
+    return () => {
+      cleanup();
+      unsubscribe();
+    };
   }, []);
 
   const sendVerificationCode = async () => {
     setError(null);
-    
+
     if (!phoneNumber) {
       setError('Please enter a phone number');
       return;
@@ -76,24 +101,17 @@ const PhoneAuth: React.FC = () => {
         throw new Error('reCAPTCHA not initialized');
       }
 
-      const formattedPhoneNumber = phoneNumber.startsWith('+') 
-        ? phoneNumber 
-        : `+${phoneNumber}`;
+      const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
 
-      const confirmationResult = await signInWithPhoneNumber(
-        auth, 
-        formattedPhoneNumber, 
-        window.recaptchaVerifier
-      );
-      
+      const confirmationResult = await signInWithPhoneNumber(auth, formattedPhoneNumber, window.recaptchaVerifier);
+
       window.confirmationResult = confirmationResult;
       setVerificationId(confirmationResult.verificationId);
       console.log('Verification code sent');
     } catch (error: any) {
       console.error('Send code error:', error);
       setError(error.message || 'Failed to send verification code');
-      
-      // Reset reCAPTCHA on error
+
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear();
         window.recaptchaVerifier = null;
@@ -103,7 +121,7 @@ const PhoneAuth: React.FC = () => {
 
   const verifyCode = async () => {
     setError(null);
-    
+
     if (!verificationCode) {
       setError('Please enter the verification code');
       return;
@@ -116,8 +134,15 @@ const PhoneAuth: React.FC = () => {
 
     try {
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-      const result = await signInWithCredential(auth, credential);
-      console.log('Phone number verified:', result.user);
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        await linkWithCredential(currentUser, credential);
+        console.log('Phone number linked to the existing user');
+      } else {
+        await signInWithCredential(auth, credential);
+        console.log('Phone number verified and user signed in');
+      }
     } catch (error: any) {
       console.error('Verification error:', error);
       setError(error.message || 'Invalid verification code');
@@ -127,12 +152,8 @@ const PhoneAuth: React.FC = () => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Phone Authentication</h2>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+
+      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
       {!verificationId ? (
         <div className="space-y-4">
@@ -149,10 +170,9 @@ const PhoneAuth: React.FC = () => {
               className="w-full p-2 border rounded"
             />
           </div>
-          
-          {/* Hidden reCAPTCHA container */}
+
           <div id="recaptcha-container" ref={recaptchaContainerRef}></div>
-          
+
           <button
             onClick={sendVerificationCode}
             className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
@@ -175,11 +195,8 @@ const PhoneAuth: React.FC = () => {
               className="w-full p-2 border rounded"
             />
           </div>
-          
-          <button
-            onClick={verifyCode}
-            className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-          >
+
+          <button onClick={verifyCode} className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
             Verify Code
           </button>
         </div>
