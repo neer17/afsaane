@@ -8,7 +8,12 @@ interface QuantityButtonProps {
   decrementCallback: (id: string) => void;
 }
 
-const QuantityButton: React.FC<QuantityButtonProps> = ({ id, quantity = 1, incrementCallback, decrementCallback }) => {
+const QuantityButton: React.FC<QuantityButtonProps> = ({
+  id,
+  quantity = 1,
+  incrementCallback,
+  decrementCallback,
+}) => {
   return (
     <div className={styles.quantityButtonContainer}>
       <span onClick={() => incrementCallback(id)}>+</span>

@@ -306,7 +306,10 @@
     display: inline-block;
   }
 
-  .mobileMenuItemExpandablePanel .moreFiltersPanel .moreFilterContainer h3::after {
+  .mobileMenuItemExpandablePanel
+    .moreFiltersPanel
+    .moreFilterContainer
+    h3::after {
     content: '';
     position: absolute;
     bottom: 0;

@@ -26,7 +26,9 @@ export default function LoginButton() {
 
   return (
     <div className={styles.container}>
-      <button onClick={signInWithGoogle}>{user ? 'Sign Out' : 'Sign In with Google'}</button>
+      <button onClick={signInWithGoogle}>
+        {user ? 'Sign Out' : 'Sign In with Google'}
+      </button>
     </div>
   );
 }

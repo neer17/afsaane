@@ -43,7 +43,10 @@ export default function RootLayout({
           //   console.log('Google Script loaded successfully');
           // }}
         />
-        <meta name="google-signin-client_id" content={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID} />
+        <meta
+          name="google-signin-client_id"
+          content={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>

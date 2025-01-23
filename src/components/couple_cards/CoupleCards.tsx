@@ -9,9 +9,16 @@ interface CoupleCardsProps {
   doReverse?: boolean;
 }
 
-const CoupleCards: React.FC<CoupleCardsProps> = ({ image, altText, texts, doReverse }) => {
+const CoupleCards: React.FC<CoupleCardsProps> = ({
+  image,
+  altText,
+  texts,
+  doReverse,
+}) => {
   return (
-    <div className={`${styles.coupleCardsContainer} ${doReverse ? styles.coupleCardsContainerReverse : ''}`}>
+    <div
+      className={`${styles.coupleCardsContainer} ${doReverse ? styles.coupleCardsContainerReverse : ''}`}
+    >
       {image && (
         <div className={styles.imageContainer}>
           <Image

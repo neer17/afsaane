@@ -6,13 +6,17 @@ interface CrossProps {
   height?: string;
   onClickCallback: () => void;
 }
-const Cross: React.FC<CrossProps> = ({ width = '20px', height = '20px', onClickCallback }) => {
+const Cross: React.FC<CrossProps> = ({
+  width = '20px',
+  height = '20px',
+  onClickCallback,
+}) => {
   return (
     <div
       className={styles.crossButton}
       aria-label="Close"
       role="button"
-      style={{ width: width, height: height }}
+      style={{ width, height }}
       onClick={onClickCallback}
     ></div>
   );

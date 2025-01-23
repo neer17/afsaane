@@ -69,28 +69,35 @@ export default function Wishlist() {
   return (
     <div className={styles.wishlistPageContainer}>
       <div className={styles.goBackToShoppingContainer} onClick={handleGoBack}>
-        <Image height={25} width={25} src={LeftArrow} alt="Go back to shopping" />
+        <Image
+          height={25}
+          width={25}
+          src={LeftArrow}
+          alt="Go back to shopping"
+        />
         <span>Go back to shopping</span>
       </div>
 
       <h3>Your Wishlist</h3>
 
       <div className={styles.productsContainer}>
-        {Array.from(wishlistData.values()).map(({ id, name, quantity, imageSrc, price }) => (
-          <div key={id} className={styles.productCardWrapper}>
-            <WishlistCard
-              id={id}
-              name={name}
-              quantity={quantity}
-              imageSrc={imageSrc}
-              price={price}
-              addToCardCallback={handleAddToCart}
-              removeItemCallback={handleRemoveItem}
-              incrementInQuantityCallback={handleIncrementQuantity}
-              decrementInQuantityCallback={handleDecrementQuantity}
-            />
-          </div>
-        ))}
+        {Array.from(wishlistData.values()).map(
+          ({ id, name, quantity, imageSrc, price }) => (
+            <div key={id} className={styles.productCardWrapper}>
+              <WishlistCard
+                id={id}
+                name={name}
+                quantity={quantity}
+                imageSrc={imageSrc}
+                price={price}
+                addToCardCallback={handleAddToCart}
+                removeItemCallback={handleRemoveItem}
+                incrementInQuantityCallback={handleIncrementQuantity}
+                decrementInQuantityCallback={handleDecrementQuantity}
+              />
+            </div>
+          ),
+        )}
       </div>
     </div>
   );

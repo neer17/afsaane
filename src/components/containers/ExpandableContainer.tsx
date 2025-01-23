@@ -33,10 +33,18 @@ const ExpandableContainer: React.FC<ExpandableContainerProps> = ({
     <>
       <div className={styles.headingContainer}>
         <h1 className={styles.containerHeading}>{title}</h1>
-        {isExpandable && <span onClick={handleExpandContainer}>{getSpanValue()}</span>}
+        {isExpandable && (
+          <span onClick={handleExpandContainer}>{getSpanValue()}</span>
+        )}
       </div>
 
-      <div className={isExpanded ? styles.expandableContainerExpanded : styles.expandableContainer}>
+      <div
+        className={
+          isExpanded
+            ? styles.expandableContainerExpanded
+            : styles.expandableContainer
+        }
+      >
         <div className={styles.ownContent}>
           <ul>
             {contents.map((text) => (

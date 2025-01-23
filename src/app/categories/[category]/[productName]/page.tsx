@@ -86,7 +86,11 @@ export default function ProductDetails() {
           {/* Will be visible for smaller screens < 1024px */}
           {/* TODO: Make this a type of card */}
           <div className={styles.imageContainerOnSmallScreens}>
-            <Swiper spaceBetween={0} slidesPerView={1.1} className={styles.swiperContainer}>
+            <Swiper
+              spaceBetween={0}
+              slidesPerView={1.1}
+              className={styles.swiperContainer}
+            >
               {images.map((imageSrc, index) => (
                 <SwiperSlide key={uuid()}>
                   <Image
@@ -105,8 +109,10 @@ export default function ProductDetails() {
             <div className={styles.productDescription}>
               <h1>Stripefront Sweater - Black & Oatmeal Stripes</h1>
               <h4>
-                Sober and sophisticated in equal measure, the Stripe Front Sweater stands out all day long. Its comfy
-                fit and clean lines can do it all - from a hot drink on a cold night to a sunny afternoon picnic.
+                Sober and sophisticated in equal measure, the Stripe Front
+                Sweater stands out all day long. Its comfy fit and clean lines
+                can do it all - from a hot drink on a cold night to a sunny
+                afternoon picnic.
               </h4>
             </div>
             <div className={styles.priceDetails}>
@@ -234,7 +240,10 @@ export default function ProductDetails() {
         </div>
 
         {/* Cart popup */}
-        <SlidePopup isOpen={showCartPopup} backdropClickCallback={handleAddToCart} />
+        <SlidePopup
+          isOpen={showCartPopup}
+          backdropClickCallback={handleAddToCart}
+        />
       </div>
     </>
   );
@@ -245,7 +254,9 @@ export default function ProductDetails() {
 type AddToCartButtonProps = {
   onClickCallback: () => void;
 };
-const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onClickCallback }) => {
+const AddToCartButton: React.FC<AddToCartButtonProps> = ({
+  onClickCallback,
+}) => {
   'use client';
 
   const { setCartData } = useCart();

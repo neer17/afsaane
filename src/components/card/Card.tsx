@@ -10,11 +10,23 @@ interface CardProps {
   imageName: string;
 }
 
-const Card: React.FC<CardProps> = ({ productDescription, price, imageSrc, sizes, imageName }) => {
+const Card: React.FC<CardProps> = ({
+  productDescription,
+  price,
+  imageSrc,
+  sizes,
+  imageName,
+}) => {
   return (
     <div className={styles.cardContainer}>
       <div className={styles.imageContainer}>
-        <Image width={0} height={0} alt={imageName} src={imageSrc} sizes={sizes} />
+        <Image
+          width={0}
+          height={0}
+          alt={imageName}
+          src={imageSrc}
+          sizes={sizes}
+        />
       </div>
       <div className={styles.textContainer}>
         <div className={styles.productDescription}>{productDescription}</div>

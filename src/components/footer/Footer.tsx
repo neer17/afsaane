@@ -41,15 +41,20 @@ export default function Footer() {
       </div>
       <div className={styles.signupContainer}>
         <h3>Sign up for our emails</h3>
-        <h5>We’ll send you updates on our latest launches and more. Need to take off? Unsubscribe at any time.</h5>
+        <h5>
+          We’ll send you updates on our latest launches and more. Need to take
+          off? Unsubscribe at any time.
+        </h5>
         <div className={styles.emailAddressContainer}>
           <input type="text" placeholder="Email address"></input>
           <button></button>
         </div>
         <h5>
-          Sign up for our emails We’ll send you updates on our latest launches and more. Need to take off? Unsubscribe
-          at any time. Email address Newsletter email submit By clicking submit, you agree to our Privacy Policy and
-          Terms. We’ll send you updates on all things Away. Need to take off? Unsubscribe anytime.
+          Sign up for our emails We’ll send you updates on our latest launches
+          and more. Need to take off? Unsubscribe at any time. Email address
+          Newsletter email submit By clicking submit, you agree to our Privacy
+          Policy and Terms. We’ll send you updates on all things Away. Need to
+          take off? Unsubscribe anytime.
         </h5>
       </div>
     </div>

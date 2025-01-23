@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useContext,
+} from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
 import { Product } from '@/app/helpers/types';
@@ -39,7 +45,9 @@ interface CartDB extends DBSchema {
 
 // Create context with proper type and default value
 const CartContext = createContext<CartContextType | undefined>(undefined);
-const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
+const WishlistContext = createContext<WishlistContextType | undefined>(
+  undefined,
+);
 
 // Initialize IndexedDB only if in the browser
 let dbPromise: Promise<IDBPDatabase<CartDB>> | undefined;
@@ -53,8 +61,12 @@ if (typeof window !== 'undefined') {
 }
 
 export default function CartProvider({ children }: CartProviderProps) {
-  const [cartData, setCartDataState] = useState<Map<string, Product>>(new Map());
-  const [wishlistData, setWishlistDataState] = useState<Map<string, Product>>(new Map());
+  const [cartData, setCartDataState] = useState<Map<string, Product>>(
+    new Map(),
+  );
+  const [wishlistData, setWishlistDataState] = useState<Map<string, Product>>(
+    new Map(),
+  );
 
   useEffect(() => {
     console.info({
@@ -86,7 +98,9 @@ export default function CartProvider({ children }: CartProviderProps) {
         const db = await dbPromise;
         const allWishlistItems = await db.getAll('wishlistStore');
         const initialWishlistData = new Map<string, Product>();
-        allWishlistItems.forEach((item) => initialWishlistData.set(item.id, item));
+        allWishlistItems.forEach((item) =>
+          initialWishlistData.set(item.id, item),
+        );
         setWishlistDataState(initialWishlistData);
         console.info('Wishlist data loaded from IndexedDB');
       } catch (error) {
@@ -202,8 +216,18 @@ export default function CartProvider({ children }: CartProviderProps) {
   };
 
   return (
-    <CartContext.Provider value={{ cartData, setCartData, removeCartData, deleteCartData, getTotalPrice }}>
-      <WishlistContext.Provider value={{ wishlistData, addWishlistItem, removeWishlistItem }}>
+    <CartContext.Provider
+      value={{
+        cartData,
+        setCartData,
+        removeCartData,
+        deleteCartData,
+        getTotalPrice,
+      }}
+    >
+      <WishlistContext.Provider
+        value={{ wishlistData, addWishlistItem, removeWishlistItem }}
+      >
         {children}
       </WishlistContext.Provider>
     </CartContext.Provider>

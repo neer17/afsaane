@@ -17,7 +17,10 @@ export default function Home() {
       <section className={styles.heroSection}>
         <div className={styles.textContainer}>
           <span>Long heading about the product</span>
-          <span>Long description about the product. Long description about the product.</span>
+          <span>
+            Long description about the product. Long description about the
+            product.
+          </span>
         </div>
         <Image
           className={styles.heroImage}
@@ -99,10 +102,13 @@ export default function Home() {
 
       {/* Shipping Info Section */}
       <section className={styles.shippingInfoSection}>
-        <span>Free shipping on all luggage. Designed by travelers, for travelers.</span>
         <span>
-          We want you to love everything about getting Away—which is why we offer free returns and exchanges on unused
-          items for the first 100 days.
+          Free shipping on all luggage. Designed by travelers, for travelers.
+        </span>
+        <span>
+          We want you to love everything about getting Away—which is why we
+          offer free returns and exchanges on unused items for the first 100
+          days.
         </span>
         <span>Exclusions apply. Learn more</span>
       </section>

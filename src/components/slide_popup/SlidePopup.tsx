@@ -9,8 +9,17 @@ interface SlidePopupProps {
   backdropClickCallback: () => void;
 }
 
-const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }) => {
-  const { cartData, setCartData, deleteCartData, removeCartData, getTotalPrice } = useCart();
+const SlidePopup: React.FC<SlidePopupProps> = ({
+  isOpen,
+  backdropClickCallback,
+}) => {
+  const {
+    cartData,
+    setCartData,
+    deleteCartData,
+    removeCartData,
+    getTotalPrice,
+  } = useCart();
 
   useEffect(() => {
     if (isOpen) {
@@ -48,8 +57,17 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
 
   return (
     <>
-      {isOpen && <div className={styles.overlay} aria-hidden="true" onClick={backdropClickCallback} />}
-      <div className={`${styles.slidePanel} ${isOpen ? styles.open : ''}`} aria-expanded={isOpen}>
+      {isOpen && (
+        <div
+          className={styles.overlay}
+          aria-hidden="true"
+          onClick={backdropClickCallback}
+        />
+      )}
+      <div
+        className={`${styles.slidePanel} ${isOpen ? styles.open : ''}`}
+        aria-expanded={isOpen}
+      >
         <div className={styles.panelHeader}>
           <h1>Cart</h1>
           <div>
@@ -58,21 +76,23 @@ const SlidePopup: React.FC<SlidePopupProps> = ({ isOpen, backdropClickCallback }
         </div>
 
         <div className={styles.productsList}>
-          {Array.from(cartData.values()).map(({ id, name, price, quantity, imageSrc, category }) => (
-            <CartProductCard
-              key={id}
-              id={id}
-              name={name}
-              price={price}
-              quantity={quantity}
-              imageSrc={imageSrc}
-              category={category}
-              incrementCallback={handleIncrementItemQuantity}
-              decrementCallback={handleDecrementItemQuantity}
-              deleteCartItem={handleDeleteCartItem}
-              imageSizes="10vw"
-            />
-          ))}
+          {Array.from(cartData.values()).map(
+            ({ id, name, price, quantity, imageSrc, category }) => (
+              <CartProductCard
+                key={id}
+                id={id}
+                name={name}
+                price={price}
+                quantity={quantity}
+                imageSrc={imageSrc}
+                category={category}
+                incrementCallback={handleIncrementItemQuantity}
+                decrementCallback={handleDecrementItemQuantity}
+                deleteCartItem={handleDeleteCartItem}
+                imageSizes="10vw"
+              />
+            ),
+          )}
         </div>
 
         <div className={styles.checkoutContainer}>

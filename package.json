@@ -13,11 +13,15 @@
     "start": "next start",
     "lint": "next lint",
     "prettier:fix": "prettier -c .prettierrc --ignore-path prettier-ignore --write src",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "lint:fix": "next lint --fix",
+    "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
+    "prettier": "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}"
   },
   "dependencies": {
     "firebase": "^11.1.0",
     "idb": "^8.0.1",
+    "lint-staged": "^15.4.2",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
@@ -30,9 +34,13 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.15",
-    "husky": "^9.1.6",
-    "prettier": "^3.3.3",
-    "typescript": "^5"
+    "eslint-config-next": "^15.1.6",
+    "husky": "^9.1.7",
+    "prettier": "^3.4.2",
+    "typescript": "^5",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3"
   }
 }

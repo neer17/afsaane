@@ -10,7 +10,7 @@ import {
   linkWithCredential,
   setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from 'firebase/auth';
 
 declare global {
@@ -25,12 +25,9 @@ const PhoneAuth: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationId, setVerificationId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.info('PhoneAuth.tsx', 'useEffect', 'auth: currentUser', auth.currentUser);
-
     const cleanup = () => {
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear();
@@ -101,9 +98,15 @@ const PhoneAuth: React.FC = () => {
         throw new Error('reCAPTCHA not initialized');
       }
 
-      const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
+      const formattedPhoneNumber = phoneNumber.startsWith('+')
+        ? phoneNumber
+        : `+${phoneNumber}`;
 
-      const confirmationResult = await signInWithPhoneNumber(auth, formattedPhoneNumber, window.recaptchaVerifier);
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        formattedPhoneNumber,
+        window.recaptchaVerifier,
+      );
 
       window.confirmationResult = confirmationResult;
       setVerificationId(confirmationResult.verificationId);
@@ -133,7 +136,10 @@ const PhoneAuth: React.FC = () => {
     }
 
     try {
-      const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+      const credential = PhoneAuthProvider.credential(
+        verificationId,
+        verificationCode,
+      );
       const currentUser = auth.currentUser;
 
       if (currentUser) {
@@ -153,7 +159,11 @@ const PhoneAuth: React.FC = () => {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Phone Authentication</h2>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
 
       {!verificationId ? (
         <div className="space-y-4">
@@ -196,7 +206,10 @@ const PhoneAuth: React.FC = () => {
             />
           </div>
 
-          <button onClick={verifyCode} className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+          <button
+            onClick={verifyCode}
+            className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+          >
             Verify Code
           </button>
         </div>

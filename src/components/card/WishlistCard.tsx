@@ -32,10 +32,23 @@ const WishlistCard: React.FC<WishlistCardProps> = ({
   return (
     <div className={styles.cardContainer}>
       <div className={styles.imageContainer}>
-        <Image width={0} height={0} src={imageSrc} alt="Default image name" sizes={imageSizes} />
+        <Image
+          width={0}
+          height={0}
+          src={imageSrc}
+          alt="Default image name"
+          sizes={imageSizes}
+        />
 
-        <span className={styles.crossButtonContainer} onClick={() => removeItemCallback(id)}>
-          <CrossButton width="5px" height="5px" onClickCallback={() => removeItemCallback(id)} />
+        <span
+          className={styles.crossButtonContainer}
+          onClick={() => removeItemCallback(id)}
+        >
+          <CrossButton
+            width="5px"
+            height="5px"
+            onClickCallback={() => removeItemCallback(id)}
+          />
         </span>
         <div className={styles.addToCartButtonContainer}>
           <button onClick={() => addToCardCallback(id)}>Add to cart</button>

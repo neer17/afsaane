@@ -16,7 +16,12 @@ interface ProductCardProps {
   productPrice: number;
 }
 
-export default function ProductCard({ images, productTitle, imageSizes, productPrice }: ProductCardProps) {
+export default function ProductCard({
+  images,
+  productTitle,
+  imageSizes,
+  productPrice,
+}: ProductCardProps) {
   const [isSmallViewport, setIsSmallViewport] = useState<boolean>(false);
 
   useEffect(() => {

@@ -26,8 +26,12 @@ const NavigationBar: React.FC = () => {
   const { wishlistData } = useWishlist();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [mobileMenuItemExpanded, setMobileMenuItemExpanded] = useState<string | null>(null);
-  const [desktopMenuItemHovered, setDesktopMenuItemHovered] = useState<string | null>(null);
+  const [mobileMenuItemExpanded, setMobileMenuItemExpanded] = useState<
+    string | null
+  >(null);
+  const [desktopMenuItemHovered, setDesktopMenuItemHovered] = useState<
+    string | null
+  >(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -57,7 +61,11 @@ const NavigationBar: React.FC = () => {
       <nav className={styles.navbar}>
         <div className={styles.navbarContainer}>
           {/* Hamburger button */}
-          <button onClick={toggleMenu} className={styles.mobileMenuButton} aria-label="Menu">
+          <button
+            onClick={toggleMenu}
+            className={styles.mobileMenuButton}
+            aria-label="Menu"
+          >
             <div className={styles.hamburgerIcon}>
               <span className={styles.hamburgerBar}></span>
               <span className={styles.hamburgerBar}></span>
@@ -118,7 +126,11 @@ const NavigationBar: React.FC = () => {
                             <li>Flex: Expandable luggage</li>
                           </ul>
                         </div>
-                        <div className={styles.mobileMenuItemExpandablePanelImageColumn}>
+                        <div
+                          className={
+                            styles.mobileMenuItemExpandablePanelImageColumn
+                          }
+                        >
                           <Image
                             width={300}
                             height={200}
@@ -126,7 +138,11 @@ const NavigationBar: React.FC = () => {
                             alt="Luggage image"
                             className={styles.desktopMenuItemPanelFeaturedImage}
                           ></Image>
-                          <p className={styles.mobileMenuItemExpandablePanelCaption}>
+                          <p
+                            className={
+                              styles.mobileMenuItemExpandablePanelCaption
+                            }
+                          >
                             FIT FOR EVERY TRIP. SHOP SUITCASES &rarr;
                           </p>
                         </div>
@@ -140,7 +156,9 @@ const NavigationBar: React.FC = () => {
 
           <Link href="/wishlist" className={styles.wishlistContainer}>
             <Image src={WishlistSVG} alt="Cart" width={25} height={25} />
-            <span className={styles.cartItemsIndicator}>{wishlistData.size}</span>
+            <span className={styles.cartItemsIndicator}>
+              {wishlistData.size}
+            </span>
           </Link>
 
           <Link href="/cart" className={styles.cartContainer}>
@@ -154,7 +172,11 @@ const NavigationBar: React.FC = () => {
       <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
         <div className={styles.menuHeader}>
           <span className={styles.menuTitle}>Menu</span>
-          <button onClick={toggleMenu} className={styles.closeButton} aria-label="Close menu">
+          <button
+            onClick={toggleMenu}
+            className={styles.closeButton}
+            aria-label="Close menu"
+          >
             <span className={styles.closeBar}></span>
             <span className={styles.closeBar}></span>
           </button>
@@ -162,7 +184,11 @@ const NavigationBar: React.FC = () => {
 
         <div className={styles.menuItems}>
           {menuItems.map((item) => (
-            <span key={uuid()} className={styles.menuItem} onClick={() => handleMobileMenuItemsExpand(item.name)}>
+            <span
+              key={uuid()}
+              className={styles.menuItem}
+              onClick={() => handleMobileMenuItemsExpand(item.name)}
+            >
               <div className={styles.mobileMenuItem}>
                 <div>
                   <span>{item.name} &#9660;</span>

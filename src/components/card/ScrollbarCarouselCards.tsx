@@ -11,7 +11,9 @@ interface ScrollbarCarouselCardsProps {
   products: Product[];
 }
 
-const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({ products }) => {
+const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
+  products,
+}) => {
   return (
     <div className={styles.carouselContainer}>
       <Swiper
@@ -39,7 +41,13 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({ product
           <SwiperSlide key={uuid()}>
             <div className={styles.productCard}>
               <div className={styles.productImage}>
-                <Image src={product.imageSrc} alt={product.name} width={0} height={0} sizes={product.imageSizes} />
+                <Image
+                  src={product.imageSrc}
+                  alt={product.name}
+                  width={0}
+                  height={0}
+                  sizes={product.imageSizes}
+                />
               </div>
               <div className={styles.productInfo}>
                 <h3>{product.name}</h3>

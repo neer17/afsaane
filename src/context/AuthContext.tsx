@@ -6,7 +6,11 @@ import { auth } from './../../lib/firebase/config';
 
 const AuthContext = createContext<{ user: User | null }>({ user: null });
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +23,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return unsubscribe;
   }, []);
 
-  return <AuthContext.Provider value={{ user }}>{!loading && children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user }}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 }
 
 export const useAuth = () => useContext(AuthContext);

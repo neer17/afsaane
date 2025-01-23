@@ -9,7 +9,7 @@ import {
   setPersistence,
   browserLocalPersistence,
   linkWithCredential,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from 'firebase/auth';
 
 declare global {
@@ -17,15 +17,49 @@ declare global {
     google: {
       accounts: {
         id: {
-          initialize: (config: any) => void;
-          prompt: (momentListener?: any) => void;
-          renderButton: (element: HTMLElement, config: any) => void;
+          initialize: (_config: GoogleOneTapConfig) => void;
+          prompt: (momentListener?: PromptMomentListener) => void;
+          renderButton: (element: HTMLElement, config: ButtonConfig) => void;
           cancel: () => void;
           revoke: (email: string, callback: () => void) => void;
         };
       };
     };
   }
+}
+
+interface GoogleOneTapConfig {
+  client_id: string;
+  callback: (response: CredentialResponse) => void;
+  auto_select?: boolean;
+  cancel_on_tap_outside?: boolean;
+  prompt_parent_id?: string;
+  context?: string;
+  itp_support?: boolean;
+  use_fedcm_for_prompt?: boolean;
+  native_callback?: (response: CredentialResponse) => void;
+  error?: (error: Error) => void;
+}
+
+interface CredentialResponse {
+  credential: string;
+}
+
+type PromptMomentListener = (notification: PromptMomentNotification) => void;
+
+interface PromptMomentNotification {
+  isNotDisplayed: () => boolean;
+  getNotDisplayedReason: () => string;
+  isSkippedMoment: () => boolean;
+  getSkippedReason: () => string;
+  isDismissedMoment: () => boolean;
+  getDismissedReason: () => string;
+}
+
+interface ButtonConfig {
+  theme: string;
+  size: string;
+  type: string;
 }
 
 export const handleSignOut = async () => {
@@ -61,7 +95,9 @@ export default function GoogleOneTap() {
           callback: async (response: any) => {
             console.log('Received response from Google:', response);
             try {
-              const credential = GoogleAuthProvider.credential(response.credential);
+              const credential = GoogleAuthProvider.credential(
+                response.credential,
+              );
               await setPersistence(auth, browserLocalPersistence);
               const user = auth.currentUser;
 
@@ -87,7 +123,7 @@ export default function GoogleOneTap() {
           },
           error: (error: any) => {
             console.error('Google One Tap error:', error);
-          }
+          },
         });
       } catch (error) {
         console.error('Error in Google One Tap initialization:', error);
@@ -101,14 +137,19 @@ export default function GoogleOneTap() {
     const checkAndInitialize = () => {
       if (window.google?.accounts?.id) {
         initializeGoogleOneTap();
-        
+
         // Only show the prompt for non-authenticated users
         onAuthStateChanged(auth, (user) => {
           if (!user) {
             window.google.accounts.id.prompt((notification: any) => {
               if (notification.isNotDisplayed()) {
-                console.log('One Tap not displayed:', notification.getNotDisplayedReason());
-                const buttonElement = document.getElementById('google-signin-button');
+                console.log(
+                  'One Tap not displayed:',
+                  notification.getNotDisplayedReason(),
+                );
+                const buttonElement = document.getElementById(
+                  'google-signin-button',
+                );
                 if (buttonElement) {
                   buttonElement.style.display = 'block';
                   window.google.accounts.id.renderButton(buttonElement, {
@@ -118,9 +159,15 @@ export default function GoogleOneTap() {
                   });
                 }
               } else if (notification.isSkippedMoment()) {
-                console.log('One Tap skipped:', notification.getSkippedReason());
+                console.log(
+                  'One Tap skipped:',
+                  notification.getSkippedReason(),
+                );
               } else if (notification.isDismissedMoment()) {
-                console.log('One Tap dismissed:', notification.getDismissedReason());
+                console.log(
+                  'One Tap dismissed:',
+                  notification.getDismissedReason(),
+                );
               }
             });
           }

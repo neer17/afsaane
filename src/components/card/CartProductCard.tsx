@@ -25,7 +25,13 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   return (
     <div className={styles.contentsContainer}>
       <div className={styles.imageContainer}>
-        <Image width={0} height={0} src={imageSrc} alt={name} sizes={imageSizes} />
+        <Image
+          width={0}
+          height={0}
+          src={imageSrc}
+          alt={name}
+          sizes={imageSizes}
+        />
       </div>
       <div className={styles.detailsContainer}>
         <h5>{name}</h5>
