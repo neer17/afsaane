@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import localFont from 'next/font/local';
 import './globals.css';
+import { MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+
 import Navbar from '@/components/navbar/Navbar';
 import SlidingBanner from '@/components/banner/SlidingBanner';
 import CartProvider from '@/context/CartContext';
@@ -49,15 +52,17 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AuthProvider>
-          <CartProvider>
-            <div>
-              <SlidingBanner />
-              <Navbar />
-            </div>
-            {children}
-          </CartProvider>
-        </AuthProvider>
+        <MantineProvider>
+          <AuthProvider>
+            <CartProvider>
+              <div>
+                <SlidingBanner />
+                <Navbar />
+              </div>
+              {children}
+            </CartProvider>
+          </AuthProvider>
+        </MantineProvider>
       </body>
     </html>
   );
