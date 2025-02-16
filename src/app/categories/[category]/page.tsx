@@ -1,4 +1,4 @@
-import ProductCard from '@/components/productCard/ProductCard';
+import ProductCard from '@/components/card/ProductCard';
 import React from 'react';
 import styles from './page.module.css';
 import { v4 as uuid } from 'uuid';

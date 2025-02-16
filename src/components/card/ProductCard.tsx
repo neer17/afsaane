@@ -40,10 +40,6 @@ export default function ProductCard({
     }
   }, []);
 
-  console.info({
-    isSmallViewport,
-  });
-
   return (
     <div className={styles.productContainer}>
       <div className={styles.imageContainer}>

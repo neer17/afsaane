@@ -265,14 +265,14 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     <button
       className={styles.buttonForLargerScreen}
       onClick={() => {
-        // setCartData({
-        //   id: '1239',
-        //   name: 'Test Product',
-        //   category: 'Test',
-        //   imageSrc: images[1],
-        //   quantity: 1,
-        //   price: 1000,
-        // });
+        setCartData({
+          id: '1239',
+          name: 'Test Product',
+          category: 'Test',
+          imageSrc: images[1],
+          quantity: 1,
+          price: 1000,
+        });
         for (let i = 0; i < 100; i++) {
           setCartData({
             id: i.toString(),

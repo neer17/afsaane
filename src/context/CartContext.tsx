@@ -22,6 +22,7 @@ interface CartContextType {
   removeCartData: (itemId: string) => Promise<void>;
   deleteCartData: (itemId: string) => Promise<void>;
   getTotalPrice: () => number;
+  getTotalQuantity: () => number;
 }
 
 // Context type for Wishlist
@@ -69,10 +70,10 @@ export default function CartProvider({ children }: CartProviderProps) {
   );
 
   useEffect(() => {
-    console.info({
-      cartData,
-      wishlistData,
-    });
+    // console.info({
+    //   cartData,
+    //   wishlistData,
+    // });
   }, [cartData, wishlistData]);
 
   useEffect(() => {
@@ -215,6 +216,12 @@ export default function CartProvider({ children }: CartProviderProps) {
     }
   };
 
+  const getTotalQuantity = () => {
+    return Array.from(cartData.values()).reduce((acc, item) => {
+      return acc + item.quantity;
+    }, 0);
+  }
+
   return (
     <CartContext.Provider
       value={{
@@ -223,6 +230,7 @@ export default function CartProvider({ children }: CartProviderProps) {
         removeCartData,
         deleteCartData,
         getTotalPrice,
+        getTotalQuantity
       }}
     >
       <WishlistContext.Provider

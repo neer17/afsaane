@@ -4,11 +4,15 @@ import styles from './CartProductCard.module.css';
 import { Product } from '@/app/helpers/types';
 import QuantityButton from '@/components/buttons/Quantity';
 import CrossButton from '@/components/buttons/Cross';
+import { Text, Group } from '@mantine/core';
 
 interface CartProductCardProps extends Product {
-  incrementCallback: (id: string) => void;
-  decrementCallback: (id: string) => void;
-  deleteCartItem: (id: string) => void;
+  isOrderSummaryCard?: boolean;
+  crossButtonWidth?: string;
+  crossButtonHeight?: string;
+  incrementCallback?: (id: string) => void;
+  decrementCallback?: (id: string) => void;
+  deleteCartItem?: (id: string) => void;
 }
 
 const CartProductCard: React.FC<CartProductCardProps> = ({
@@ -18,6 +22,9 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   price,
   imageSizes = '10vw',
   imageSrc,
+  isOrderSummaryCard = false,
+  crossButtonWidth = '20px',
+  crossButtonHeight = '20px',
   incrementCallback,
   decrementCallback,
   deleteCartItem,
@@ -36,16 +43,30 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
       <div className={styles.detailsContainer}>
         <h5>{name}</h5>
         <h5>{price}</h5>
-        <QuantityButton
-          id={id}
-          quantity={quantity}
-          incrementCallback={() => incrementCallback(id)}
-          decrementCallback={() => decrementCallback(id)}
-        />
+        {isOrderSummaryCard && (
+          <Group>
+            <Text size="xs" fw={700} mr={4}>
+              Qty
+            </Text>
+            <Text size="xs">{quantity}</Text>
+          </Group>
+        )}
+        {!isOrderSummaryCard && (
+          <QuantityButton
+            id={id}
+            quantity={quantity}
+            incrementCallback={() => incrementCallback && incrementCallback(id)}
+            decrementCallback={() => decrementCallback && decrementCallback(id)}
+          />
+        )}
       </div>
 
       <div className={styles.crossButtonContainer}>
-        <CrossButton onClickCallback={() => deleteCartItem(id)} />
+        <CrossButton
+          width={crossButtonWidth}
+          height={crossButtonHeight}
+          onClickCallback={() => deleteCartItem && deleteCartItem(id)}
+        />
       </div>
     </div>
   );
