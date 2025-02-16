@@ -4,7 +4,9 @@ import React, { useRef } from 'react';
 import usePhoneAuth from '@/hooks/PhoneAuth';
 import styles from './page.module.css';
 import GoogleOneTap from '@/components/auth/google_one_tap/GoogleOneTap';
-import CheckoutForm from '@/components/forms/CheckoutForm';
+import CheckoutForm, {
+  DeliveryFormHandle,
+} from '@/components/forms/CheckoutForm';
 import Rupee from '@/components/symbols/Rupee';
 import { useMediaQuery } from '@mantine/hooks';
 
@@ -18,11 +20,9 @@ import {
   Group,
   Text,
   Button,
-  Container,
 } from '@mantine/core';
 import { useCart } from '@/context/CartContext';
 import CartProductCard from '@/components/card/CartProductCard';
-import { verify } from 'crypto';
 
 export default function LoginButton() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
@@ -36,7 +36,8 @@ export default function LoginButton() {
     React.useState(false);
 
   const isSmallerThan1024 = useMediaQuery('(max-width: 1025px)');
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const formRef = useRef<DeliveryFormHandle>(null);
+
   const [sendVerificationCode, verifyCode] = usePhoneAuth(
     recaptchaSolvedCallback,
   );
@@ -55,8 +56,6 @@ export default function LoginButton() {
     console.log('Discount coupon applied');
     setIsDiscountCouponApplied(true);
   };
-
-  const handleValidPHoneNumberAdded = () => {};
 
   // In prod this will not be needed as Firebase will handle this in the background in the paid plan
   function recaptchaSolvedCallback(response: string) {
@@ -91,13 +90,19 @@ export default function LoginButton() {
 
     function verificationCodeSuccessCallback() {
       console.log('verificationCodeSuccessCallback');
-      setIsVerificationCodeVerified(true)
+      setIsVerificationCodeVerified(true);
     }
 
     function verificationCodeErrorCallback() {
       console.log('verificationCodeErrorCallback');
-      setIsVerificationCodeVerified(false)
+      setIsVerificationCodeVerified(false);
     }
+  };
+
+  const handleFormSubmit = (event: React.MouseEvent) => {
+    event.preventDefault();
+    console.info('here');
+    const formValues = formRef.current?.submitForm();
   };
 
   return (
@@ -113,6 +118,7 @@ export default function LoginButton() {
         <Grid overflow="hidden">
           <Grid.Col span={{ base: 12, lg: 7 }}>
             <CheckoutForm
+              ref={formRef}
               sendOtpCallback={handleSendOtp}
               isVerificationCodeSent={isVerificationCodeSent}
               isVerificationCodeVerified={isVerificationCodeVerified}
@@ -120,7 +126,12 @@ export default function LoginButton() {
             />
             {!isSmallerThan1024 && (
               <Group mt={32}>
-                <Button type="submit" size="md" fullWidth>
+                <Button
+                  type="submit"
+                  size="md"
+                  fullWidth
+                  onClick={handleFormSubmit}
+                >
                   Pay Now
                 </Button>
               </Group>
@@ -212,7 +223,7 @@ export default function LoginButton() {
             // Optional: Add width if needed
             width: 'calc(100% - 32px)', // Full width minus margins
           }}
-          onClick={() => buttonRef.current?.click()}
+          onClick={handleFormSubmit}
         >
           Pay Now
         </Button>
