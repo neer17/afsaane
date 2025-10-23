@@ -1,21 +1,29 @@
-// 'use client'
+'use client';
 import { useEffect, useRef } from 'react';
 
 const GoogleSignInButton = () => {
   const buttonRef = useRef<HTMLDivElement>(null);
 
-  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
 
   // Generate nonce for secure authentication
   const generateNonce = async (): Promise<[string, string]> => {
+    // Create random bytes array
+    const randomBytes = new Uint8Array(32);
+    crypto.getRandomValues(randomBytes);
+
+    // Convert to base64 string without spread operator
     const nonce = btoa(
-      String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))),
+      Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(''),
     );
+
     const encoder = new TextEncoder();
     const encodedNonce = encoder.encode(nonce);
     const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
+
+    // Use Array.from directly without spread operator
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedNonce = hashArray
       .map((b) => b.toString(16).padStart(2, '0'))
@@ -123,7 +131,7 @@ const GoogleSignInButton = () => {
         nonce: hashedNonce,
       });
 
-      window.google.accounts.id.renderButton(buttonRef.current, {
+      (window.google.accounts.id as any).renderButton(buttonRef.current, {
         theme: 'outline',
         size: 'large',
         text: 'continue_with',
@@ -135,3 +143,5 @@ const GoogleSignInButton = () => {
 
   return <div ref={buttonRef} />;
 };
+
+export default GoogleSignInButton;

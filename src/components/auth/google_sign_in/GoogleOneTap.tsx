@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import GoogleSignInButton from './GoogleSignInButton';
 
 // Type definitions for Google One Tap
 interface CredentialResponse {
@@ -103,23 +104,31 @@ const createSupabaseClient = () => {
 
 // Generate nonce for secure authentication
 const generateNonce = async (): Promise<[string, string]> => {
-  const nonce = btoa(
-    String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))),
-  );
-  const encoder = new TextEncoder();
-  const encodedNonce = encoder.encode(nonce);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashedNonce = hashArray
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+    // Create random bytes array
+    const randomBytes = new Uint8Array(32);
+    crypto.getRandomValues(randomBytes);
 
-  return [nonce, hashedNonce];
-};
+    // Convert to base64 string without spread operator
+    const nonce = btoa(
+      Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(''),
+    );
 
-const GoogleOneTap = ({ showButton = false }: { showButton?: boolean }) => {
+    const encoder = new TextEncoder();
+    const encodedNonce = encoder.encode(nonce);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
+
+    // Use Array.from directly without spread operator
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedNonce = hashArray
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return [nonce, hashedNonce];
+  };
+
+const GoogleOneTap = () => {
   const initialized = useRef(false);
-  const buttonRef = useRef<HTMLDivElement>(null);
+  const [showGoogleSignInButton, setShowGoogleSignInButton] = useState(false);
 
   useEffect(() => {
     // Prevent double initialization in React Strict Mode
@@ -244,6 +253,9 @@ const GoogleOneTap = ({ showButton = false }: { showButton?: boolean }) => {
             window.location.href = '/';
           } catch (error) {
             console.error('Error in Google One Tap callback:', error);
+
+            // Show sign in button when Google One Tap fails
+            setShowGoogleSignInButton(true);
           }
         },
         nonce: hashedNonce,
@@ -274,33 +286,16 @@ const GoogleOneTap = ({ showButton = false }: { showButton?: boolean }) => {
       });
 
       console.log('Prompt called successfully');
-
-      // Render the sign-in button if requested
-      if (showButton && buttonRef.current) {
-        window.google.accounts.id.renderButton(buttonRef.current, {
-          theme: 'outline',
-          size: 'large',
-          text: 'continue_with',
-          shape: 'rectangular',
-          logo_alignment: 'left',
-        });
-      }
     } catch (error) {
       console.error('Error in initializeGoogleOneTap:', error);
       initialized.current = false; // Reset on error
+
+      // Show sign in button when Google One Tap fails
+      setShowGoogleSignInButton(true);
     }
   };
 
-  return showButton ? (
-    <div
-      ref={buttonRef}
-      style={{
-        display: 'inline-block',
-        minHeight: '40px',
-        minWidth: '200px',
-      }}
-    />
-  ) : null;
+  return showGoogleSignInButton ? <GoogleSignInButton /> : null;
 };
 
 export default GoogleOneTap;

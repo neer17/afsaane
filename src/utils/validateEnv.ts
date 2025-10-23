@@ -15,7 +15,7 @@ const envSchema = Joi.object({
 
 export function validateEnv() {
   const { error, value } = envSchema.validate(process.env, {
-    abortEarly: true, // Don't stop at the first error
+    abortEarly: false, // Don't stop at the first error
     allowUnknown: false, // Allow unknown keys
   });
 

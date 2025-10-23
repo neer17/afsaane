@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import usePhoneAuth from '@/hooks/PhoneAuth';
 import styles from './page.module.css';
-import GoogleOneTap from '@/components/auth/google_one_tap/GoogleOneTap';
+import GoogleOneTap from '@/components/auth/google_sign_in/GoogleOneTap';
 import CheckoutForm, {
   DeliveryFormHandle,
 } from '@/components/forms/CheckoutForm';
@@ -25,7 +25,7 @@ import { useCart } from '@/context/CartContext';
 import CartProductCard from '@/components/card/CartProductCard';
 // import SupabaseAuthPage from '@/components/firebase/SupabaseAuthPage'
 import { useAuth } from '@/context/SupabaseAuthContext';
-import SignOutButton from '@/components/auth/google_one_tap/Signout';
+import SignOutButton from '@/components/auth/google_sign_in/Signout';
 
 export default function LoginButton() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
@@ -125,8 +125,7 @@ export default function LoginButton() {
 
   return (
     <div style={{ paddingTop: '500px' }}>
-      {/* <SignOutButton /> */}
-      <GoogleOneTap showButton={true} />
+      <GoogleOneTap />
     </div>
   );
 }
