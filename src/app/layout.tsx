@@ -9,6 +9,7 @@ import Navbar from '@/components/navbar/Navbar';
 import SlidingBanner from '@/components/banner/SlidingBanner';
 import CartProvider from '@/context/CartContext';
 import AuthProvider from '@/context/AuthContext';
+import { AuthProvider as SupabaseAuthProvider } from '@/context/SupabaseAuthContext';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -53,15 +54,17 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
-          <AuthProvider>
-            <CartProvider>
-              <div>
-                <SlidingBanner />
-                <Navbar />
-              </div>
-              {children}
-            </CartProvider>
-          </AuthProvider>
+          <SupabaseAuthProvider>
+            <AuthProvider>
+              <CartProvider>
+                <div>
+                  <SlidingBanner />
+                  <Navbar />
+                </div>
+                {children}
+              </CartProvider>
+            </AuthProvider>
+          </SupabaseAuthProvider>
         </MantineProvider>
       </body>
     </html>

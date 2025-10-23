@@ -220,7 +220,7 @@ export default function CartProvider({ children }: CartProviderProps) {
     return Array.from(cartData.values()).reduce((acc, item) => {
       return acc + item.quantity;
     }, 0);
-  }
+  };
 
   return (
     <CartContext.Provider
@@ -230,7 +230,7 @@ export default function CartProvider({ children }: CartProviderProps) {
         removeCartData,
         deleteCartData,
         getTotalPrice,
-        getTotalQuantity
+        getTotalQuantity,
       }}
     >
       <WishlistContext.Provider
