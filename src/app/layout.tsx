@@ -10,6 +10,10 @@ import SlidingBanner from '@/components/banner/SlidingBanner';
 import CartProvider from '@/context/CartContext';
 import AuthProvider from '@/context/AuthContext';
 import { AuthProvider as SupabaseAuthProvider } from '@/context/SupabaseAuthContext';
+import { validateEnv } from '@/utils/validateEnv';
+
+// Validate all the env variables
+validateEnv();
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
