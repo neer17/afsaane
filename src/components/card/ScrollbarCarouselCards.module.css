@@ -11,9 +11,9 @@
   height: 100%;
 }
 
-.productCard:hover {
+/* .productCard:hover {
   transform: translateY(-5px);
-}
+} */
 
 .productImage {
   width: 100%;

@@ -8,17 +8,19 @@
 }
 
 .imageContainer {
-  width: 100%;
   position: relative;
+  /* width: 100%;
+  aspect-ratio: 16/9; */
 }
 
-.imageContainer img {
+/* .imageContainer img {
   width: 100%;
   height: auto;
   aspect-ratio: 0.9 / 1.1;
-}
+} */
 
 .textContainer {
+  flex-basis: 80%;
   display: flex;
   flex-direction: column;
 }
@@ -39,7 +41,24 @@
 }
 
 .productImage {
-  object-fit: cover;
+  object-fit: contain;
+}
+
+.buyContainer {
+  flex-basis: 20%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.productDetailsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.wishlistSvgContainer {
+}
+
+.bagSvgContainer {
+  margin-left: 0.5rem;
 }
 
 /* Swiper.js */
@@ -49,15 +68,7 @@
   opacity: 0;
 }
 
-.swiperContainer:hover div:last-child,
+/* .swiperContainer:hover div:last-child,
 .swiperContainer:hover div:nth-child(2) {
   opacity: 1;
-}
-
-@media (max-width: 1024px) {
-  .swiperContainer div:last-child {
-    width: fit-content;
-    margin-right: 8px;
-    opacity: 1;
-  }
-}
+} */

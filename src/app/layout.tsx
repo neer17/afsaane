@@ -10,7 +10,7 @@ import SlidingBanner from '@/components/banner/SlidingBanner';
 import CartProvider from '@/context/CartContext';
 import AuthProvider from '@/context/AuthContext';
 import { AuthProvider as SupabaseAuthProvider } from '@/context/SupabaseAuthContext';
-import { validateEnv } from '@/utils/validateEnv';
+import { validateEnv } from '@/utils/schema';
 
 // Validate all the env variables
 validateEnv();
@@ -58,17 +58,17 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
-          <SupabaseAuthProvider>
-            <AuthProvider>
-              <CartProvider>
-                <div>
-                  <SlidingBanner />
-                  <Navbar />
-                </div>
-                {children}
-              </CartProvider>
-            </AuthProvider>
-          </SupabaseAuthProvider>
+          {/* <SupabaseAuthProvider> */}
+          <AuthProvider>
+            <CartProvider>
+              <div>
+                <SlidingBanner />
+                <Navbar />
+              </div>
+              {children}
+            </CartProvider>
+          </AuthProvider>
+          {/* </SupabaseAuthProvider> */}
         </MantineProvider>
       </body>
     </html>

@@ -1,9 +1,10 @@
 export interface Product {
   id: string;
-  imageSrc: string;
+  images: string[];
   name: string;
   price: number;
-  quantity: number;
+  quantity?: number;
   category: string;
   imageSizes?: string;
+  slug?: string;
 }

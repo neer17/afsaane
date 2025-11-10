@@ -104,27 +104,27 @@ const createSupabaseClient = () => {
 
 // Generate nonce for secure authentication
 const generateNonce = async (): Promise<[string, string]> => {
-    // Create random bytes array
-    const randomBytes = new Uint8Array(32);
-    crypto.getRandomValues(randomBytes);
+  // Create random bytes array
+  const randomBytes = new Uint8Array(32);
+  crypto.getRandomValues(randomBytes);
 
-    // Convert to base64 string without spread operator
-    const nonce = btoa(
-      Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(''),
-    );
+  // Convert to base64 string without spread operator
+  const nonce = btoa(
+    Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(''),
+  );
 
-    const encoder = new TextEncoder();
-    const encodedNonce = encoder.encode(nonce);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
+  const encoder = new TextEncoder();
+  const encodedNonce = encoder.encode(nonce);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
 
-    // Use Array.from directly without spread operator
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashedNonce = hashArray
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+  // Use Array.from directly without spread operator
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashedNonce = hashArray
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 
-    return [nonce, hashedNonce];
-  };
+  return [nonce, hashedNonce];
+};
 
 const GoogleOneTap = () => {
   const initialized = useRef(false);

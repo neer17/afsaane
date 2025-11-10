@@ -22,9 +22,9 @@
 }
 .imageContainerOnLargerScreensGrid {
   display: grid;
-  column-gap: 8px;
+  column-gap: 0.5rem;
   grid-template-columns: auto auto;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .imageWrapperGridItem img {

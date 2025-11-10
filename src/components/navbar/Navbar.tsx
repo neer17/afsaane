@@ -155,7 +155,7 @@ const NavigationBar: React.FC = () => {
           </div>
 
           <Link href="/wishlist" className={styles.wishlistContainer}>
-            <Image src={WishlistSVG} alt="Cart" width={25} height={25} />
+            <Image src={WishlistSVG} alt="Wishlist" width={25} height={25} />
             <span className={styles.cartItemsIndicator}>
               {wishlistData.size}
             </span>

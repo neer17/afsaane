@@ -40,6 +40,10 @@ export default function page() {
     router.back();
   };
 
+  const navigateToCheckoutPage = () => {
+    router.push('/checkout');
+  };
+
   return (
     <div className={styles.cartDetailsContainer}>
       <div className={styles.goBackToShoppingContainer} onClick={handleGoBack}>
@@ -84,7 +88,12 @@ export default function page() {
               <h3>Total</h3> <span>{getTotalPrice()}</span>
             </span>
           </div>
-          <button className={styles.checkoutButton}>Checkout</button>
+          <button
+            className={styles.checkoutButton}
+            onClick={navigateToCheckoutPage}
+          >
+            Checkout
+          </button>
 
           <div className={styles.queryContainer}></div>
         </div>
@@ -92,7 +101,12 @@ export default function page() {
 
       <div className={styles.checkoutContainerMobile}>
         <span>{getTotalPrice()}</span>
-        <button className={styles.checkoutButton}>Checkout</button>
+        <button
+          className={styles.checkoutButton}
+          onClick={navigateToCheckoutPage}
+        >
+          Checkout
+        </button>
       </div>
     </div>
   );

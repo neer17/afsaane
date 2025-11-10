@@ -1,82 +1,88 @@
-import ProductCard from '@/components/card/ProductCard';
-import React from 'react';
-import styles from './page.module.css';
-import { v4 as uuid } from 'uuid';
+'use client';
 
-// type Props = {
-//   params: {
-//     dynamicName: string;
-//   };
-// };
+import ProductCard from '@/components/card/ProductCard';
+import React, { useEffect, useState } from 'react';
+import styles from './page.module.css';
+import { useParams } from 'next/navigation';
+import { API_ENDPOINTS } from '@/app/helpers/constants';
+import { SimpleGrid } from '@mantine/core';
 
 const ProductCatalog = () => {
-  // const { dynamicName } = params;
+  const { category } = useParams();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const products = [
-    {
-      productTitle: 'Stripefront sweater - Olive',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 5000,
-      imageSrc:
-        'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Cable-knit sweater - Blue',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 6000,
-      imageSrc:
-        'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Classic hoodie - Black',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 7000,
-      imageSrc:
-        'https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Denim jacket - Light Wash',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 8000,
-      imageSrc:
-        'https://images.pexels.com/photos/1192601/pexels-photo-1192601.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Leather jacket - Brown',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 10000,
-      imageSrc:
-        'https://images.pexels.com/photos/1292998/pexels-photo-1292998.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Bomber jacket - Green',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 8500,
-      imageSrc:
-        'https://images.pexels.com/photos/2306774/pexels-photo-2306774.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-    {
-      productTitle: 'Oversized T-shirt - White',
-      imageSizes: '(max-width: 1024px) 50vw, 25vw;',
-      productPrice: 3000,
-      imageSrc:
-        'https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=1440&h=1440&dpr=2',
-    },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!category) return;
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/${API_ENDPOINTS.PRODUCTS_BY_CATEGORY.URL}${category}`,
+          {
+            method: API_ENDPOINTS.PRODUCTS_BY_CATEGORY.METHOD,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
+
+        const data: ApiResponse = await response.json();
+        setProducts(data.data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to fetch products',
+        );
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
+
+  if (loading) {
+    return (
+      <div className={styles.productCatalogContainer}>
+        <div>Loading products...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.productCatalogContainer}>
+        <div>Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.productCatalogContainer}>
-      <div className={styles.productsContainer}>
-        {products.map(({ productTitle, productPrice, imageSizes }) => (
+    <div className={`page ${styles.productCatalogContainer}`}>
+      <SimpleGrid
+        cols={{ base: 2, md: 3, xl: 4 }}
+        spacing={{ base: 10, sm: 'xl' }}
+        verticalSpacing={{ base: 'md', sm: 'xl' }}
+      >
+        {products.map((product) => (
           <ProductCard
-            key={uuid()}
-            images={products.map((value) => value.imageSrc)}
-            productTitle={productTitle}
-            imageSizes={imageSizes}
-            productPrice={productPrice}
+            key={product.id}
+            images={product.images.map((img) => img.url)}
+            productTitle={product.name}
+            imageSizes="(max-width: 768px) 50vw, 33.3vw"
+            productPrice={product.price}
           />
         ))}
-      </div>
+      </SimpleGrid>
     </div>
   );
 };

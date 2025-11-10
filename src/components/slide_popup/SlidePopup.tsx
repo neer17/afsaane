@@ -3,6 +3,7 @@ import styles from './SlidePopup.module.css';
 import CrossButton from '../buttons/Cross';
 import { useCart } from '@/context/CartContext';
 import CartProductCard from '../card/CartProductCard';
+import { useRouter } from 'next/navigation';
 
 interface SlidePopupProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ const SlidePopup: React.FC<SlidePopupProps> = ({
     removeCartData,
     getTotalPrice,
   } = useCart();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (isOpen) {
@@ -49,6 +52,10 @@ const SlidePopup: React.FC<SlidePopupProps> = ({
 
   const handleDecrementItemQuantity = async (itemId: string) => {
     await removeCartData(itemId);
+  };
+
+  const navigateToCheckoutPage = () => {
+    router.push('/checkout');
   };
 
   useEffect(() => {
@@ -97,7 +104,7 @@ const SlidePopup: React.FC<SlidePopupProps> = ({
 
         <div className={styles.checkoutContainer}>
           <button className={styles.checkoutButton}>
-            <span>Checkout</span>
+            <button onClick={navigateToCheckoutPage}>Checkout</button>
             <span>.</span>
             <span>{getTotalPrice()}</span>{' '}
           </button>
