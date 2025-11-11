@@ -76,6 +76,7 @@ const ProductCatalog = () => {
         {products.map((product) => (
           <ProductCard
             key={product.id}
+            slug={product.slug}
             images={product.images.map((img) => img.url)}
             productTitle={product.name}
             imageSizes="(max-width: 768px) 50vw, 33.3vw"

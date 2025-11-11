@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import { Autoplay } from 'swiper/modules';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import styles from './SlidingBanner.module.css';
 
 const SlidingBanner = () => {
@@ -15,23 +13,25 @@ const SlidingBanner = () => {
     'Contact us for more info.',
   ];
 
+  const [emblaRef, _emblaApi] = useEmblaCarousel(
+    { 
+      loop: true,
+      duration: 8000
+    },
+    [Autoplay({ delay: 2000, stopOnInteraction: false })]
+  );
+
   return (
     <div className={styles.slidingBannerContainer}>
-      <Swiper
-        modules={[Autoplay]}
-        spaceBetween={50}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{ delay: 2000, disableOnInteraction: false }}
-        speed={1000}
-        className="text-swiper"
-      >
-        {textItems.map((text, index) => (
-          <SwiperSlide key={index}>
-            <div className={styles.textContainer}>{text}</div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <div className={styles.embla} ref={emblaRef}>
+        <div className={styles.emblaContainer}>
+          {textItems.map((text, index) => (
+            <div key={index} className={styles.emblaSlide}>
+              <div className={styles.textContainer}>{text}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

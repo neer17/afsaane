@@ -25,6 +25,8 @@
     "@mantine/notifications": "^8.3.5",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "firebase": "^11.1.0",
     "google-one-tap": "^1.0.6",
     "idb": "^8.0.1",
@@ -34,7 +36,6 @@
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.33.5",
-    "swiper": "^11.1.14",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

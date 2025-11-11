@@ -1,5 +1,23 @@
 .carouselContainer {
+  position: relative;
   width: 100%;
+  padding-bottom: 2rem;
+}
+
+/* CHANGE: Replace Swiper container with Embla carousel styles */
+.emblaContainer {
+  overflow: hidden;
+  width: 100%;
+}
+
+.emblaSlides {
+  display: flex;
+  gap: 20px;
+}
+
+.emblaSlide {
+  flex: 0 0 83.33%; /* CHANGE: Equivalent to slidesPerView: 1.2 */
+  min-width: 0;
 }
 
 .productCard {
@@ -42,22 +60,47 @@
   color: #2c5282;
 }
 
-/* Swiper custom styles */
-.carouselContainer :global(.swiper) {
-  padding-bottom: 2rem;
-}
-.carouselContainer :global(.swiper-scrollbar) {
-  background: rgba(44, 82, 130, 0.1);
-  height: 8px !important;
-  border-radius: 4px;
+/* CHANGE: Replace Swiper scrollbar with custom scrollbar styling */
+.scrollbarContainer {
+  margin-top: 16px;
+  padding: 0 8px;
 }
 
-.carouselContainer :global(.swiper-scrollbar-drag) {
+.scrollbarTrack {
+  background: rgba(44, 82, 130, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.scrollbarThumb {
   background: var(--buttonBackgroundDark);
   border-radius: 4px;
+  height: 100%;
+  width: 30%;
   cursor: grab;
+  transition: background-color 0.2s ease;
 }
 
-.carouselContainer :global(.swiper-scrollbar-drag:active) {
+.scrollbarThumb:active {
   cursor: grabbing;
+}
+
+/* CHANGE: Responsive breakpoints using CSS media queries instead of Swiper breakpoints */
+@media (min-width: 640px) {
+  .emblaSlide {
+    flex: 0 0 calc(50% - 10px); /* 2 slides per view */
+  }
+}
+
+@media (min-width: 768px) {
+  .emblaSlide {
+    flex: 0 0 calc(33.333% - 13.33px); /* 3 slides per view */
+  }
+}
+
+@media (min-width: 1024px) {
+  .emblaSlide {
+    flex: 0 0 calc(25% - 15px); /* 4 slides per view */
+  }
 }

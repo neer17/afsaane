@@ -1,12 +1,11 @@
 // TODO: make a separate component for these images so that the page can be SSR
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { useParams } from 'next/navigation'; // CHANGE: Use useParams from next/navigation instead of useRouter from next/router
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import useEmblaCarousel from 'embla-carousel-react'; // CHANGE: Import Embla carousel hook
 import CartSVG from '@/app/svgs/cart.svg';
 import { v4 as uuid } from 'uuid';
 
@@ -27,6 +26,14 @@ export default function ProductDetails() {
   const slug = params.productName as string;
 
   const [showCartPopup, setShowCartPopup] = useState<boolean>(false);
+  
+  // CHANGE: Initialize Embla carousel with options
+  const [emblaRef] = useEmblaCarousel({ 
+    loop: false,
+    align: 'start',
+    slidesToScroll: 1,
+    containScroll: 'trimSnaps'
+  });
 
   const handleAddToCart = () => {
     toggleCartPopup();
@@ -89,23 +96,22 @@ export default function ProductDetails() {
         {/* Will be visible for smaller screens < 1024px */}
         {/* TODO: Make this a type of card */}
         <div className={styles.imageContainerOnSmallScreens}>
-          <Swiper
-            spaceBetween={0}
-            slidesPerView={1.1}
-            className={styles.swiperContainer}
-          >
-            {images.map((imageSrc, index) => (
-              <SwiperSlide key={uuid()}>
-                <Image
-                  src={imageSrc}
-                  alt={`Product Image ${index + 1}`}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className={styles.productImage}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {/* CHANGE: Replace Swiper with Embla carousel */}
+          <div className={styles.emblaContainer} ref={emblaRef}>
+            <div className={styles.emblaSlides}>
+              {images.map((imageSrc, index) => (
+                <div className={styles.emblaSlide} key={uuid()}>
+                  <Image
+                    src={imageSrc}
+                    alt={`Product Image ${index + 1}`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className={styles.productImage}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className={styles.detailsContainer}>

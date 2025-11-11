@@ -183,6 +183,26 @@
   display: none;
 }
 
+/* CHANGE: Add Embla carousel styles for mobile image slider */
+.emblaContainer {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.emblaSlides {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.emblaSlide {
+  flex: 0 0 90%;
+  position: relative;
+  min-height: 0;
+}
+
 /* For iPad */
 @media (min-width: 768px) and (max-width: 1024px) {
   .imageContainerOnSmallScreens {
@@ -216,7 +236,8 @@
     flex-direction: column;
   }
 
-  .swiperContainer {
+  /* CHANGE: Remove obsolete .swiperContainer and update for Embla */
+  .emblaContainer {
     width: 100%;
     height: 100%;
   }

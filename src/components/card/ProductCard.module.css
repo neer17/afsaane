@@ -9,15 +9,58 @@
 
 .imageContainer {
   position: relative;
-  /* width: 100%;
-  aspect-ratio: 16/9; */
 }
 
-/* .imageContainer img {
+.embla {
+  overflow: hidden;
+}
+
+.emblaContainer {
+  display: flex;
+}
+
+.emblaSlide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.productImage {
+  object-fit: contain;
+  cursor: grab;
+}
+
+.productImage:active {
+  cursor: grabbing;
+}
+
+.emblaDots {
+  position: absolute;
+  bottom: 1.4rem;
+  display: flex;
+  justify-content: center;
   width: 100%;
-  height: auto;
-  aspect-ratio: 0.9 / 1.1;
-} */
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.emblaDot {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.emblaDot:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.emblaDotSelected {
+  background-color: #294a70;
+}
 
 .textContainer {
   flex-basis: 80%;
@@ -35,15 +78,6 @@
   font-size: 11px;
 }
 
-.swiperContainer {
-  width: 100%;
-  height: 100%;
-}
-
-.productImage {
-  object-fit: contain;
-}
-
 .buyContainer {
   flex-basis: 20%;
   display: flex;
@@ -54,21 +88,10 @@
   display: flex;
   justify-content: space-between;
 }
+
 .wishlistSvgContainer {
 }
 
 .bagSvgContainer {
   margin-left: 0.5rem;
 }
-
-/* Swiper.js */
-.swiperContainer div:last-child,
-.swiperContainer div:nth-child(2) {
-  font-weight: 900;
-  opacity: 0;
-}
-
-/* .swiperContainer:hover div:last-child,
-.swiperContainer:hover div:nth-child(2) {
-  opacity: 1;
-} */

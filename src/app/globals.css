@@ -9,10 +9,6 @@
   --accentColor: #57b3b2;
 
   --pageTopMargin: 94px;
-
-  /* For Swiper.js */
-  --swiper-navigation-size: 16px !important;
-  --swiper-navigation-color: white;
 }
 
 /* Media query for dark mode */
