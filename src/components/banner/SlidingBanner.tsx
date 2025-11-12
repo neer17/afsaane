@@ -14,11 +14,11 @@ const SlidingBanner = () => {
   ];
 
   const [emblaRef, _emblaApi] = useEmblaCarousel(
-    { 
+    {
       loop: true,
-      duration: 8000
+      duration: 8000,
     },
-    [Autoplay({ delay: 2000, stopOnInteraction: false })]
+    [Autoplay({ delay: 2000, stopOnInteraction: false })],
   );
 
   return (

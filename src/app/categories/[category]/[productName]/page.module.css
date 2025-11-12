@@ -1,5 +1,5 @@
 .productDetailsContainer {
-  margin-top: 64px;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -7,12 +7,25 @@
 }
 
 .imageAndProductDetails {
-  flex: 1 1 80%;
   display: flex;
-  margin-bottom: 2rem;
+}
+
+.imagesContainerOnLargeScreen {
+  flex: 2;
+  position: relative;
+}
+.imagesGalleryOnLargeScreen {
+  position: sticky;
+  top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.3rem;
+  /* max-height: 150vh;
+  overflow-y: auto; */
 }
 
 .detailsContainer {
+  flex: 1;
   padding: 20px 40px;
   background-color: white;
 }
@@ -20,18 +33,17 @@
 .imageContainerOnSmallScreens {
   display: none;
 }
-.imageContainerOnLargerScreensGrid {
+
+/* .imageContainerOnLargerScreensGrid {
   display: grid;
-  column-gap: 0.5rem;
   grid-template-columns: auto auto;
-  margin-bottom: 0.5rem;
+  column-gap: 1rem;
 }
 
-.imageWrapperGridItem img {
-  width: 100%;
-  height: auto;
-}
-
+.imageContainerOnLargerScreensGrid > div {
+  grid-column-start: 1;
+  grid-column-end: 3;
+} */
 .productDescription h1 {
   font-size: 22px;
   margin-bottom: 18px;
@@ -111,17 +123,6 @@
   align-items: center;
   height: 100px;
   background-color: #f7f9f8;
-}
-
-.imageContainerOnLargerScreensGridSecond {
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 8px;
-}
-
-.imageContainerOnLargerScreensGridSecond > div:last-child {
-  grid-column-start: 1;
-  grid-column-end: 3;
 }
 
 .shippingDetailsOnSmallerScreen {
@@ -204,11 +205,11 @@
 }
 
 /* For iPad */
-@media (min-width: 768px) and (max-width: 1024px) {
+/* @media (min-width: 768px) and (max-width: 1024px) {
   .imageContainerOnSmallScreens {
     display: none;
   }
-}
+} */
 
 /* For Phone */
 @media (max-width: 768px) {
@@ -226,7 +227,7 @@
 /* For smaller screens */
 @media (max-width: 1024px) {
   .productDetailsContainer {
-    margin-top: 64px;
+    padding-top: 100px;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -235,7 +236,9 @@
   .imageAndProductDetails {
     flex-direction: column;
   }
-
+  .imagesContainerOnLargeScreen {
+    display: none;
+  }
   /* CHANGE: Remove obsolete .swiperContainer and update for Embla */
   .emblaContainer {
     width: 100%;

@@ -25,21 +25,23 @@ export default function ProductCard({
   productPrice,
 }: ProductCardProps) {
   const router = useRouter();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: 'start',
     dragFree: false,
-    containScroll: 'trimSnaps'
+    containScroll: 'trimSnaps',
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
-  const filteredImages = images.filter((imageSrc) => !imageSrc.includes('.mp4'));
+  const filteredImages = images.filter(
+    (imageSrc) => !imageSrc.includes('.mp4'),
+  );
 
   const scrollTo = useCallback(
     (index: number) => emblaApi && emblaApi.scrollTo(index),
-    [emblaApi]
+    [emblaApi],
   );
 
   const onInit = useCallback((emblaApi: EmblaCarouselType) => {
@@ -59,13 +61,18 @@ export default function ProductCard({
     emblaApi.on('select', onSelect);
   }, [emblaApi, onInit, onSelect]);
 
-  const navigateToProductDetailsPage = (e: React.MouseEvent<HTMLDivElement>) => {
+  const navigateToProductDetailsPage = (
+    e: React.MouseEvent<HTMLDivElement>,
+  ) => {
     e.preventDefault();
     router.push(`/categories/rings/${slug}`);
   };
 
-  const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
-    e.stopPropagation();
+  const handleDotClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    e.preventDefault();
     scrollTo(index);
   };
 
@@ -74,7 +81,10 @@ export default function ProductCard({
   };
 
   return (
-    <div className={styles.productContainer} onClick={navigateToProductDetailsPage}>
+    <div
+      className={styles.productContainer}
+      onClick={navigateToProductDetailsPage}
+    >
       <div className={styles.imageContainer}>
         <div className={styles.embla} ref={emblaRef}>
           <div className={styles.emblaContainer}>
@@ -122,7 +132,12 @@ export default function ProductCard({
         </div>
         <div className={styles.buyContainer} onClick={handleActionClick}>
           <div className={styles.wishlistSvgContainer}>
-            <Image src={WishlistSVG} alt="Add to Wishlist" width={20} height={20} />
+            <Image
+              src={WishlistSVG}
+              alt="Add to Wishlist"
+              width={20}
+              height={20}
+            />
           </div>
           <div className={styles.bagSvgContainer}>
             <Image src={CartSVG} alt="Add to Cart" width={20} height={20} />

@@ -60,32 +60,6 @@
   color: #2c5282;
 }
 
-/* CHANGE: Replace Swiper scrollbar with custom scrollbar styling */
-.scrollbarContainer {
-  margin-top: 16px;
-  padding: 0 8px;
-}
-
-.scrollbarTrack {
-  background: rgba(44, 82, 130, 0.1);
-  height: 8px;
-  border-radius: 4px;
-  position: relative;
-}
-
-.scrollbarThumb {
-  background: var(--buttonBackgroundDark);
-  border-radius: 4px;
-  height: 100%;
-  width: 30%;
-  cursor: grab;
-  transition: background-color 0.2s ease;
-}
-
-.scrollbarThumb:active {
-  cursor: grabbing;
-}
-
 /* CHANGE: Responsive breakpoints using CSS media queries instead of Swiper breakpoints */
 @media (min-width: 640px) {
   .emblaSlide {
