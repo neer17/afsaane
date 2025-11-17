@@ -129,7 +129,7 @@ export default function ProductDetails() {
         <div className={styles.imageContainerOnSmallScreens}>
           <div className={styles.emblaContainer} ref={emblaRef}>
             <div className={styles.emblaSlides}>
-              {product.images.map((image, index) => (
+              {product.images.map((image, _index) => (
                 <div className={styles.emblaSlide} key={image.id}>
                   {image.url.includes('.mp4') ? (
                     <video
@@ -270,7 +270,10 @@ export default function ProductDetails() {
 
       <div className={styles.moreProductsSmallerScreen}>
         <h1>More from this collection</h1>
-        <ScrollbarCarouselCards products={similarProducts} imageSizes="(min-width: 768px) 100vw 50vw"/>
+        <ScrollbarCarouselCards
+          products={similarProducts}
+          imageSizes="(min-width: 768px) 100vw 50vw"
+        />
       </div>
 
       <SlidePopup

@@ -13,6 +13,7 @@ interface Category {
   description: string;
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 interface Product {
   id: string;
   name: string;
@@ -37,6 +38,7 @@ interface Product {
   metaTitle: string;
   metaDescription: string;
 }
+/* eslint-enable  @typescript-eslint/no-explicit-any */
 
 interface ApiResponse {
   data: Product[];

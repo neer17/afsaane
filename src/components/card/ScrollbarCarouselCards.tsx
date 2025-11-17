@@ -10,7 +10,7 @@ interface ScrollbarCarouselCardsProps {
 
 const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
   products,
-  imageSizes
+  imageSizes,
 }) => {
   // CHANGE: Initialize Embla carousel with responsive options
   const [emblaRef] = useEmblaCarousel({
@@ -30,25 +30,27 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
       {/* CHANGE: Replace Swiper with Embla carousel structure */}
       <div className={styles.emblaContainer} ref={emblaRef}>
         <div className={styles.emblaSlides}>
-          {products.filter(product => product.images && product.images.length > 0).map((product) => (
-            <div className={styles.emblaSlide} key={product.id}>
-              <div className={styles.productCard}>
-                <div className={styles.productImage}>
-                  <Image
-                    src={product.images[0]?.url}
-                    alt={product.name}
-                    width={0}
-                    height={0}
-                    sizes={imageSizes}
-                  />
-                </div>
-                <div className={styles.productInfo}>
-                  <h3>{product.name}</h3>
-                  <p className={styles.price}>{product.price}</p>
+          {products
+            .filter((product) => product.images && product.images.length > 0)
+            .map((product) => (
+              <div className={styles.emblaSlide} key={product.id}>
+                <div className={styles.productCard}>
+                  <div className={styles.productImage}>
+                    <Image
+                      src={product.images[0]?.url}
+                      alt={product.name}
+                      width={0}
+                      height={0}
+                      sizes={imageSizes}
+                    />
+                  </div>
+                  <div className={styles.productInfo}>
+                    <h3>{product.name}</h3>
+                    <p className={styles.price}>{product.price}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
