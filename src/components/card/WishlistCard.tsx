@@ -1,8 +1,8 @@
 // TODO: FEATURE: Add progress bar when the product is added and slight delay if possible
-import React from 'react';
-import styles from './WishlistCard.module.css';
-import Image from 'next/image';
-import CrossButton from '@/components/buttons/Cross';
+import React from "react";
+import styles from "./WishlistCard.module.css";
+import Image from "next/image";
+import CrossButton from "@/components/buttons/Cross";
 
 interface WishlistCardProps {
   id: string;
@@ -23,7 +23,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({
   quantity,
   price,
   imageSrc,
-  imageSizes = '20vw',
+  imageSizes = "20vw",
   addToCardCallback,
   removeItemCallback,
   incrementInQuantityCallback,

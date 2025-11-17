@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
-import styles from './SlidingBanner.module.css';
+import React from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import styles from "./SlidingBanner.module.css";
 
 const SlidingBanner = () => {
   const textItems = [
-    'Welcome to our website!',
-    'Discover amazing products.',
-    'Enjoy seamless shopping.',
-    'Contact us for more info.',
+    "Welcome to our website!",
+    "Discover amazing products.",
+    "Enjoy seamless shopping.",
+    "Contact us for more info.",
   ];
 
   const [emblaRef, _emblaApi] = useEmblaCarousel(

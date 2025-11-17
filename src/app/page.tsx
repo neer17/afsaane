@@ -1,14 +1,14 @@
-import Image from 'next/image';
-import styles from './page.module.css';
-import Banner from '@/components/banner/Banner';
-import Card from '@/components/card/Card';
-import CoupleCards from '@/components/couple_cards/CoupleCards';
-import DetailCard from '@/components/detail_card/DetailCard';
-import Footer from '@/components/footer/Footer';
-import ScrollingText from '@/components/scrolling_banner/ScrollingBanner';
-import { images } from './helpers/constants';
+import Image from "next/image";
+import styles from "./page.module.css";
+import Banner from "@/components/banner/Banner";
+import Card from "@/components/card/Card";
+import CoupleCards from "@/components/couple_cards/CoupleCards";
+import DetailCard from "@/components/detail_card/DetailCard";
+import Footer from "@/components/footer/Footer";
+import ScrollingText from "@/components/scrolling_banner/ScrollingBanner";
+import { images } from "./helpers/constants";
 // TODO: UUID remove all occurences
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 export default function Home() {
   return (
@@ -56,20 +56,20 @@ export default function Home() {
           image="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800"
           altText="Product Variety 1"
           texts={[
-            'Where function meets family',
-            'The Double Diaper Backpack and Tote',
-            'With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.',
-            'Shop Now',
+            "Where function meets family",
+            "The Double Diaper Backpack and Tote",
+            "With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.",
+            "Shop Now",
           ]}
         />
         <CoupleCards
           image="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800"
           altText="Product Variety 1"
           texts={[
-            'Where function meets family',
-            'The Double Diaper Backpack and Tote',
-            'With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.',
-            'Shop Now',
+            "Where function meets family",
+            "The Double Diaper Backpack and Tote",
+            "With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.",
+            "Shop Now",
           ]}
           doReverse
         />
@@ -77,10 +77,10 @@ export default function Home() {
           image="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800"
           altText="Product Variety 1"
           texts={[
-            'Where function meets family',
-            'The Double Diaper Backpack and Tote',
-            'With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.',
-            'Shop Now',
+            "Where function meets family",
+            "The Double Diaper Backpack and Tote",
+            "With separate compartments for you and baby, a changing pad, and stroller straps, we’ve taken care of the details so you can focus on the journey ahead without a fuss. Shop online now and available in store 12/15.",
+            "Shop Now",
           ]}
         />
       </section>

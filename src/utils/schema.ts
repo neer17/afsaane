@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from "joi";
 
 // Define the environment variable schema
 const envSchema = Joi.object({
@@ -15,15 +15,15 @@ const envSchema = Joi.object({
   .required();
 
 export function validateEnv() {
-  const { error, value } = envSchema.validate(process.env, {
+  const { error } = envSchema.validate(process.env, {
     abortEarly: false, // Don't stop at the first error
     allowUnknown: false, // Allow unknown keys
   });
 
   if (error) {
-    console.error('Environment variable validation errors:', error.details);
+    console.error("Environment variable validation errors:", error.details);
     process.exit(1); // Exit the app if validation fails
   }
 
-  console.log('Environment variables validated successfully!');
+  console.log("Environment variables validated successfully!");
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Cross.module.css';
+import React from "react";
+import styles from "./Cross.module.css";
 
 interface CrossProps {
   width?: string;
@@ -7,8 +7,8 @@ interface CrossProps {
   onClickCallback: () => void;
 }
 const Cross: React.FC<CrossProps> = ({
-  width = '20px',
-  height = '20px',
+  width = "20px",
+  height = "20px",
   onClickCallback,
 }) => {
   return (

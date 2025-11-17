@@ -1,10 +1,10 @@
-import React from 'react';
-import Image from 'next/image';
-import styles from './CartProductCard.module.css';
-import { Product } from '@/app/helpers/types';
-import QuantityButton from '@/components/buttons/Quantity';
-import CrossButton from '@/components/buttons/Cross';
-import { Text, Group } from '@mantine/core';
+import React from "react";
+import Image from "next/image";
+import styles from "./CartProductCard.module.css";
+import { Product } from "@/app/helpers/types";
+import QuantityButton from "@/components/buttons/Quantity";
+import CrossButton from "@/components/buttons/Cross";
+import { Text, Group } from "@mantine/core";
 
 interface CartProductCardProps extends Product {
   isOrderSummaryCard?: boolean;
@@ -20,11 +20,11 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   name,
   quantity,
   price,
-  imageSizes = '10vw',
+  imageSizes = "10vw",
   imageSrc,
   isOrderSummaryCard = false,
-  crossButtonWidth = '20px',
-  crossButtonHeight = '20px',
+  crossButtonWidth = "20px",
+  crossButtonHeight = "20px",
   incrementCallback,
   decrementCallback,
   deleteCartItem,

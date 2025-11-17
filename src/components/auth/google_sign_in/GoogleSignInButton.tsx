@@ -1,5 +1,5 @@
-'use client';
-import { useEffect, useRef } from 'react';
+"use client";
+import { useEffect, useRef } from "react";
 
 const GoogleSignInButton = () => {
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -16,18 +16,18 @@ const GoogleSignInButton = () => {
 
     // Convert to base64 string without spread operator
     const nonce = btoa(
-      Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(''),
+      Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join(""),
     );
 
     const encoder = new TextEncoder();
     const encodedNonce = encoder.encode(nonce);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedNonce);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", encodedNonce);
 
     // Use Array.from directly without spread operator
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedNonce = hashArray
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
 
     return [nonce, hashedNonce];
   };
@@ -37,14 +37,14 @@ const GoogleSignInButton = () => {
     const getAccessToken = () => {
       try {
         const session = localStorage.getItem(
-          `sb-${SUPABASE_URL.split('//')[1].split('.')[0]}-auth-token`,
+          `sb-${SUPABASE_URL.split("//")[1].split(".")[0]}-auth-token`,
         );
         if (session) {
           const parsed = JSON.parse(session);
           return parsed?.access_token;
         }
       } catch (e) {
-        console.error('Error reading session:', e);
+        console.error("Error reading session:", e);
       }
       return null;
     };
@@ -75,10 +75,10 @@ const GoogleSignInButton = () => {
           const response = await fetch(
             `${SUPABASE_URL}/auth/v1/token?grant_type=id_token`,
             {
-              method: 'POST',
+              method: "POST",
               headers: {
                 apikey: SUPABASE_ANON_KEY,
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 provider,
@@ -91,7 +91,7 @@ const GoogleSignInButton = () => {
           if (response.ok) {
             const data = await response.json();
 
-            const storageKey = `sb-${SUPABASE_URL.split('//')[1].split('.')[0]}-auth-token`;
+            const storageKey = `sb-${SUPABASE_URL.split("//")[1].split(".")[0]}-auth-token`;
             localStorage.setItem(storageKey, JSON.stringify(data));
 
             return { data, error: null };
@@ -105,8 +105,8 @@ const GoogleSignInButton = () => {
   };
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
 
     script.onload = async () => {
@@ -119,22 +119,22 @@ const GoogleSignInButton = () => {
         client_id: GOOGLE_CLIENT_ID,
         callback: async (response: any) => {
           const { data, error } = await supabase.auth.signInWithIdToken({
-            provider: 'google',
+            provider: "google",
             token: response.credential,
             nonce,
           });
 
           if (!error) {
-            window.location.href = '/';
+            window.location.href = "/";
           }
         },
         nonce: hashedNonce,
       });
 
       (window.google.accounts.id as any).renderButton(buttonRef.current, {
-        theme: 'outline',
-        size: 'large',
-        text: 'continue_with',
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
       });
     };
 

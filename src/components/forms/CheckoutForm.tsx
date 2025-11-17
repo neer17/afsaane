@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
 import React, {
   useState,
   useRef,
   useImperativeHandle,
   forwardRef,
-} from 'react';
-import Image from 'next/image';
-import { useForm } from '@mantine/form';
+} from "react";
+import Image from "next/image";
+import { useForm } from "@mantine/form";
 import {
   TextInput,
   Select,
@@ -21,13 +21,13 @@ import {
   Group,
   Alert,
   Text,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
-import styles from './CheckoutForm.module.css';
-import { IndianStatesList } from '@/app/helpers/constants';
-import WhatsApp from 'public/svgs/whatsapp.svg';
-import { API_ENDPOINTS } from '@/app/helpers/constants';
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import styles from "./CheckoutForm.module.css";
+import { IndianStatesList } from "@/app/helpers/constants";
+import WhatsApp from "public/svgs/whatsapp.svg";
+import { API_ENDPOINTS } from "@/app/helpers/constants";
 
 interface DeliveryFormProps {
   isVerificationCodeSent: boolean;
@@ -70,7 +70,7 @@ const submitCheckoutForm = async (
   const response = await fetch(API_ENDPOINTS.ORDER_CREATE.URL, {
     method: API_ENDPOINTS.ORDER_CREATE.METHOD,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   });
@@ -106,97 +106,97 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
 
     const form = useForm({
       initialValues: {
-        country: 'India',
-        shippingFirstName: '',
-        shippingLastName: '',
-        shippingAddress: '',
-        shippingApartment: '',
-        shippingCity: '',
-        shippingState: '',
-        shippingPinCode: '',
-        shippingPhone: '',
-        billingFirstName: '',
-        billingLastName: '',
-        billingAddress: '',
-        billingApartment: '',
-        billingCity: '',
-        billingState: '',
-        billingPinCode: '',
-        billingPhone: '',
+        country: "India",
+        shippingFirstName: "",
+        shippingLastName: "",
+        shippingAddress: "",
+        shippingApartment: "",
+        shippingCity: "",
+        shippingState: "",
+        shippingPinCode: "",
+        shippingPhone: "",
+        billingFirstName: "",
+        billingLastName: "",
+        billingAddress: "",
+        billingApartment: "",
+        billingCity: "",
+        billingState: "",
+        billingPinCode: "",
+        billingPhone: "",
         // TODO: change this after integrating msg91 and supabase
         isPhoneVerified: true,
-        userId: 'random-user-id',
+        userId: "random-user-id",
       },
       validate: {
         shippingFirstName: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'First name is required';
+            return "First name is required";
           }
           if (value.trim().length < 2) {
-            return 'First name must be at least 2 characters';
+            return "First name must be at least 2 characters";
           }
           if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return 'First name can only contain letters and spaces';
+            return "First name can only contain letters and spaces";
           }
           return null;
         },
         shippingLastName: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'Last name is required';
+            return "Last name is required";
           }
           if (value.trim().length < 2) {
-            return 'Last name must be at least 2 characters';
+            return "Last name must be at least 2 characters";
           }
           if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return 'Last name can only contain letters and spaces';
+            return "Last name can only contain letters and spaces";
           }
           return null;
         },
         shippingAddress: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'Address is required';
+            return "Address is required";
           }
           if (value.trim().length < 5) {
-            return 'Please enter a valid address (minimum 5 characters)';
+            return "Please enter a valid address (minimum 5 characters)";
           }
           return null;
         },
         shippingCity: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'City is required';
+            return "City is required";
           }
           if (value.trim().length < 2) {
-            return 'Please enter a valid city name';
+            return "Please enter a valid city name";
           }
           if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return 'City name can only contain letters and spaces';
+            return "City name can only contain letters and spaces";
           }
           return null;
         },
         shippingState: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'State is required';
+            return "State is required";
           }
           return null;
         },
         shippingPinCode: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'PIN code is required';
+            return "PIN code is required";
           }
           if (!/^\d{6}$/.test(value.trim())) {
-            return 'PIN code must be exactly 6 digits';
+            return "PIN code must be exactly 6 digits";
           }
           return null;
         },
         shippingPhone: (value) => {
           if (!value || value.trim().length === 0) {
-            return 'Phone number is required';
+            return "Phone number is required";
           }
           if (!/^\d{10}$/.test(value.trim())) {
-            return 'Phone number must be exactly 10 digits';
+            return "Phone number must be exactly 10 digits";
           }
           if (isVerificationCodeSent && !isVerificationCodeVerified) {
-            return 'Please verify your phone number with OTP';
+            return "Please verify your phone number with OTP";
           }
           return null;
         },
@@ -215,13 +215,13 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingFirstName: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing first name is required';
+              return "Billing first name is required";
             }
             if (value.trim().length < 2) {
-              return 'Billing first name must be at least 2 characters';
+              return "Billing first name must be at least 2 characters";
             }
             if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return 'Billing first name can only contain letters and spaces';
+              return "Billing first name can only contain letters and spaces";
             }
           }
           return null;
@@ -229,13 +229,13 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingLastName: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing last name is required';
+              return "Billing last name is required";
             }
             if (value.trim().length < 2) {
-              return 'Billing last name must be at least 2 characters';
+              return "Billing last name must be at least 2 characters";
             }
             if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return 'Billing last name can only contain letters and spaces';
+              return "Billing last name can only contain letters and spaces";
             }
           }
           return null;
@@ -243,10 +243,10 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingAddress: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing address is required';
+              return "Billing address is required";
             }
             if (value.trim().length < 5) {
-              return 'Please enter a valid billing address (minimum 5 characters)';
+              return "Please enter a valid billing address (minimum 5 characters)";
             }
           }
           return null;
@@ -254,13 +254,13 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingCity: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing city is required';
+              return "Billing city is required";
             }
             if (value.trim().length < 2) {
-              return 'Please enter a valid billing city name';
+              return "Please enter a valid billing city name";
             }
             if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return 'Billing city name can only contain letters and spaces';
+              return "Billing city name can only contain letters and spaces";
             }
           }
           return null;
@@ -268,7 +268,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingState: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing state is required';
+              return "Billing state is required";
             }
           }
           return null;
@@ -276,10 +276,10 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingPinCode: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing PIN code is required';
+              return "Billing PIN code is required";
             }
             if (!/^\d{6}$/.test(value.trim())) {
-              return 'Billing PIN code must be exactly 6 digits';
+              return "Billing PIN code must be exactly 6 digits";
             }
           }
           return null;
@@ -287,10 +287,10 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingPhone: (value) => {
           if (useDifferentBilling) {
             if (!value || value.trim().length === 0) {
-              return 'Billing phone number is required';
+              return "Billing phone number is required";
             }
             if (!/^\d{10}$/.test(value.trim())) {
-              return 'Billing phone number must be exactly 10 digits';
+              return "Billing phone number must be exactly 10 digits";
             }
           }
           return null;
@@ -327,30 +327,30 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
 
         // Show success notification
         notifications.show({
-          title: 'Success!',
-          message: 'Your order has been submitted successfully.',
-          color: 'green',
+          title: "Success!",
+          message: "Your order has been submitted successfully.",
+          color: "green",
         });
 
         // Reset form after successful submission
         form.reset();
         setUseDifferentBilling(false);
 
-        console.log('Form submitted successfully:', response);
+        console.log("Form submitted successfully:", response);
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
-            : 'An unexpected error occurred';
+            : "An unexpected error occurred";
         setSubmitError(errorMessage);
 
         notifications.show({
-          title: 'Error',
+          title: "Error",
           message: errorMessage,
-          color: 'red',
+          color: "red",
         });
 
-        console.error('Form submission error:', error);
+        console.error("Form submission error:", error);
       } finally {
         setIsSubmitting(false);
       }
@@ -388,7 +388,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
     useImperativeHandle(ref, () => ({
       submitForm: () => {
         const result = form.validate();
-        console.info('form validation');
+        console.info("form validation");
         console.info({ result });
         if (!result.hasErrors) {
           return form.values;
@@ -416,8 +416,8 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
               <Select
                 label="Country/Region"
                 placeholder="Select country"
-                data={['India']}
-                {...form.getInputProps('country')}
+                data={["India"]}
+                {...form.getInputProps("country")}
                 disabled
                 required
               />
@@ -427,7 +427,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="First name"
                     placeholder="Enter first name"
-                    {...form.getInputProps('shippingFirstName')}
+                    {...form.getInputProps("shippingFirstName")}
                     required
                   />
                 </Grid.Col>
@@ -435,7 +435,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="Last name"
                     placeholder="Enter last name"
-                    {...form.getInputProps('shippingLastName')}
+                    {...form.getInputProps("shippingLastName")}
                     required
                   />
                 </Grid.Col>
@@ -444,14 +444,14 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
               <TextInput
                 label="Address"
                 placeholder="Enter your address"
-                {...form.getInputProps('shippingAddress')}
+                {...form.getInputProps("shippingAddress")}
                 required
               />
 
               <TextInput
                 label="Apartment, suite, landmark etc. (optional)"
                 placeholder="Enter apartment details"
-                {...form.getInputProps('shippingApartment')}
+                {...form.getInputProps("shippingApartment")}
               />
 
               <Grid gutter="md">
@@ -459,7 +459,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="City"
                     placeholder="Enter city"
-                    {...form.getInputProps('city')}
+                    {...form.getInputProps("city")}
                     required
                   />
                 </Grid.Col>
@@ -468,7 +468,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                     label="State"
                     placeholder="Select state"
                     data={indianStatesAndTerritory}
-                    {...form.getInputProps('state')}
+                    {...form.getInputProps("state")}
                     required
                     searchable
                   />
@@ -477,7 +477,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="PIN code"
                     placeholder="Enter PIN code"
-                    {...form.getInputProps('pinCode')}
+                    {...form.getInputProps("pinCode")}
                     required
                   />
                 </Grid.Col>
@@ -488,7 +488,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   flex={1}
                   label="Phone"
                   placeholder="Enter phone number"
-                  {...form.getInputProps('phone')}
+                  {...form.getInputProps("phone")}
                   required
                 />
                 {/* <Button
@@ -575,7 +575,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                         <Select
                           label="Country/Region"
                           placeholder="Select country"
-                          data={['India']}
+                          data={["India"]}
                           value="India"
                           disabled
                           required
@@ -586,7 +586,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                             <TextInput
                               label="First name"
                               placeholder="Enter first name"
-                              {...form.getInputProps('billingFirstName')}
+                              {...form.getInputProps("billingFirstName")}
                               required
                             />
                           </Grid.Col>
@@ -594,7 +594,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                             <TextInput
                               label="Last name"
                               placeholder="Enter last name"
-                              {...form.getInputProps('billingLastName')}
+                              {...form.getInputProps("billingLastName")}
                               required
                             />
                           </Grid.Col>
@@ -603,14 +603,14 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                         <TextInput
                           label="Address"
                           placeholder="Enter your address"
-                          {...form.getInputProps('billingAddress')}
+                          {...form.getInputProps("billingAddress")}
                           required
                         />
 
                         <TextInput
                           label="Apartment, suite, etc. (optional)"
                           placeholder="Enter apartment details"
-                          {...form.getInputProps('billingApartment')}
+                          {...form.getInputProps("billingApartment")}
                         />
 
                         <Grid gutter="md">
@@ -618,7 +618,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                             <TextInput
                               label="City"
                               placeholder="Enter city"
-                              {...form.getInputProps('billingCity')}
+                              {...form.getInputProps("billingCity")}
                               required
                             />
                           </Grid.Col>
@@ -627,7 +627,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                               label="State"
                               placeholder="Select state"
                               data={indianStatesAndTerritory}
-                              {...form.getInputProps('billingState')}
+                              {...form.getInputProps("billingState")}
                               required
                               searchable
                             />
@@ -636,7 +636,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                             <TextInput
                               label="PIN code"
                               placeholder="Enter PIN code"
-                              {...form.getInputProps('billingPinCode')}
+                              {...form.getInputProps("billingPinCode")}
                               required
                             />
                           </Grid.Col>
@@ -645,7 +645,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                         <TextInput
                           label="Phone"
                           placeholder="Enter phone number"
-                          {...form.getInputProps('billingPhone')}
+                          {...form.getInputProps("billingPhone")}
                           required
                         />
                       </Stack>
@@ -656,7 +656,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
             </Stack>
           </Stack>
 
-          <Button type="submit" display={'none'} ref={buttonRef}>
+          <Button type="submit" display={"none"} ref={buttonRef}>
             Dummy button to submit the form
           </Button>
         </form>
@@ -665,6 +665,6 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
   },
 );
 
-DeliveryForm.displayName = 'DeliveryForm';
+DeliveryForm.displayName = "DeliveryForm";
 
 export default DeliveryForm;

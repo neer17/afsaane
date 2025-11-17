@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import usePhoneAuth from '@/hooks/PhoneAuth';
-import styles from './page.module.css';
-import GoogleOneTap from '@/components/auth/google_sign_in/GoogleOneTap';
+import React, { useRef } from "react";
+import usePhoneAuth from "@/hooks/PhoneAuth";
+import styles from "./page.module.css";
+import GoogleOneTap from "@/components/auth/google_sign_in/GoogleOneTap";
 import CheckoutForm, {
   DeliveryFormHandle,
-} from '@/components/forms/CheckoutForm';
-import Rupee from '@/components/symbols/Rupee';
-import { useMediaQuery } from '@mantine/hooks';
-import { AuthProvider as SupabaseAuthProvider } from '@/context/SupabaseAuthContext';
+} from "@/components/forms/CheckoutForm";
+import Rupee from "@/components/symbols/Rupee";
+import { useMediaQuery } from "@mantine/hooks";
+import { AuthProvider as SupabaseAuthProvider } from "@/context/SupabaseAuthContext";
 
 import {
   Paper,
@@ -21,11 +21,11 @@ import {
   Group,
   Text,
   Button,
-} from '@mantine/core';
-import { useCart } from '@/context/CartContext';
-import CartProductCard from '@/components/card/CartProductCard';
-import { API_ENDPOINTS } from '../helpers/constants';
-import { useAuth } from '@/context/AuthContext';
+} from "@mantine/core";
+import { useCart } from "@/context/CartContext";
+import CartProductCard from "@/components/card/CartProductCard";
+import { API_ENDPOINTS } from "../helpers/constants";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Checkout() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
@@ -39,7 +39,7 @@ export default function Checkout() {
   // const [isVerificationCodeVerified, setIsVerificationCodeVerified] =
   //   React.useState(false);
 
-  const isSmallerThan1024 = useMediaQuery('(max-width: 1025px)');
+  const isSmallerThan1024 = useMediaQuery("(max-width: 1025px)");
   const formRef = useRef<DeliveryFormHandle>(null);
 
   // const [sendVerificationCode, verifyCode] = usePhoneAuth(
@@ -68,17 +68,17 @@ export default function Checkout() {
 
     // Validate input parameters
     if (!discountCode || discountCode.trim().length === 0) {
-      throw new Error('Discount code is required');
+      throw new Error("Discount code is required");
     }
 
-    const DISCOUNT_ENDPOINT = `${process.env['NEXT_PUBLIC_BACKEND_BASE_URL']}/${API_ENDPOINTS.APPLY_DISCOUNT_CODE.URL}`;
+    const DISCOUNT_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}/${API_ENDPOINTS.APPLY_DISCOUNT_CODE.URL}`;
     console.info({
       DISCOUNT_ENDPOINT,
     });
     const response = await fetch(DISCOUNT_ENDPOINT, {
       method: API_ENDPOINTS.APPLY_DISCOUNT_CODE.METHOD,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         discountCode: discountCode.trim(),
@@ -97,7 +97,7 @@ export default function Checkout() {
 
   // In prod this will not be needed as Firebase will handle this in the background in the paid plan
   function recaptchaSolvedCallback(response: string) {
-    console.log('recaptchaSolvedCallback', response);
+    console.log("recaptchaSolvedCallback", response);
   }
 
   // const handleSendOtp = async (phoneNumber: string) => {
@@ -177,7 +177,7 @@ export default function Checkout() {
                 </Group>
               )}
             </Grid.Col>
-            <Grid.Col span={{ base: 12, lg: 5 }} p={{ base: 0, md: 'md' }}>
+            <Grid.Col span={{ base: 12, lg: 5 }} p={{ base: 0, md: "md" }}>
               <Stack>
                 <Title order={2}>Order Summary</Title>
 
@@ -186,8 +186,8 @@ export default function Checkout() {
                   mb={32}
                   pr="sm"
                   style={{
-                    overflowY: 'auto',
-                    maxHeight: '50vh',
+                    overflowY: "auto",
+                    maxHeight: "50vh",
                   }}
                 >
                   {Array.from(cartData.values()).map(
@@ -260,13 +260,13 @@ export default function Checkout() {
         {isSmallerThan1024 && (
           <Button
             style={{
-              position: 'fixed',
+              position: "fixed",
               bottom: 10, // 20px from bottom
-              left: '50%',
-              transform: 'translateX(-50%)', // Center horizontally
+              left: "50%",
+              transform: "translateX(-50%)", // Center horizontally
               zIndex: 1000, // Ensure it stays on top of other content
               // Optional: Add width if needed
-              width: 'calc(100% - 32px)', // Full width minus margins
+              width: "calc(100% - 32px)", // Full width minus margins
             }}
             onClick={handleFormSubmit}
           >

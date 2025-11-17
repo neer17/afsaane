@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-'use client';
+"use client";
 
-import React from 'react';
-import styles from './page.module.css';
-import { useCart, useWishlist } from '@/context/CartContext';
-import WishlistCard from '@/components/card/WishlistCard';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import LeftArrow from '@/app/svgs/left_arrow.svg';
+import React from "react";
+import styles from "./page.module.css";
+import { useCart, useWishlist } from "@/context/CartContext";
+import WishlistCard from "@/components/card/WishlistCard";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import LeftArrow from "@/app/svgs/left_arrow.svg";
 
 export default function Wishlist() {
   const { wishlistData, removeWishlistItem } = useWishlist();

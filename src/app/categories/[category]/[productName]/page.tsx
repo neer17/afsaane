@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import styles from './page.module.css';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import useEmblaCarousel from 'embla-carousel-react';
-import CartSVG from '@/app/svgs/cart.svg';
+import React, { useState, useEffect } from "react";
+import styles from "./page.module.css";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import useEmblaCarousel from "embla-carousel-react";
+import CartSVG from "@/app/svgs/cart.svg";
 
-import ScrollbarCarouselCards from '@/components/card/ScrollbarCarouselCards';
-import RegularCard from '@/components/card/Card';
-import SlidePopup from '@/components/slide_popup/SlidePopup';
-import { useCart } from '@/context/CartContext';
-import ExpandableContainer from '@/components/containers/ExpandableContainer';
+import ScrollbarCarouselCards from "@/components/card/ScrollbarCarouselCards";
+import RegularCard from "@/components/card/Card";
+import SlidePopup from "@/components/slide_popup/SlidePopup";
+import { useCart } from "@/context/CartContext";
+import ExpandableContainer from "@/components/containers/ExpandableContainer";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -26,9 +26,9 @@ export default function ProductDetails() {
 
   const [emblaRef] = useEmblaCarousel({
     loop: false,
-    align: 'start',
+    align: "start",
     slidesToScroll: 1,
-    containScroll: 'trimSnaps',
+    containScroll: "trimSnaps",
   });
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function ProductDetails() {
         setProduct(data);
         setProductCollectionId(data.collectionId);
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       }
     };
 
@@ -59,7 +59,7 @@ export default function ProductDetails() {
         const similarData = await similarResponse.json();
         setSimilarProducts(similarData);
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       }
     };
 
@@ -93,14 +93,14 @@ export default function ProductDetails() {
             {product.images.map((image) => {
               return (
                 <div key={image.id}>
-                  {image.url.includes('.mp4') ? (
+                  {image.url.includes(".mp4") ? (
                     <video
                       width={1920}
                       height={1080}
                       style={{
-                        width: '100%',
-                        height: 'auto',
-                        objectFit: 'cover',
+                        width: "100%",
+                        height: "auto",
+                        objectFit: "cover",
                       }}
                       src={image.url}
                       autoPlay
@@ -112,8 +112,8 @@ export default function ProductDetails() {
                       width={1920}
                       height={1080}
                       style={{
-                        width: '100%',
-                        height: 'auto',
+                        width: "100%",
+                        height: "auto",
                       }}
                       sizes="(max-width: 1024px) 100vw, 33.3vw"
                       alt={image.alt}
@@ -131,14 +131,14 @@ export default function ProductDetails() {
             <div className={styles.emblaSlides}>
               {product.images.map((image, _index) => (
                 <div className={styles.emblaSlide} key={image.id}>
-                  {image.url.includes('.mp4') ? (
+                  {image.url.includes(".mp4") ? (
                     <video
                       width={1920}
                       height={1080}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
                       }}
                       src={image.url}
                       autoPlay
@@ -194,10 +194,10 @@ export default function ProductDetails() {
           </div>
           <div className={styles.shippingDetailsOnSmallerScreen}>
             {[
-              { svgSrc: CartSVG, text: 'Easy Return' },
-              { svgSrc: CartSVG, text: 'Easy Retur' },
-              { svgSrc: CartSVG, text: 'Easy Retu' },
-              { svgSrc: CartSVG, text: 'Easy Ret' },
+              { svgSrc: CartSVG, text: "Easy Return" },
+              { svgSrc: CartSVG, text: "Easy Retur" },
+              { svgSrc: CartSVG, text: "Easy Retu" },
+              { svgSrc: CartSVG, text: "Easy Ret" },
             ].map(({ svgSrc, text }) => (
               <div className={styles.box} key={text}>
                 <Image src={svgSrc} width={20} height={20} alt={text} />
@@ -207,42 +207,42 @@ export default function ProductDetails() {
           </div>
 
           <ExpandableContainer
-            title={'Product Details'}
+            title={"Product Details"}
             contents={[
-              '100% Organic cotton yarn in black and oatmeal keeps you snug',
-              '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+              "100% Organic cotton yarn in black and oatmeal keeps you snug",
+              "100% Organic cotton yarn in black and oatmeal keeps you snug and comfy",
             ]}
             isExpandable
             isExpandedInitially
           >
             <ExpandableContainer
-              title={'Size & Fit'}
-              contents={['Fit: Slim fit', 'Fit: Regular']}
+              title={"Size & Fit"}
+              contents={["Fit: Slim fit", "Fit: Regular"]}
               isExpandable={false}
               isExpandedInitially
             />
             <ExpandableContainer
-              title={'Details'}
-              contents={['Gentle wash and care']}
+              title={"Details"}
+              contents={["Gentle wash and care"]}
               isExpandable={false}
               isExpandedInitially
             />
           </ExpandableContainer>
 
           <ExpandableContainer
-            title={'Delivery Details'}
+            title={"Delivery Details"}
             contents={[
-              '100% Organic cotton yarn in black and oatmeal keeps you snug',
-              '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+              "100% Organic cotton yarn in black and oatmeal keeps you snug",
+              "100% Organic cotton yarn in black and oatmeal keeps you snug and comfy",
             ]}
             isExpandable
           />
 
           <ExpandableContainer
-            title={'Return & Exchange'}
+            title={"Return & Exchange"}
             contents={[
-              '100% Organic cotton yarn in black and oatmeal keeps you snug',
-              '100% Organic cotton yarn in black and oatmeal keeps you snug and comfy',
+              "100% Organic cotton yarn in black and oatmeal keeps you snug",
+              "100% Organic cotton yarn in black and oatmeal keeps you snug and comfy",
             ]}
             isExpandable
           />
@@ -290,7 +290,7 @@ type AddToCartButtonProps = {
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   onClickCallback,
 }) => {
-  'use client';
+  "use client";
 
   const { setCartData } = useCart();
 
@@ -301,8 +301,8 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         for (let i = 0; i < 5; i++) {
           setCartData({
             id: i.toString(),
-            name: 'Test Product',
-            category: 'Test',
+            name: "Test Product",
+            category: "Test",
             images: [],
             quantity: 1,
             price: 1000,

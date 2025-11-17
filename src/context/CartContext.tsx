@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   createContext,
@@ -6,10 +6,10 @@ import React, {
   ReactNode,
   useEffect,
   useContext,
-} from 'react';
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+} from "react";
+import { openDB, DBSchema, IDBPDatabase } from "idb";
 
-import { Product } from '@/app/helpers/types';
+import { Product } from "@/app/helpers/types";
 
 // Props for the CartProvider
 interface CartProviderProps {
@@ -52,11 +52,11 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 
 // Initialize IndexedDB only if in the browser
 let dbPromise: Promise<IDBPDatabase<CartDB>> | undefined;
-if (typeof window !== 'undefined') {
-  dbPromise = openDB<CartDB>('cartDB', 1, {
+if (typeof window !== "undefined") {
+  dbPromise = openDB<CartDB>("cartDB", 1, {
     upgrade(db) {
-      db.createObjectStore('cartStore', { keyPath: 'id' });
-      db.createObjectStore('wishlistStore', { keyPath: 'id' });
+      db.createObjectStore("cartStore", { keyPath: "id" });
+      db.createObjectStore("wishlistStore", { keyPath: "id" });
     },
   });
 }
@@ -82,13 +82,13 @@ export default function CartProvider({ children }: CartProviderProps) {
 
       try {
         const db = await dbPromise;
-        const allCartItems = await db.getAll('cartStore');
+        const allCartItems = await db.getAll("cartStore");
         const initialCartData = new Map<string, Product>();
         allCartItems.forEach((item) => initialCartData.set(item.id, item));
         setCartDataState(initialCartData);
-        console.info('Cart data loaded from IndexedDB');
+        console.info("Cart data loaded from IndexedDB");
       } catch (error) {
-        console.error('Failed to load cart data:', error);
+        console.error("Failed to load cart data:", error);
       }
     };
 
@@ -97,15 +97,15 @@ export default function CartProvider({ children }: CartProviderProps) {
 
       try {
         const db = await dbPromise;
-        const allWishlistItems = await db.getAll('wishlistStore');
+        const allWishlistItems = await db.getAll("wishlistStore");
         const initialWishlistData = new Map<string, Product>();
         allWishlistItems.forEach((item) =>
           initialWishlistData.set(item.id, item),
         );
         setWishlistDataState(initialWishlistData);
-        console.info('Wishlist data loaded from IndexedDB');
+        console.info("Wishlist data loaded from IndexedDB");
       } catch (error) {
-        console.error('Failed to load wishlist data:', error);
+        console.error("Failed to load wishlist data:", error);
       }
     };
 
@@ -126,10 +126,10 @@ export default function CartProvider({ children }: CartProviderProps) {
       }
 
       const db = await dbPromise;
-      await db.put('cartStore', newCartData.get(cartItem.id)!);
+      await db.put("cartStore", newCartData.get(cartItem.id)!);
       setCartDataState(newCartData);
     } catch (error) {
-      console.error('Failed to set cart data:', error);
+      console.error("Failed to set cart data:", error);
     }
   };
 
@@ -143,16 +143,16 @@ export default function CartProvider({ children }: CartProviderProps) {
         if (item.quantity > 1) {
           item.quantity--;
           const db = await dbPromise;
-          await db.put('cartStore', item);
+          await db.put("cartStore", item);
         } else {
           newCartData.delete(itemId);
           const db = await dbPromise;
-          await db.delete('cartStore', itemId);
+          await db.delete("cartStore", itemId);
         }
       }
       setCartDataState(newCartData);
     } catch (error) {
-      console.error('Failed to remove cart data:', error);
+      console.error("Failed to remove cart data:", error);
     }
   };
 
@@ -170,9 +170,9 @@ export default function CartProvider({ children }: CartProviderProps) {
       setCartDataState(newCartData);
 
       const db = await dbPromise;
-      await db.delete('cartStore', itemId);
+      await db.delete("cartStore", itemId);
     } catch (error) {
-      console.error('Failed to delete cart data:', error);
+      console.error("Failed to delete cart data:", error);
     }
   };
 
@@ -193,10 +193,10 @@ export default function CartProvider({ children }: CartProviderProps) {
       newWishlistData.set(wishlistItem.id, wishlistItem);
 
       const db = await dbPromise;
-      await db.put('wishlistStore', wishlistItem);
+      await db.put("wishlistStore", wishlistItem);
       setWishlistDataState(newWishlistData);
     } catch (error) {
-      console.error('Failed to add wishlist item:', error);
+      console.error("Failed to add wishlist item:", error);
     }
   };
 
@@ -208,11 +208,11 @@ export default function CartProvider({ children }: CartProviderProps) {
       if (newWishlistData.has(itemId)) {
         newWishlistData.delete(itemId);
         const db = await dbPromise;
-        await db.delete('wishlistStore', itemId);
+        await db.delete("wishlistStore", itemId);
       }
       setWishlistDataState(newWishlistData);
     } catch (error) {
-      console.error('Failed to remove wishlist item:', error);
+      console.error("Failed to remove wishlist item:", error);
     }
   };
 
@@ -245,7 +245,7 @@ export default function CartProvider({ children }: CartProviderProps) {
 export function useCart() {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 }
@@ -253,7 +253,7 @@ export function useCart() {
 export function useWishlist() {
   const context = useContext(WishlistContext);
   if (context === undefined) {
-    throw new Error('useWishlist must be used within a CartProvider');
+    throw new Error("useWishlist must be used within a CartProvider");
   }
   return context;
 }

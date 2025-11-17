@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import styles from './ExpandableContainer.module.css';
-import { v4 as uuid } from 'uuid';
+import React, { useState } from "react";
+import styles from "./ExpandableContainer.module.css";
+import { v4 as uuid } from "uuid";
 
 interface ExpandableContainerProps {
   title: string;
@@ -26,7 +26,7 @@ const ExpandableContainer: React.FC<ExpandableContainerProps> = ({
   };
 
   const getSpanValue = () => {
-    return isExpanded ? 'See less' : 'See more';
+    return isExpanded ? "See less" : "See more";
   };
 
   return (

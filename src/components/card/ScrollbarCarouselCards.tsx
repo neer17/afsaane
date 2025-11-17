@@ -1,7 +1,8 @@
-import React from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import styles from './ScrollbarCarouselCards.module.css';
-import Image from 'next/image';
+import React from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import styles from "./ScrollbarCarouselCards.module.css";
+import Image from "next/image";
+import { Product } from "@/app/helpers/types";
 
 interface ScrollbarCarouselCardsProps {
   products: Product[];
@@ -15,13 +16,13 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
   // CHANGE: Initialize Embla carousel with responsive options
   const [emblaRef] = useEmblaCarousel({
     loop: false,
-    align: 'start',
+    align: "start",
     slidesToScroll: 1,
-    containScroll: 'trimSnaps',
+    containScroll: "trimSnaps",
     breakpoints: {
-      '(min-width: 640px)': { slidesToScroll: 2 },
-      '(min-width: 768px)': { slidesToScroll: 3 },
-      '(min-width: 1024px)': { slidesToScroll: 4 },
+      "(min-width: 640px)": { slidesToScroll: 2 },
+      "(min-width: 768px)": { slidesToScroll: 3 },
+      "(min-width: 1024px)": { slidesToScroll: 4 },
     },
   });
 
@@ -37,7 +38,7 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
                 <div className={styles.productCard}>
                   <div className={styles.productImage}>
                     <Image
-                      src={product.images[0]?.url}
+                      src={product.images[0]}
                       alt={product.name}
                       width={0}
                       height={0}

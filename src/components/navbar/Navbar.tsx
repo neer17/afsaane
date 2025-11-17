@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import styles from './Navbar.module.css';
-import Link from 'next/link';
-import CartSVG from '@/app/svgs/cart.svg';
-import WishlistSVG from '@/app/svgs/wishlist.svg';
-import { useCart, useWishlist } from '@/context/CartContext';
-import { v4 as uuid } from 'uuid';
+import React, { useState } from "react";
+import Image from "next/image";
+import styles from "./Navbar.module.css";
+import Link from "next/link";
+import CartSVG from "@/app/svgs/cart.svg";
+import WishlistSVG from "@/app/svgs/wishlist.svg";
+import { useCart, useWishlist } from "@/context/CartContext";
+import { v4 as uuid } from "uuid";
 
 interface MenuItem {
   name: string;
@@ -15,10 +15,10 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { name: 'Collections', path: '/' },
-  { name: 'Earrings', path: '/shop' },
-  { name: 'Rings', path: '/new-launch' },
-  { name: 'Pendants', path: '/navratri-special' },
+  { name: "Collections", path: "/" },
+  { name: "Earrings", path: "/shop" },
+  { name: "Rings", path: "/new-launch" },
+  { name: "Pendants", path: "/navratri-special" },
 ];
 
 const NavigationBar: React.FC = () => {
@@ -35,7 +35,7 @@ const NavigationBar: React.FC = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    document.body.style.overflow = isMenuOpen ? 'unset' : 'hidden';
+    document.body.style.overflow = isMenuOpen ? "unset" : "hidden";
   };
 
   const handleMobileMenuItemsExpand = (menuItemName: string) => {
@@ -169,7 +169,7 @@ const NavigationBar: React.FC = () => {
       </nav>
 
       {/* Mobile navbar menu items*/}
-      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
+      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ""}`}>
         <div className={styles.menuHeader}>
           <span className={styles.menuTitle}>Menu</span>
           <button

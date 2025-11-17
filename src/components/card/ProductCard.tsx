@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import useEmblaCarousel from 'embla-carousel-react';
-import { EmblaCarouselType } from 'embla-carousel';
-import styles from './ProductCard.module.css';
-import Image from 'next/image';
-import WishlistSVG from '@/app/svgs/wishlist.svg';
-import CartSVG from '@/app/svgs/cart.svg';
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import useEmblaCarousel from "embla-carousel-react";
+import { EmblaCarouselType } from "embla-carousel";
+import styles from "./ProductCard.module.css";
+import Image from "next/image";
+import WishlistSVG from "@/app/svgs/wishlist.svg";
+import CartSVG from "@/app/svgs/cart.svg";
 
 interface ProductCardProps {
   slug: string;
@@ -27,16 +27,16 @@ export default function ProductCard({
   const router = useRouter();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    align: 'start',
+    align: "start",
     dragFree: false,
-    containScroll: 'trimSnaps',
+    containScroll: "trimSnaps",
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const filteredImages = images.filter(
-    (imageSrc) => !imageSrc.includes('.mp4'),
+    (imageSrc) => !imageSrc.includes(".mp4"),
   );
 
   const scrollTo = useCallback(
@@ -57,8 +57,8 @@ export default function ProductCard({
 
     onInit(emblaApi);
     onSelect(emblaApi);
-    emblaApi.on('reInit', onInit);
-    emblaApi.on('select', onSelect);
+    emblaApi.on("reInit", onInit);
+    emblaApi.on("select", onSelect);
   }, [emblaApi, onInit, onSelect]);
 
   const navigateToProductDetailsPage = (
@@ -96,8 +96,8 @@ export default function ProductCard({
                   width={1920}
                   height={1080}
                   style={{
-                    width: '100%',
-                    height: 'auto',
+                    width: "100%",
+                    height: "auto",
                   }}
                   sizes={imageSizes}
                   priority={index === 0}
@@ -114,7 +114,7 @@ export default function ProductCard({
               <button
                 key={index}
                 className={`${styles.emblaDot} ${
-                  index === selectedIndex ? styles.emblaDotSelected : ''
+                  index === selectedIndex ? styles.emblaDotSelected : ""
                 }`}
                 type="button"
                 onClick={(e) => handleDotClick(e, index)}

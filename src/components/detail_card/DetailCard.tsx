@@ -1,7 +1,7 @@
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
-import styles from './DetailCard.module.css';
+import styles from "./DetailCard.module.css";
 
 interface DetailCardProps {
   imageSrc: string;

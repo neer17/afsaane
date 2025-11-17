@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import ProductCard from '@/components/card/ProductCard';
-import React, { useEffect, useState } from 'react';
-import styles from './page.module.css';
-import { useParams } from 'next/navigation';
-import { API_ENDPOINTS } from '@/app/helpers/constants';
-import { SimpleGrid } from '@mantine/core';
+import ProductCard from "@/components/card/ProductCard";
+import React, { useEffect, useState } from "react";
+import styles from "./page.module.css";
+import { useParams } from "next/navigation";
+import { API_ENDPOINTS } from "@/app/helpers/constants";
+import { SimpleGrid } from "@mantine/core";
 
 const ProductCatalog = () => {
   const { category } = useParams();
@@ -26,7 +26,7 @@ const ProductCatalog = () => {
           {
             method: API_ENDPOINTS.PRODUCTS_BY_CATEGORY.METHOD,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           },
         );
@@ -39,9 +39,9 @@ const ProductCatalog = () => {
         setProducts(data.data);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to fetch products',
+          err instanceof Error ? err.message : "Failed to fetch products",
         );
-        console.error('Error fetching products:', err);
+        console.error("Error fetching products:", err);
       } finally {
         setLoading(false);
       }
@@ -70,8 +70,8 @@ const ProductCatalog = () => {
     <div className={`page ${styles.productCatalogContainer}`}>
       <SimpleGrid
         cols={{ base: 2, md: 3, xl: 4 }}
-        spacing={{ base: 10, sm: 'xl' }}
-        verticalSpacing={{ base: 'md', sm: 'xl' }}
+        spacing={{ base: 10, sm: "xl" }}
+        verticalSpacing={{ base: "md", sm: "xl" }}
       >
         {products.map((product) => (
           <ProductCard

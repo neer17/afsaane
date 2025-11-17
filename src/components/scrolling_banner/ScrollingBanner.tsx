@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef } from 'react';
-import styles from './ScrollingBanner.module.css';
+import React, { useEffect, useRef } from "react";
+import styles from "./ScrollingBanner.module.css";
 
 function HorizontalScrollText() {
   const textRef = useRef<HTMLDivElement | null>(null);
@@ -9,7 +9,7 @@ function HorizontalScrollText() {
   const previousDirection = useRef<number | null>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleScroll = () => {
       if (textRef.current) {
@@ -35,10 +35,10 @@ function HorizontalScrollText() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

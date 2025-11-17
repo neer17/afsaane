@@ -1,8 +1,8 @@
 // TODO: Google one tap is working with this, no need for a separate component
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { createContext, useContext, useEffect, useState } from "react";
+import { createClient, SupabaseClient, User } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -43,8 +43,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!clientId) return;
 
     // Load Google One Tap
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.defer = true;
     script.onload = () => {
@@ -55,11 +55,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const { credential } = response;
           // Send token to backend or directly to Supabase for verification
           const { data, error } = await supabase.auth.signInWithIdToken({
-            provider: 'google',
+            provider: "google",
             token: credential,
           });
 
-          if (error) console.error('Google sign-in error:', error);
+          if (error) console.error("Google sign-in error:", error);
           else setUser(data.user);
         },
       });

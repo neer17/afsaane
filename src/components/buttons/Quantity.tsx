@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Quantity.module.css';
+import React from "react";
+import styles from "./Quantity.module.css";
 
 interface QuantityButtonProps {
   id: string;

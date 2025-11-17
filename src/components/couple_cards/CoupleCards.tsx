@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import styles from './CoupleCards.module.css';
+import React from "react";
+import Image from "next/image";
+import styles from "./CoupleCards.module.css";
 
 interface CoupleCardsProps {
   image: string;
@@ -17,7 +17,7 @@ const CoupleCards: React.FC<CoupleCardsProps> = ({
 }) => {
   return (
     <div
-      className={`${styles.coupleCardsContainer} ${doReverse ? styles.coupleCardsContainerReverse : ''}`}
+      className={`${styles.coupleCardsContainer} ${doReverse ? styles.coupleCardsContainerReverse : ""}`}
     >
       {image && (
         <div className={styles.imageContainer}>

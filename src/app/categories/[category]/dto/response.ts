@@ -40,7 +40,7 @@ interface Product {
 }
 /* eslint-enable  @typescript-eslint/no-explicit-any */
 
-interface ApiResponse {
+export interface ApiResponse {
   data: Product[];
   message: string;
 }
