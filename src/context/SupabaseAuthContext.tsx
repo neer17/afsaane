@@ -48,9 +48,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     script.async = true;
     script.defer = true;
     script.onload = () => {
-      // @ts-ignore
+      // @ts-expect-error Property 'google' does not exist on type 'Window & typeof globalThis'.
       window.google.accounts.id.initialize({
         client_id: clientId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callback: async (response: any) => {
           const { credential } = response;
           // Send token to backend or directly to Supabase for verification
@@ -64,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       // Show the prompt
-      // @ts-ignore
+      // @ts-expect-error Property 'google' does not exist on type 'Window & typeof globalThis'.
       window.google.accounts.id.prompt();
     };
     document.body.appendChild(script);

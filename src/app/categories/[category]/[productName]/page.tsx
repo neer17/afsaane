@@ -12,6 +12,7 @@ import RegularCard from "@/components/card/Card";
 import SlidePopup from "@/components/slide_popup/SlidePopup";
 import { useCart } from "@/context/CartContext";
 import ExpandableContainer from "@/components/containers/ExpandableContainer";
+import { Product } from "@/app/helpers/types";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -35,12 +36,14 @@ export default function ProductDetails() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          // TODO: refactor this endpoint to /products?query
-          `http://localhost:8080/v1/products/${slug}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/products?slug=${slug}`,
         );
-        const data = await response.json();
-        setProduct(data);
-        setProductCollectionId(data.collectionId);
+        const { data } = await response.json();
+        if (!data) return;
+
+        const [product] = data;
+        setProduct(product);
+        setProductCollectionId(product.collectionId);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -54,10 +57,11 @@ export default function ProductDetails() {
       try {
         // Fetch similar products based on collectionId
         const similarResponse = await fetch(
-          `http://localhost:8080/v1/products?collectionId=${productCollectionId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/products?collectionId=${productCollectionId}`,
         );
-        const similarData = await similarResponse.json();
-        setSimilarProducts(similarData);
+        const { data } = await similarResponse.json();
+        if (!data) return;
+        setSimilarProducts(data);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -82,7 +86,6 @@ export default function ProductDetails() {
     product,
     productCollectionId,
     similarProducts,
-    images: similarProducts?.map((similarProduct) => similarProduct.images[0]),
   });
 
   return (
@@ -90,7 +93,7 @@ export default function ProductDetails() {
       <div className={styles.imageAndProductDetails}>
         <div className={styles.imagesContainerOnLargeScreen}>
           <div className={styles.imagesGalleryOnLargeScreen}>
-            {product.images.map((image) => {
+            {product.images?.map((image) => {
               return (
                 <div key={image.id}>
                   {image.url.includes(".mp4") ? (
@@ -129,7 +132,7 @@ export default function ProductDetails() {
         <div className={styles.imageContainerOnSmallScreens}>
           <div className={styles.emblaContainer} ref={emblaRef}>
             <div className={styles.emblaSlides}>
-              {product.images.map((image, _index) => (
+              {product.images?.map((image, _index) => (
                 <div className={styles.emblaSlide} key={image.id}>
                   {image.url.includes(".mp4") ? (
                     <video
@@ -253,7 +256,7 @@ export default function ProductDetails() {
         <div className={styles.moreProductsCardsWrapper}>
           {similarProducts
             ?.filter((product) => product.images && product.images.length > 0)
-            .map((similarProduct) => similarProduct.images[0])
+            ?.map((similarProduct) => similarProduct.images[0])
             ?.map((image) => (
               <div className={styles.moreProductsCardContainer} key={image.id}>
                 <RegularCard
@@ -298,17 +301,16 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     <button
       className={styles.buttonForLargerScreen}
       onClick={() => {
-        for (let i = 0; i < 5; i++) {
-          setCartData({
-            id: i.toString(),
-            name: "Test Product",
-            category: "Test",
-            images: [],
-            quantity: 1,
-            price: 1000,
-          });
-        }
-
+        // for (let i = 0; i < 5; i++) {
+        //   setCartData({
+        //     id: i.toString(),
+        //     name: "Test Product",
+        //     category: "Test",
+        //     images: [],
+        //     quantity: 1,
+        //     price: 1000,
+        //   });
+        // }
         onClickCallback();
       }}
     >

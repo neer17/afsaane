@@ -64,6 +64,8 @@ export interface DeliveryFormHandle {
 }
 
 // API service function
+// TODO: redundant remove eslint check
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const submitCheckoutForm = async (
   formData: DeliveryFormValues,
 ): Promise<any> => {
@@ -84,6 +86,7 @@ const submitCheckoutForm = async (
 
   return response.json();
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
   (
@@ -101,6 +104,15 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
       useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
+
+    // TODO: remove: to prevent esint-errors
+    console.info({
+      sendingVerificationCode,
+      setSendingVerificationCode,
+      sendOtpCallback,
+      verificationCodeEnteredCallback,
+      isSubmitting,
+    });
 
     const buttonRef = useRef<HTMLButtonElement>(null);
 

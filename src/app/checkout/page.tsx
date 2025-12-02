@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import usePhoneAuth from "@/hooks/PhoneAuth";
 import styles from "./page.module.css";
-import GoogleOneTap from "@/components/auth/google_sign_in/GoogleOneTap";
 import CheckoutForm, {
   DeliveryFormHandle,
 } from "@/components/forms/CheckoutForm";
@@ -25,7 +23,6 @@ import {
 import { useCart } from "@/context/CartContext";
 import CartProductCard from "@/components/card/CartProductCard";
 import { API_ENDPOINTS } from "../helpers/constants";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Checkout() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
@@ -95,11 +92,6 @@ export default function Checkout() {
     return response.json();
   };
 
-  // In prod this will not be needed as Firebase will handle this in the background in the paid plan
-  function recaptchaSolvedCallback(response: string) {
-    console.log("recaptchaSolvedCallback", response);
-  }
-
   // const handleSendOtp = async (phoneNumber: string) => {
   //   await sendVerificationCode(
   //     phoneNumber,
@@ -152,8 +144,6 @@ export default function Checkout() {
   return (
     <SupabaseAuthProvider>
       <div className={styles.container}>
-        <Box>{/* <GoogleOneTap /> */}</Box>
-
         <Paper p="xl" pb={50}>
           <Grid overflow="hidden">
             <Grid.Col span={{ base: 12, lg: 7 }}>
@@ -191,15 +181,16 @@ export default function Checkout() {
                   }}
                 >
                   {Array.from(cartData.values()).map(
-                    ({ id, name, price, quantity, category, imageSrc }) => (
+                    ({ id, name, price, quantity, category, images, slug }) => (
                       <CartProductCard
                         key={id}
                         id={id}
                         name={name}
                         price={price}
+                        slug={slug}
+                        images={images}
                         quantity={quantity}
                         category={category}
-                        imageSrc={imageSrc}
                         isOrderSummaryCard
                         crossButtonWidth="10px"
                         crossButtonHeight="10px"

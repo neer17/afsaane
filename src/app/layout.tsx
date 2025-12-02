@@ -9,7 +9,6 @@ import Navbar from "@/components/navbar/Navbar";
 import SlidingBanner from "@/components/banner/SlidingBanner";
 import CartProvider from "@/context/CartContext";
 import AuthProvider from "@/context/AuthContext";
-import { AuthProvider as SupabaseAuthProvider } from "@/context/SupabaseAuthContext";
 import { validateEnv } from "@/utils/schema";
 
 // Validate all the env variables

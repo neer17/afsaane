@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import { useParams } from "next/navigation";
 import { API_ENDPOINTS } from "@/app/helpers/constants";
 import { SimpleGrid } from "@mantine/core";
+import { Product } from "@/app/helpers/types";
 
 const ProductCatalog = () => {
   const { category } = useParams();
@@ -35,7 +36,7 @@ const ProductCatalog = () => {
           throw new Error(`Failed to fetch products: ${response.status}`);
         }
 
-        const data: ApiResponse = await response.json();
+        const data = await response.json();
         setProducts(data.data);
       } catch (err) {
         setError(
@@ -77,7 +78,7 @@ const ProductCatalog = () => {
           <ProductCard
             key={product.id}
             slug={product.slug}
-            images={product.images.map((img) => img.url)}
+            images={product.images?.map((img) => img.url)}
             productTitle={product.name}
             imageSizes="(max-width: 768px) 50vw, 33.3vw"
             productPrice={product.price}
