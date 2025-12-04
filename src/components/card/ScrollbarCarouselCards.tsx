@@ -38,7 +38,7 @@ const ScrollbarCarouselCards: React.FC<ScrollbarCarouselCardsProps> = ({
                 <div className={styles.productCard}>
                   <div className={styles.productImage}>
                     <Image
-                      src={product.images[0]}
+                      src={product.images[0].url}
                       alt={product.name}
                       width={0}
                       height={0}

@@ -62,14 +62,17 @@ export default function page() {
       >
         <div className={styles.productsContainer}>
           {Array.from(cartData.values()).map(
-            ({ id, name, price, quantity, category, imageSrc }) => (
+            ({ id, name, price, quantity, category, images, material, slug, description }) => (
               <CartProductCard
                 key={id}
                 id={id}
                 name={name}
                 price={price}
                 quantity={quantity}
-                imageSrc={imageSrc}
+                images={images}
+                slug={slug}
+                material={material}
+                description={description}
                 category={category}
                 imageSizes="10vw"
                 incrementCallback={handleQuantityIncrement}

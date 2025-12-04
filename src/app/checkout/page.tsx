@@ -181,13 +181,15 @@ export default function Checkout() {
                   }}
                 >
                   {Array.from(cartData.values()).map(
-                    ({ id, name, price, quantity, category, images, slug }) => (
+                    ({ id, name, price, quantity, category, images, slug, material, description }) => (
                       <CartProductCard
                         key={id}
                         id={id}
                         name={name}
                         price={price}
                         slug={slug}
+                        material={material}
+                        description={description}
                         images={images}
                         quantity={quantity}
                         category={category}

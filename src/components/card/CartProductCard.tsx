@@ -7,11 +7,6 @@ import CrossButton from "@/components/buttons/Cross";
 import { Text, Group } from "@mantine/core";
 
 interface CartProductCardProps extends Product {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-  images: string[];
   imageSizes?: string;
   isOrderSummaryCard?: boolean;
   crossButtonWidth?: string;
@@ -41,7 +36,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
         <Image
           width={0}
           height={0}
-          src={images[0]}
+          src={images[0].url}
           alt={name}
           sizes={imageSizes}
         />

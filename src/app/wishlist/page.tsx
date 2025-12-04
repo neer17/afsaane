@@ -82,13 +82,13 @@ export default function Wishlist() {
 
       <div className={styles.productsContainer}>
         {Array.from(wishlistData.values()).map(
-          ({ id, name, quantity, imageSrc, price }) => (
+          ({ id, name, quantity, images, price }) => (
             <div key={id} className={styles.productCardWrapper}>
               <WishlistCard
                 id={id}
                 name={name}
                 quantity={quantity}
-                imageSrc={imageSrc}
+                imageSrc={images[0].url}
                 price={price}
                 addToCardCallback={handleAddToCart}
                 removeItemCallback={handleRemoveItem}
