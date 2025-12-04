@@ -2,7 +2,6 @@ import Joi from "joi";
 
 // Define the environment variable schema
 const envSchema = Joi.object({
-  NEXT_PUBLIC_APP_URL: Joi.string().uri().required(),
   NEXT_PUBLIC_SUPABASE_URL: Joi.string().required(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: Joi.string().required(),
   NEXT_PUBLIC_GOOGLE_CLIENT_ID: Joi.string().required(),
