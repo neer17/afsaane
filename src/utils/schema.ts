@@ -5,9 +5,6 @@ const envSchema = Joi.object({
   NEXT_PUBLIC_APP_URL: Joi.string().uri().required(),
   NEXT_PUBLIC_SUPABASE_URL: Joi.string().required(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: Joi.string().required(),
-  // TODO: this may not be needed, double check
-  NEXT_PUBLIC_SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET:
-    Joi.string().required(),
   NEXT_PUBLIC_GOOGLE_CLIENT_ID: Joi.string().required(),
   NEXT_PUBLIC_BACKEND_BASE_URL: Joi.string().required(),
 })

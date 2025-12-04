@@ -10,7 +10,6 @@ import CartSVG from "@/app/svgs/cart.svg";
 import ScrollbarCarouselCards from "@/components/card/ScrollbarCarouselCards";
 import RegularCard from "@/components/card/Card";
 import SlidePopup from "@/components/slide_popup/SlidePopup";
-import { useCart } from "@/context/CartContext";
 import ExpandableContainer from "@/components/containers/ExpandableContainer";
 import { Product } from "@/app/helpers/types";
 
@@ -132,7 +131,7 @@ export default function ProductDetails() {
         <div className={styles.imageContainerOnSmallScreens}>
           <div className={styles.emblaContainer} ref={emblaRef}>
             <div className={styles.emblaSlides}>
-              {product.images?.map((image, _index) => (
+              {product.images?.map((image) => (
                 <div className={styles.emblaSlide} key={image.id}>
                   {image.url.includes(".mp4") ? (
                     <video
@@ -294,8 +293,6 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   onClickCallback,
 }) => {
   "use client";
-
-  const { setCartData } = useCart();
 
   return (
     <button

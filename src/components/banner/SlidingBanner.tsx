@@ -13,7 +13,7 @@ const SlidingBanner = () => {
     "Contact us for more info.",
   ];
 
-  const [emblaRef, _emblaApi] = useEmblaCarousel(
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       duration: 8000,

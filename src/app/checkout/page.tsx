@@ -58,6 +58,8 @@ export default function Checkout() {
     await applyDiscountCode(appliedDiscountCode);
   };
 
+  // TODO: remove
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const applyDiscountCode = async (
     discountCode: string | undefined,
   ): Promise<any> => {
@@ -91,6 +93,7 @@ export default function Checkout() {
 
     return response.json();
   };
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   // const handleSendOtp = async (phoneNumber: string) => {
   //   await sendVerificationCode(
@@ -135,10 +138,10 @@ export default function Checkout() {
 
   const handleFormSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
-    const formValues = formRef.current?.submitForm();
-    const productIds = cartData
-      .values()
-      .map((productDetails) => productDetails.id);
+    // const formValues = formRef.current?.submitForm();
+    // const productIds = cartData
+    //   .values()
+    //   .map((productDetails) => productDetails.id);
   };
 
   return (
@@ -181,7 +184,17 @@ export default function Checkout() {
                   }}
                 >
                   {Array.from(cartData.values()).map(
-                    ({ id, name, price, quantity, category, images, slug, material, description }) => (
+                    ({
+                      id,
+                      name,
+                      price,
+                      quantity,
+                      category,
+                      images,
+                      slug,
+                      material,
+                      description,
+                    }) => (
                       <CartProductCard
                         key={id}
                         id={id}

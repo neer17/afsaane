@@ -1,7 +1,3 @@
-// const APP_NAME = 'Afsaane';
-
-import { Product } from "./types";
-
 export const images = [
   "https://www.nicobar.com/cdn/shop/files/NBI036270_2_2048x.jpg?v=1730278425",
   "https://www.nicobar.com/cdn/shop/files/NBI036270_1_2048x.jpg?v=1730278423",

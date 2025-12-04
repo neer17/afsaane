@@ -14,7 +14,7 @@
     "lint": "next lint",
     "prettier:fix": "prettier -c tooling-config/.prettierrc --ignore-path tooling-config/prettier-ignore --write src",
     "prepare": "husky",
-    "lint:fix": "next lint --fix --config tooling-config/.eslintrc.js",
+    "lint:fix": "next lint --fix --config .eslintrc.json",
     "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {

@@ -84,7 +84,17 @@ const SlidePopup: React.FC<SlidePopupProps> = ({
 
         <div className={styles.productsList}>
           {Array.from(cartData.values()).map(
-            ({ id, name, price, quantity, images, category, slug, material, description }) => (
+            ({
+              id,
+              name,
+              price,
+              quantity,
+              images,
+              category,
+              slug,
+              material,
+              description,
+            }) => (
               <CartProductCard
                 key={id}
                 id={id}

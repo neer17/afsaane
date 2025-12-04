@@ -62,7 +62,17 @@ export default function page() {
       >
         <div className={styles.productsContainer}>
           {Array.from(cartData.values()).map(
-            ({ id, name, price, quantity, category, images, material, slug, description }) => (
+            ({
+              id,
+              name,
+              price,
+              quantity,
+              category,
+              images,
+              material,
+              slug,
+              description,
+            }) => (
               <CartProductCard
                 key={id}
                 id={id}
