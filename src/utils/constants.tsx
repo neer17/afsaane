@@ -47,20 +47,32 @@ export const IndianStatesList = [
 
 export const API_ENDPOINTS = {
   ORDER_CREATE: {
-    URL: "v1/orders/create",
+    URL: "/v1/orders/create",
     METHOD: "POST",
   },
   VALIDATE_DISCOUNT_CODE: {
-    URL: "v1/orders/validate-discount-code",
+    URL: "/v1/orders/validate-discount-code",
     METHOD: "POST",
   },
   APPLY_DISCOUNT_CODE: {
-    URL: "v1/orders/apply-discount-code",
+    URL: "/v1/orders/apply-discount-code",
     METHOD: "POST",
+  },
+  PRODUCTS: {
+    URL: "/v1/products",
+    METHOD: "GET",
   },
   PRODUCTS_BY_CATEGORY: {
     // TODO: how to include param or slug?
-    URL: "v1/products/categories/",
+    URL: "/v1/products/categories",
     METHOD: "GET",
+  },
+  SEND_OTP: {
+    URL: "/v1/auth/send-otp",
+    METHOD: "POST",
+  },
+  VERIFY_OTP: {
+    URL: "/v1/auth/verify-otp",
+    METHOD: "POST",
   },
 };

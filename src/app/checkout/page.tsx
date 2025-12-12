@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./page.module.css";
-import CheckoutForm, {
-  DeliveryFormHandle,
-} from "@/components/forms/CheckoutForm";
+import CheckoutForm from "@/components/forms/CheckoutForm";
+import { DeliveryFormRef } from "@/components/forms/CheckoutForm";
 import Rupee from "@/components/symbols/Rupee";
 import { useMediaQuery } from "@mantine/hooks";
 import { AuthProvider as SupabaseAuthProvider } from "@/context/SupabaseAuthContext";
@@ -22,26 +21,156 @@ import {
 } from "@mantine/core";
 import { useCart } from "@/context/CartContext";
 import CartProductCard from "@/components/card/CartProductCard";
-import { API_ENDPOINTS } from "../helpers/constants";
+import { API_ENDPOINTS } from "@/utils/constants";
+import {
+  saveCheckoutState,
+  loadCheckoutState,
+  clearCheckoutState,
+} from "@/utils/idb/checkout_idb";
 
 export default function Checkout() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
     useCart();
-  const [appliedDiscountCode, setAppliedDiscountCode] =
-    React.useState<string>();
+  const [appliedDiscountCode, setAppliedDiscountCode] = useState<string>();
 
-  // const [isVerificationCodeSent, setIsVerificationCodeSent] =
-  //   React.useState(false);
+  const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
 
-  // const [isVerificationCodeVerified, setIsVerificationCodeVerified] =
-  //   React.useState(false);
+  const [isVerificationCodeVerified, setIsVerificationCodeVerified] =
+    useState(false);
+
+  const [otpRequestTimeoutError, setOtpRequestTimeoutError] =
+    useState<string>();
+
+  // Timer state
+  const [otpExpiryTime, setOtpExpiryTime] = useState<number | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
+
+  // Loading state for IDB operations
+  const [isStateLoaded, setIsStateLoaded] = useState(false);
 
   const isSmallerThan1024 = useMediaQuery("(max-width: 1025px)");
-  const formRef = useRef<DeliveryFormHandle>(null);
 
-  // const [sendVerificationCode, verifyCode] = usePhoneAuth(
-  //   recaptchaSolvedCallback,
-  // );
+  // Create ref for the CheckoutForm
+  const formRef = useRef<DeliveryFormRef>(null);
+
+  // Load saved state on mount
+  useEffect(() => {
+    const loadSavedState = async () => {
+      try {
+        const savedState = await loadCheckoutState();
+        if (savedState) {
+          setIsVerificationCodeSent(savedState.isVerificationCodeSent);
+          setIsVerificationCodeVerified(savedState.isVerificationCodeVerified);
+          setOtpExpiryTime(savedState.otpExpiryTime);
+          setTimeRemaining(savedState.timeRemaining);
+
+          // Set form data in the form ref if available
+          if (formRef.current && savedState.formData) {
+            formRef.current.setFormData(
+              savedState.formData,
+              savedState.useDifferentBilling,
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load saved checkout state:", error);
+      } finally {
+        setIsStateLoaded(true);
+      }
+    };
+
+    loadSavedState();
+  }, []);
+
+  // Save state whenever relevant state changes
+  useEffect(() => {
+    if (!isStateLoaded) return;
+
+    const saveState = async () => {
+      if (formRef.current) {
+        const formData = formRef.current.getFormData();
+        const useDifferentBilling = formRef.current.getUseDifferentBilling();
+
+        await saveCheckoutState(
+          { ...formData },
+          isVerificationCodeSent,
+          isVerificationCodeVerified,
+          otpExpiryTime,
+          timeRemaining,
+          useDifferentBilling,
+        );
+      }
+    };
+
+    saveState();
+  }, [
+    isVerificationCodeSent,
+    isVerificationCodeVerified,
+    otpExpiryTime,
+    timeRemaining,
+    isStateLoaded,
+  ]);
+
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (otpExpiryTime && timeRemaining > 0) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((otpExpiryTime - now) / 1000));
+        setTimeRemaining(remaining);
+
+        if (remaining === 0) {
+          setOtpExpiryTime(null);
+          setIsVerificationCodeSent(false);
+        }
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [otpExpiryTime, timeRemaining]);
+
+  // Clear state on successful payment or when leaving
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Don't clear on page refresh, only on navigation away
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && formRef.current) {
+        // Save current state when tab becomes hidden
+        const formData = formRef.current.getFormData();
+        const useDifferentBilling = formRef.current.getUseDifferentBilling();
+
+        saveCheckoutState(
+          { ...formData },
+          isVerificationCodeSent,
+          isVerificationCodeVerified,
+          otpExpiryTime,
+          timeRemaining,
+          useDifferentBilling,
+        );
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [
+    isVerificationCodeSent,
+    isVerificationCodeVerified,
+    otpExpiryTime,
+    timeRemaining,
+  ]);
 
   const handleDeleteItem = async (id: string) => {
     await deleteCartData(id);
@@ -70,10 +199,7 @@ export default function Checkout() {
       throw new Error("Discount code is required");
     }
 
-    const DISCOUNT_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}/${API_ENDPOINTS.APPLY_DISCOUNT_CODE.URL}`;
-    console.info({
-      DISCOUNT_ENDPOINT,
-    });
+    const DISCOUNT_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.APPLY_DISCOUNT_CODE.URL}`;
     const response = await fetch(DISCOUNT_ENDPOINT, {
       method: API_ENDPOINTS.APPLY_DISCOUNT_CODE.METHOD,
       headers: {
@@ -95,54 +221,120 @@ export default function Checkout() {
   };
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  // const handleSendOtp = async (phoneNumber: string) => {
-  //   await sendVerificationCode(
-  //     phoneNumber,
-  //     verificationCodeSentCallback,
-  //     verificationCodeSentErrorCallback,
-  //   );
+  const handleSendOtp = async (phoneNumber: string): Promise<void> => {
+    if (!phoneNumber) return Promise.reject();
 
-  //   async function verificationCodeSentCallback() {
-  //     console.log('verificationCodeSentCallback');
-  //     setIsVerificationCodeSent(true);
-  //   }
+    // Validate input parameters
+    if (!phoneNumber || phoneNumber.trim().length !== 10) {
+      throw new Error("Phone number should be 10 digits long");
+    }
 
-  //   function verificationCodeSentErrorCallback() {
-  //     console.log('verificationCodeSentErrorCallback');
-  //     setIsVerificationCodeSent(false);
-  //     // TODO: Add a try again mechanism through the UI
-  //   }
-  // };
+    const SEND_OTP_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.SEND_OTP.URL}`;
+    const response = await fetch(SEND_OTP_ENDPOINT, {
+      method: API_ENDPOINTS.SEND_OTP.METHOD,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone: `91${phoneNumber}`, // TODO: FO how to make it dynamic
+      }),
+    });
 
-  // const handleVerificationCode = async (verificationCode: string) => {
-  //   await verifyCode(
-  //     verificationCode,
-  //     verificationCodeSuccessCallback,
-  //     verificationCodeErrorCallback,
-  //   );
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
 
-  //   function verificationCodeSuccessCallback() {
-  //     console.log('verificationCodeSuccessCallback');
-  //     setIsVerificationCodeVerified(true);
-  //   }
+      // Show error message to wait certain minutes before requesting for OTP again
+      if (
+        response.status == 400 &&
+        String(errorData.error).includes("Please wait")
+      ) {
+        setOtpRequestTimeoutError(errorData.error);
+      }
 
-  //   function verificationCodeErrorCallback() {
-  //     console.log('verificationCodeErrorCallback');
-  //     setIsVerificationCodeVerified(false);
-  //   }
-  // };
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`,
+      );
+    }
 
-  console.info({
-    cartData,
-  });
+    // Update state on success - start 2 minute timer
+    const expiryTime = Date.now() + 2 * 60 * 1000; // 2 minutes from now
+    setOtpExpiryTime(expiryTime);
+    setTimeRemaining(120); // 2 minutes in seconds
+    setIsVerificationCodeSent(true);
 
-  const handleFormSubmit = (event: React.MouseEvent) => {
-    event.preventDefault();
-    // const formValues = formRef.current?.submitForm();
-    // const productIds = cartData
-    //   .values()
-    //   .map((productDetails) => productDetails.id);
+    return response.json();
   };
+
+  const handleOtpVerification = async (
+    phoneNumber: string,
+    verificationCode: string,
+  ): Promise<void> => {
+    if (!verificationCode || !phoneNumber)
+      throw new Error("Verification code and phone number should be present");
+
+    // Validate input parameters
+    if (!verificationCode || verificationCode.trim().length !== 6) {
+      throw new Error("verification code should be 6 digits long");
+    }
+
+    const VERIFY_OTP_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.VERIFY_OTP.URL}`;
+    const response = await fetch(VERIFY_OTP_ENDPOINT, {
+      method: API_ENDPOINTS.VERIFY_OTP.METHOD,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone: `91${phoneNumber}`,
+        otp: verificationCode,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`,
+      );
+    }
+
+    // Update state on success - clear timer
+    setIsVerificationCodeVerified(true);
+    setOtpExpiryTime(null);
+    setTimeRemaining(0);
+
+    return response.json();
+  };
+
+  const handleOtpExpired = () => {
+    setIsVerificationCodeSent(false);
+    setOtpExpiryTime(null);
+    setTimeRemaining(0);
+  };
+
+  const handlePayNow = async (data: any) => {
+    console.log("Payment data:", data);
+    await clearCheckoutState();
+    // Implement your payment processing logic here
+  };
+
+  // Submit form from parent
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submitForm();
+    }
+  };
+
+  // Don't render until state is loaded
+  if (!isStateLoaded) {
+    return (
+      <SupabaseAuthProvider>
+        <div className={styles.container}>
+          <Paper p="xl" pb={50}>
+            <Text>Loading...</Text>
+          </Paper>
+        </div>
+      </SupabaseAuthProvider>
+    );
+  }
 
   return (
     <SupabaseAuthProvider>
@@ -152,15 +344,20 @@ export default function Checkout() {
             <Grid.Col span={{ base: 12, lg: 7 }}>
               <CheckoutForm
                 ref={formRef}
-                sendOtpCallback={() => {}}
-                isVerificationCodeSent={true}
-                isVerificationCodeVerified={true}
-                verificationCodeEnteredCallback={() => {}}
+                isVerificationCodeSent={isVerificationCodeSent}
+                isVerificationCodeVerified={isVerificationCodeVerified}
+                sendOtpCallback={handleSendOtp}
+                verifyOtpCallback={handleOtpVerification}
+                onPayNow={handlePayNow}
+                otpExpiryTime={otpExpiryTime}
+                timeRemaining={timeRemaining}
+                onOtpExpired={handleOtpExpired}
+                otpRequestTimeoutError={otpRequestTimeoutError}
               />
               {!isSmallerThan1024 && (
                 <Group mt={32}>
                   <Button
-                    type="submit"
+                    type="button"
                     size="md"
                     fullWidth
                     onClick={handleFormSubmit}
@@ -267,12 +464,11 @@ export default function Checkout() {
           <Button
             style={{
               position: "fixed",
-              bottom: 10, // 20px from bottom
+              bottom: 10,
               left: "50%",
-              transform: "translateX(-50%)", // Center horizontally
-              zIndex: 1000, // Ensure it stays on top of other content
-              // Optional: Add width if needed
-              width: "calc(100% - 32px)", // Full width minus margins
+              transform: "translateX(-50%)",
+              zIndex: 1000,
+              width: "calc(100% - 32px)",
             }}
             onClick={handleFormSubmit}
           >

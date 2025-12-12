@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./CartProductCard.module.css";
-import { Product } from "@/app/helpers/types";
+import { Product } from "@/utils/types";
 import QuantityButton from "@/components/buttons/Quantity";
 import CrossButton from "@/components/buttons/Cross";
 import { Text, Group } from "@mantine/core";

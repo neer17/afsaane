@@ -57,17 +57,13 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
-          {/* <SupabaseAuthProvider> */}
-          <AuthProvider>
-            <CartProvider>
-              <div>
-                <SlidingBanner />
-                <Navbar />
-              </div>
-              {children}
-            </CartProvider>
-          </AuthProvider>
-          {/* </SupabaseAuthProvider> */}
+          <CartProvider>
+            <div>
+              <SlidingBanner />
+              <Navbar />
+            </div>
+            {children}
+          </CartProvider>
         </MantineProvider>
       </body>
     </html>

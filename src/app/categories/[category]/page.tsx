@@ -4,9 +4,9 @@ import ProductCard from "@/components/card/ProductCard";
 import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { useParams } from "next/navigation";
-import { API_ENDPOINTS } from "@/app/helpers/constants";
+import { API_ENDPOINTS } from "@/utils/constants";
 import { SimpleGrid } from "@mantine/core";
-import { Product } from "@/app/helpers/types";
+import { Product } from "@/utils/types";
 
 const ProductCatalog = () => {
   const { category } = useParams();
@@ -23,7 +23,7 @@ const ProductCatalog = () => {
         setError(null);
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/${API_ENDPOINTS.PRODUCTS_BY_CATEGORY.URL}${category}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${API_ENDPOINTS.PRODUCTS_BY_CATEGORY.URL}/${category}`,
           {
             method: API_ENDPOINTS.PRODUCTS_BY_CATEGORY.METHOD,
             headers: {
@@ -78,10 +78,15 @@ const ProductCatalog = () => {
           <ProductCard
             key={product.id}
             slug={product.slug}
-            images={product.images?.map((img) => img.url)}
-            productTitle={product.name}
+            images={product.images}
+            name={product.name}
             imageSizes="(max-width: 768px) 50vw, 33.3vw"
-            productPrice={product.price}
+            price={product.price}
+            description={product.description}
+            category={product.category}
+            id={product.id}
+            material={product.material}
+            quantity={product.quantity}
           />
         ))}
       </SimpleGrid>

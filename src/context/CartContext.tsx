@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { openDB, DBSchema, IDBPDatabase } from "idb";
 
-import { Product } from "@/app/helpers/types";
+import { Product } from "@/utils/types";
 
 // Props for the CartProvider
 interface CartProviderProps {

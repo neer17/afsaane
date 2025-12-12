@@ -11,7 +11,8 @@ import ScrollbarCarouselCards from "@/components/card/ScrollbarCarouselCards";
 import RegularCard from "@/components/card/Card";
 import SlidePopup from "@/components/slide_popup/SlidePopup";
 import ExpandableContainer from "@/components/containers/ExpandableContainer";
-import { Product } from "@/app/helpers/types";
+import { Product } from "@/utils/types";
+import { API_ENDPOINTS } from "@/utils/constants";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -35,7 +36,7 @@ export default function ProductDetails() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/products?slug=${slug}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${API_ENDPOINTS.PRODUCTS.URL}?slug=${slug}`,
         );
         const { data } = await response.json();
         if (!data) return;
@@ -56,7 +57,7 @@ export default function ProductDetails() {
       try {
         // Fetch similar products based on collectionId
         const similarResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/products?collectionId=${productCollectionId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${API_ENDPOINTS.PRODUCTS.URL}?collectionId=${productCollectionId}`,
         );
         const { data } = await similarResponse.json();
         if (!data) return;

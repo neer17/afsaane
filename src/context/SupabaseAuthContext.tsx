@@ -1,4 +1,3 @@
-// TODO: Google one tap is working with this, no need for a separate component
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";

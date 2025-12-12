@@ -2,7 +2,7 @@ import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import styles from "./ScrollbarCarouselCards.module.css";
 import Image from "next/image";
-import { Product } from "@/app/helpers/types";
+import { Product } from "@/utils/types";
 
 interface ScrollbarCarouselCardsProps {
   products: Product[];

@@ -116,11 +116,11 @@ const SlidePopup: React.FC<SlidePopupProps> = ({
         </div>
 
         <div className={styles.checkoutContainer}>
-          <button className={styles.checkoutButton}>
+          <div className={styles.checkoutButton}>
             <button onClick={navigateToCheckoutPage}>Checkout</button>
             <span>.</span>
             <span>{getTotalPrice()}</span>{" "}
-          </button>
+          </div>
         </div>
       </div>
     </>

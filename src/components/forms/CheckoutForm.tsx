@@ -2,9 +2,10 @@
 
 import React, {
   useState,
-  useRef,
-  useImperativeHandle,
   forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useRef,
 } from "react";
 import Image from "next/image";
 import { useForm } from "@mantine/form";
@@ -25,24 +26,35 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import styles from "./CheckoutForm.module.css";
-import { IndianStatesList } from "@/app/helpers/constants";
-import WhatsApp from "public/svgs/whatsapp.svg";
-import { API_ENDPOINTS } from "@/app/helpers/constants";
+import { IndianStatesList, API_ENDPOINTS } from "@/utils/constants";
+import { useAuth } from "@/context/SupabaseAuthContext";
+import {
+  loadCheckoutState,
+  saveCheckoutState,
+} from "@/utils/idb/checkout_idb";
 
 interface DeliveryFormProps {
   isVerificationCodeSent: boolean;
   isVerificationCodeVerified: boolean;
-  sendOtpCallback: (phoneNumber: string) => void;
-  verificationCodeEnteredCallback: (verificationCode: string) => void;
+  sendOtpCallback: (phoneNumber: string) => Promise<void>;
+  verifyOtpCallback: (
+    phoneNumber: string,
+    verificationCode: string,
+  ) => Promise<void>;
+  onPayNow: (data: DeliveryFormValues) => void;
+  otpExpiryTime?: number | null;
+  timeRemaining?: number;
+  onOtpExpired?: () => void;
+  otpRequestTimeoutError?: string;
 }
 
-interface DeliveryFormValues {
+export interface DeliveryFormValues {
   userId: string;
   country: string;
   shippingFirstName: string;
   shippingLastName: string;
   shippingAddress: string;
-  shippingApartment: string;
+  shippingApartment?: string;
   shippingCity: string;
   shippingState: string;
   shippingPinCode: string;
@@ -55,68 +67,49 @@ interface DeliveryFormValues {
   billingState?: string;
   billingPinCode?: string;
   billingPhone?: string;
+  verificationCode?: string;
   isPhoneVerified: boolean;
 }
 
-export interface DeliveryFormHandle {
-  submitForm: () => DeliveryFormValues | null;
-  resetForm: () => void;
+// Export the ref type so parent can use it
+export interface DeliveryFormRef {
+  submitForm: () => void;
+  getFormData: () => DeliveryFormValues;
+  setFormData: (
+    data: Partial<DeliveryFormValues>,
+    useDifferentBilling: boolean,
+  ) => void;
+  getUseDifferentBilling: () => boolean;
 }
 
-// API service function
-// TODO: redundant remove eslint check
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const submitCheckoutForm = async (
-  formData: DeliveryFormValues,
-): Promise<any> => {
-  const response = await fetch(API_ENDPOINTS.ORDER_CREATE.URL, {
-    method: API_ENDPOINTS.ORDER_CREATE.METHOD,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.message || `HTTP error! status: ${response.status}`,
-    );
-  }
-
-  return response.json();
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
+const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
   (
     {
-      isVerificationCodeSent,
+      isVerificationCodeSent = false,
+      isVerificationCodeVerified = false,
       sendOtpCallback,
-      verificationCodeEnteredCallback,
-      isVerificationCodeVerified,
+      verifyOtpCallback,
+      onPayNow,
+      timeRemaining = 0,
+      otpRequestTimeoutError,
     },
     ref,
   ) => {
+    const { user } = useAuth();
     const [useDifferentBilling, setUseDifferentBilling] = useState(false);
-    const [opened, { toggle: toggleBillingForm }] = useDisclosure(false);
-    const [sendingVerificationCode, setSendingVerificationCode] =
-      useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [opened, {  open, close }] = useDisclosure(false);
+
+    const [sendingOtp, setSendingOtp] = useState(false);
+    const [verifyingOtp, setVerifyingOtp] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [isFormLoaded, setIsFormLoaded] = useState(false);
 
-    // TODO: remove: to prevent esint-errors
-    console.info({
-      sendingVerificationCode,
-      setSendingVerificationCode,
-      sendOtpCallback,
-      verificationCodeEnteredCallback,
-      isSubmitting,
-    });
+    // Use ref to track if we should skip saving (during initial load)
+    const isLoadingRef = useRef(true);
+    // Use ref to prevent double-loading in Strict Mode
+    const hasLoadedRef = useRef(false);
 
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
-    const form = useForm({
+    const form = useForm<DeliveryFormValues>({
       initialValues: {
         country: "India",
         shippingFirstName: "",
@@ -135,294 +128,287 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
         billingState: "",
         billingPinCode: "",
         billingPhone: "",
-        // TODO: change this after integrating msg91 and supabase
-        isPhoneVerified: true,
-        userId: "random-user-id",
+        verificationCode: "",
+        isPhoneVerified: false,
+        userId: user?.id || "",
       },
       validate: {
-        shippingFirstName: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "First name is required";
-          }
-          if (value.trim().length < 2) {
-            return "First name must be at least 2 characters";
-          }
-          if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return "First name can only contain letters and spaces";
-          }
-          return null;
-        },
-        shippingLastName: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "Last name is required";
-          }
-          if (value.trim().length < 2) {
-            return "Last name must be at least 2 characters";
-          }
-          if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return "Last name can only contain letters and spaces";
-          }
-          return null;
-        },
-        shippingAddress: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "Address is required";
-          }
-          if (value.trim().length < 5) {
-            return "Please enter a valid address (minimum 5 characters)";
-          }
-          return null;
-        },
-        shippingCity: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "City is required";
-          }
-          if (value.trim().length < 2) {
-            return "Please enter a valid city name";
-          }
-          if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-            return "City name can only contain letters and spaces";
-          }
-          return null;
-        },
-        shippingState: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "State is required";
-          }
-          return null;
-        },
-        shippingPinCode: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "PIN code is required";
-          }
-          if (!/^\d{6}$/.test(value.trim())) {
-            return "PIN code must be exactly 6 digits";
-          }
-          return null;
-        },
-        shippingPhone: (value) => {
-          if (!value || value.trim().length === 0) {
-            return "Phone number is required";
-          }
-          if (!/^\d{10}$/.test(value.trim())) {
-            return "Phone number must be exactly 10 digits";
-          }
-          if (isVerificationCodeSent && !isVerificationCodeVerified) {
-            return "Please verify your phone number with OTP";
-          }
-          return null;
-        },
-        // verificationCode: (value) => {
-        //   if (isVerificationCodeSent && !isVerificationCodeVerified) {
-        //     if (!value || value.trim().length === 0) {
-        //       return 'Verification code is required';
-        //     }
-        //     if (!/^\d{6}$/.test(value.trim())) {
-        //       return 'Verification code must be exactly 6 digits';
-        //     }
-        //   }
-        //   return null;
-        // },
-        // Billing address validations (conditional)
-        billingFirstName: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing first name is required";
-            }
-            if (value.trim().length < 2) {
-              return "Billing first name must be at least 2 characters";
-            }
-            if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return "Billing first name can only contain letters and spaces";
-            }
-          }
-          return null;
-        },
-        billingLastName: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing last name is required";
-            }
-            if (value.trim().length < 2) {
-              return "Billing last name must be at least 2 characters";
-            }
-            if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return "Billing last name can only contain letters and spaces";
-            }
-          }
-          return null;
-        },
-        billingAddress: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing address is required";
-            }
-            if (value.trim().length < 5) {
-              return "Please enter a valid billing address (minimum 5 characters)";
-            }
-          }
-          return null;
-        },
-        billingCity: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing city is required";
-            }
-            if (value.trim().length < 2) {
-              return "Please enter a valid billing city name";
-            }
-            if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-              return "Billing city name can only contain letters and spaces";
-            }
-          }
-          return null;
-        },
-        billingState: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing state is required";
-            }
-          }
-          return null;
-        },
-        billingPinCode: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing PIN code is required";
-            }
-            if (!/^\d{6}$/.test(value.trim())) {
-              return "Billing PIN code must be exactly 6 digits";
-            }
-          }
-          return null;
-        },
-        billingPhone: (value) => {
-          if (useDifferentBilling) {
-            if (!value || value.trim().length === 0) {
-              return "Billing phone number is required";
-            }
-            if (!/^\d{10}$/.test(value.trim())) {
-              return "Billing phone number must be exactly 10 digits";
-            }
-          }
-          return null;
-        },
+        shippingFirstName: (v) =>
+          v.trim().length < 2 ? "First name required" : null,
+        shippingLastName: (v) =>
+          v.trim().length < 2 ? "Last name required" : null,
+        shippingAddress: (v) =>
+          v.trim().length < 5 ? "Valid address required" : null,
+        shippingCity: (v) =>
+          v.trim().length < 2 ? "Valid city required" : null,
+        shippingState: (v) => (!v ? "State required" : null),
+        shippingPinCode: (v) =>
+          /^\d{6}$/.test(v) ? null : "Valid 6 digit PIN required",
+        shippingPhone: (v) =>
+          /^\d{10}$/.test(v) ? null : "Valid 10 digit phone required",
+
+        verificationCode: (v) =>
+          isVerificationCodeSent && !isVerificationCodeVerified
+            ? /^\d{6}$/.test(v || "")
+              ? null
+              : "Enter valid OTP"
+            : null,
+
+        // Billing validations only when different billing is chosen
+        billingFirstName: (v) =>
+          useDifferentBilling && v && v.trim().length < 2
+            ? "Billing first name required"
+            : null,
+        billingLastName: (v) =>
+          useDifferentBilling && v && v.trim().length < 2
+            ? "Billing last name required"
+            : null,
+        billingAddress: (v) =>
+          useDifferentBilling && v && v.trim().length < 5
+            ? "Billing address required"
+            : null,
+        billingCity: (v) =>
+          useDifferentBilling && v && v.trim().length < 2
+            ? "Billing city required"
+            : null,
+        billingState: (v) =>
+          useDifferentBilling && !v ? "Billing state required" : null,
+        billingPinCode: (v) =>
+          useDifferentBilling && v && !/^\d{6}$/.test(v)
+            ? "Billing PIN must be 6 digits"
+            : null,
+        billingPhone: (v) =>
+          useDifferentBilling && v && !/^\d{10}$/.test(v)
+            ? "Billing phone must be 10 digits"
+            : null,
       },
     });
+
+    // Load saved form data on component mount
+    useEffect(() => {
+      // Prevent double-loading in React Strict Mode
+      if (hasLoadedRef.current) {
+        console.log("⏭️ Skipping duplicate load (React Strict Mode)");
+        return;
+      }
+
+      hasLoadedRef.current = true;
+
+      const loadSavedFormData = async () => {
+        try {
+          console.log("🔍 Attempting to load checkout state from IndexedDB...");
+          const savedState = await loadCheckoutState();
+          console.log("📦 Loaded state from IndexedDB:", savedState);
+
+          if (savedState && savedState.formData) {
+            console.log("✅ Found saved form data, restoring...");
+            console.log("Form data to restore:", savedState.formData);
+
+            // Restore form values
+            form.setValues(savedState.formData);
+
+            // Restore billing preference
+            const savedUseDifferentBilling =
+              savedState.useDifferentBilling || false;
+            setUseDifferentBilling(savedUseDifferentBilling);
+            console.log(
+              "Billing preference restored:",
+              savedUseDifferentBilling,
+            );
+
+            // Open billing collapse if it was previously opened
+            if (savedUseDifferentBilling) {
+              open();
+            } else {
+              close();
+            }
+
+            console.log("✅ Form hydration complete");
+          } else {
+            console.log("ℹ️ No saved form data found in IndexedDB");
+          }
+        } catch (error) {
+          console.error("❌ Failed to load saved form data:", error);
+        } finally {
+          setIsFormLoaded(true);
+          // Allow saving after a short delay to ensure form is fully hydrated
+          setTimeout(() => {
+            isLoadingRef.current = false;
+            console.log("✅ Form is now ready for auto-save");
+          }, 100);
+        }
+      };
+
+      loadSavedFormData();
+    }, []); // Empty dependency array - only run once on mount
+
+    // Save form data to IDB whenever form values change (only after initial load)
+    useEffect(() => {
+      // Skip saving during initial load
+      if (isLoadingRef.current || !isFormLoaded) {
+        console.log("⏸️ Skipping save - form is loading");
+        return;
+      }
+
+      const timeoutId = setTimeout(async () => {
+        try {
+          console.log("💾 Saving form data to IndexedDB...");
+          console.log("Form values being saved:", form.values);
+          console.log("useDifferentBilling:", useDifferentBilling);
+
+          // Create the data object with both form values and billing preference
+          const dataToSave = {
+            ...form.values,
+            verificationCode: "",
+          };
+
+          await saveCheckoutState(
+            dataToSave,
+            false, // isVerificationCodeSent - handled by parent
+            false, // isVerificationCodeVerified - handled by parent
+            null, // otpExpiryTime - handled by parent
+            0, // timeRemaining - handled by parent
+            useDifferentBilling,
+          );
+          console.log("✅ Form data saved to IndexedDB successfully");
+
+          // Verify the save by reading it back
+          const verification = await loadCheckoutState();
+          console.log("🔍 Verification read:", verification);
+        } catch (error) {
+          console.error("❌ Failed to save form data:", error);
+        }
+      }, 500); // Debounce saves by 500ms
+
+      return () => clearTimeout(timeoutId);
+    }, [form.values, useDifferentBilling, isFormLoaded]);
+
+    // Format time remaining as MM:SS
+    const formatTime = (seconds: number): string => {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+    };
+
+    // Send OTP
+    const handleSendOtp = async () => {
+      const result = form.validateField("shippingPhone");
+      if (result.hasError) return;
+
+      try {
+        setSendingOtp(true);
+        await sendOtpCallback(form.values.shippingPhone);
+      } catch (err) {
+        notifications.show({
+          title: "Error",
+          message: "Failed to send OTP. Please try again.",
+          color: "red",
+        });
+      } finally {
+        setSendingOtp(false);
+      }
+    };
+
+    // Verify OTP
+    const handleVerifyOtp = async () => {
+      const result = form.validateField("verificationCode");
+      if (result.hasError) return;
+
+      try {
+        setVerifyingOtp(true);
+        await verifyOtpCallback(
+          form.values.shippingPhone,
+          form.values.verificationCode!,
+        );
+      } catch (err) {
+        notifications.show({
+          title: "Error",
+          message: "Failed to verify OTP. Please try again.",
+          color: "red",
+        });
+      } finally {
+        setVerifyingOtp(false);
+      }
+    };
+
+    // Final form submit handler
+    const handleFormSubmit = (values: DeliveryFormValues) => {
+      // If phone not verified, block submit
+      if (!isVerificationCodeVerified) {
+        notifications.show({
+          title: "Phone verification required",
+          message: "Please verify your phone number before placing the order.",
+          color: "red",
+        });
+        return;
+      }
+
+      const finalData: DeliveryFormValues = {
+        ...values,
+        userId: user?.id || values.userId,
+        isPhoneVerified: true,
+        ...(useDifferentBilling
+          ? {}
+          : {
+              billingFirstName: values.shippingFirstName,
+              billingLastName: values.shippingLastName,
+              billingAddress: values.shippingAddress,
+              billingApartment: values.shippingApartment,
+              billingCity: values.shippingCity,
+              billingState: values.shippingState,
+              billingPinCode: values.shippingPinCode,
+              billingPhone: values.shippingPhone,
+            }),
+      };
+
+      setSubmitError(null);
+      onPayNow(finalData);
+    };
+
+    // Expose methods to parent via ref
+    useImperativeHandle(ref, () => ({
+      submitForm: () => {
+        form.onSubmit(handleFormSubmit)();
+      },
+      getFormData: () => form.values,
+      setFormData: (
+        data: Partial<DeliveryFormValues>,
+        useDifferentBilling: boolean,
+      ) => {
+        form.setValues(data);
+        setUseDifferentBilling(useDifferentBilling);
+        if (useDifferentBilling && !opened) {
+          open();
+        } else if (!useDifferentBilling && opened) {
+          close();
+        }
+      },
+      getUseDifferentBilling: () => useDifferentBilling,
+    }));
 
     const indianStatesAndTerritory = IndianStatesList;
 
-    const handleSubmit = form.onSubmit(async (values) => {
-      setIsSubmitting(true);
-      setSubmitError(null);
+    // Check if OTP can be sent (either not sent yet, or timer expired)
+    const canSendOtp = !isVerificationCodeSent || timeRemaining === 0;
 
-      try {
-        // Prepare form data for submission
-        const formData: DeliveryFormValues = {
-          ...values,
-          // If not using different billing, copy shipping address to billing
-          ...(useDifferentBilling
-            ? {}
-            : {
-                billingFirstName: values.shippingFirstName,
-                billingLastName: values.shippingLastName,
-                billingAddress: values.shippingAddress,
-                billingApartment: values.shippingApartment,
-                billingCity: values.shippingCity,
-                billingState: values.shippingState,
-                billingPinCode: values.shippingPinCode,
-                billingPhone: values.shippingPhone,
-              }),
-        };
+    // Show loading state while form data is being restored
+    if (!isFormLoaded) {
+      return (
+        <Box>
+          <Text>Loading form...</Text>
+        </Box>
+      );
+    }
 
-        const response = await submitCheckoutForm(formData);
-
-        // Show success notification
-        notifications.show({
-          title: "Success!",
-          message: "Your order has been submitted successfully.",
-          color: "green",
-        });
-
-        // Reset form after successful submission
-        form.reset();
-        setUseDifferentBilling(false);
-
-        console.log("Form submitted successfully:", response);
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred";
-        setSubmitError(errorMessage);
-
-        notifications.show({
-          title: "Error",
-          message: errorMessage,
-          color: "red",
-        });
-
-        console.error("Form submission error:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
+    console.info({
+      user,
     });
-
-    // const handleSendOtp = async () => {
-    //   const phoneValidation = form.validateField('phone');
-    //   if (phoneValidation.hasError) {
-    //     return;
-    //   }
-
-    //   setSendingVerificationCode(true);
-    //   try {
-    //     await sendOtpCallback(form.values.phone);
-    //   } catch (error) {
-    //     console.error('Error sending OTP:', error);
-    //   } finally {
-    //     setSendingVerificationCode(false);
-    //   }
-    // };
-
-    // const handleVerifyOtp = async () => {
-    //   const codeValidation = form.validateField('verificationCode');
-    //   if (codeValidation.hasError) {
-    //     return;
-    //   }
-
-    //   try {
-    //     await verificationCodeEnteredCallback(form.values.verificationCode);
-    //   } catch (error) {
-    //     console.error('Error verifying OTP:', error);
-    //   }
-    // };
-
-    useImperativeHandle(ref, () => ({
-      submitForm: () => {
-        const result = form.validate();
-        console.info("form validation");
-        console.info({ result });
-        if (!result.hasErrors) {
-          return form.values;
-        }
-        return null;
-      },
-      resetForm: () => {
-        form.reset();
-        setUseDifferentBilling(false);
-        setSubmitError(null);
-      },
-    }));
 
     return (
       <Box>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleFormSubmit)}>
           <Stack gap="lg">
-            {submitError && (
-              <Alert color="red" title="Submission Error">
-                {submitError}
-              </Alert>
-            )}
+            {submitError && <Alert color="red">{submitError}</Alert>}
 
             <Stack gap="md">
               <Select
@@ -471,7 +457,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="City"
                     placeholder="Enter city"
-                    {...form.getInputProps("city")}
+                    {...form.getInputProps("shippingCity")}
                     required
                   />
                 </Grid.Col>
@@ -480,7 +466,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                     label="State"
                     placeholder="Select state"
                     data={indianStatesAndTerritory}
-                    {...form.getInputProps("state")}
+                    {...form.getInputProps("shippingState")}
                     required
                     searchable
                   />
@@ -489,7 +475,7 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   <TextInput
                     label="PIN code"
                     placeholder="Enter PIN code"
-                    {...form.getInputProps("pinCode")}
+                    {...form.getInputProps("shippingPinCode")}
                     required
                   />
                 </Grid.Col>
@@ -500,177 +486,192 @@ const DeliveryForm = forwardRef<DeliveryFormHandle, DeliveryFormProps>(
                   flex={1}
                   label="Phone"
                   placeholder="Enter phone number"
-                  {...form.getInputProps("phone")}
+                  {...form.getInputProps("shippingPhone")}
                   required
                 />
-                {/* <Button
+                <Button
                   onClick={handleSendOtp}
                   disabled={
-                    form.values.phone.length !== 10 || isVerificationCodeSent
+                    form.values.shippingPhone.length !== 10 || !canSendOtp
                   }
-                  loading={sendingVerificationCode}
+                  loading={sendingOtp}
                 >
-                  {isVerificationCodeSent ? 'OTP Sent' : 'Send OTP'}
-                </Button> */}
-              </Group>
-              <Group>
-                <Text size="xs">
-                  This number will be used to send order related communications
-                  on Whatsapp
-                </Text>
-                <Image
-                  src={WhatsApp}
-                  width={15}
-                  height={15}
-                  alt="Whatsapp svg"
-                />
+                  {isVerificationCodeSent && timeRemaining > 0
+                    ? "OTP Sent"
+                    : "Send OTP"}
+                </Button>
               </Group>
 
-              {/* {isVerificationCodeSent && (
+              {/* Timer display */}
+              {isVerificationCodeSent && timeRemaining > 0 && (
+                <Text size="sm" c="dimmed">
+                  Resend OTP in {formatTime(timeRemaining)}
+                </Text>
+              )}
+
+              {/* Timer expired message */}
+              {isVerificationCodeSent &&
+                timeRemaining === 0 &&
+                !isVerificationCodeVerified && (
+                  <Text size="sm" c="red">
+                    OTP expired. Please request a new one.
+                  </Text>
+                )}
+
+              {/* Timer expired message */}
+              {otpRequestTimeoutError && (
+                <Text size="sm" c="red">
+                  {otpRequestTimeoutError}
+                </Text>
+              )}
+
+              {isVerificationCodeSent && (
                 <Group align="end">
                   <TextInput
                     flex={1}
                     label="Verification Code"
-                    placeholder="Enter OTP"
-                    {...form.getInputProps('verificationCode')}
+                    placeholder="Enter 6-digit OTP"
+                    {...form.getInputProps("verificationCode")}
                     required
+                    maxLength={6}
                   />
                   <Button
                     variant="light"
                     onClick={handleVerifyOtp}
                     disabled={
-                      form.values.verificationCode.length !== 6 ||
-                      isVerificationCodeVerified
+                      (form.values.verificationCode &&
+                        form.values.verificationCode.length !== 6) ||
+                      isVerificationCodeVerified ||
+                      timeRemaining === 0
                     }
+                    loading={verifyingOtp}
                   >
-                    {isVerificationCodeVerified ? 'Verified' : 'Verify OTP'}
+                    {isVerificationCodeVerified ? "Verified ✓" : "Verify OTP"}
                   </Button>
                 </Group>
-              )} */}
+              )}
             </Stack>
-          </Stack>
 
-          <Stack className={styles.sectionMarginTop}>
-            <Box bg="grey" w="100%" h={300}>
-              Payment Section
-            </Box>
-          </Stack>
+            {/* Payment Section - preserve your CSS */}
+            <Stack className={styles.sectionMarginTop}>
+              <Box bg="grey" w="100%" h={300}>
+                Payment Section
+              </Box>
+            </Stack>
 
-          <Stack gap="md" className={styles.sectionMarginTop}>
-            <Title order={2}>Billing Address</Title>
-            <Stack mt="md">
-              <Radio
-                label="Same as shipping address"
-                checked={!useDifferentBilling}
-                onChange={() => {
-                  setUseDifferentBilling(false);
-                  if (opened) toggleBillingForm();
-                }}
-              />
-              <Stack>
+            {/* Billing Address - preserve your CSS */}
+            <Stack gap="md" className={styles.sectionMarginTop}>
+              <Title order={2}>Billing Address</Title>
+              <Stack mt="md">
                 <Radio
-                  label="Use a different billing address"
-                  checked={useDifferentBilling}
+                  label="Same as shipping address"
+                  checked={!useDifferentBilling}
                   onChange={() => {
-                    setUseDifferentBilling(true);
-                    if (!opened) toggleBillingForm();
+                    setUseDifferentBilling(false);
+                    close();
                   }}
                 />
-                <Box>
-                  {useDifferentBilling && (
-                    <Collapse
-                      in={opened}
-                      transitionDuration={1000}
-                      transitionTimingFunction="ease"
-                    >
-                      <Stack gap="md">
-                        <Select
-                          label="Country/Region"
-                          placeholder="Select country"
-                          data={["India"]}
-                          value="India"
-                          disabled
-                          required
-                        />
+                <Stack>
+                  <Radio
+                    label="Use a different billing address"
+                    checked={useDifferentBilling}
+                    onChange={() => {
+                      setUseDifferentBilling(true);
+                      open();
+                    }}
+                  />
+                  <Box>
+                    {useDifferentBilling && (
+                      <Collapse
+                        in={opened}
+                        transitionDuration={1000}
+                        transitionTimingFunction="ease"
+                      >
+                        <Stack gap="md">
+                          <Select
+                            label="Country/Region"
+                            placeholder="Select country"
+                            data={["India"]}
+                            value="India"
+                            disabled
+                            required
+                          />
 
-                        <Grid gutter="md">
-                          <Grid.Col span={6}>
-                            <TextInput
-                              label="First name"
-                              placeholder="Enter first name"
-                              {...form.getInputProps("billingFirstName")}
-                              required
-                            />
-                          </Grid.Col>
-                          <Grid.Col span={6}>
-                            <TextInput
-                              label="Last name"
-                              placeholder="Enter last name"
-                              {...form.getInputProps("billingLastName")}
-                              required
-                            />
-                          </Grid.Col>
-                        </Grid>
+                          <Grid gutter="md">
+                            <Grid.Col span={6}>
+                              <TextInput
+                                label="First name"
+                                placeholder="Enter first name"
+                                {...form.getInputProps("billingFirstName")}
+                                required
+                              />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                              <TextInput
+                                label="Last name"
+                                placeholder="Enter last name"
+                                {...form.getInputProps("billingLastName")}
+                                required
+                              />
+                            </Grid.Col>
+                          </Grid>
 
-                        <TextInput
-                          label="Address"
-                          placeholder="Enter your address"
-                          {...form.getInputProps("billingAddress")}
-                          required
-                        />
+                          <TextInput
+                            label="Address"
+                            placeholder="Enter your address"
+                            {...form.getInputProps("billingAddress")}
+                            required
+                          />
 
-                        <TextInput
-                          label="Apartment, suite, etc. (optional)"
-                          placeholder="Enter apartment details"
-                          {...form.getInputProps("billingApartment")}
-                        />
+                          <TextInput
+                            label="Apartment, suite, etc. (optional)"
+                            placeholder="Enter apartment details"
+                            {...form.getInputProps("billingApartment")}
+                          />
 
-                        <Grid gutter="md">
-                          <Grid.Col span={4}>
-                            <TextInput
-                              label="City"
-                              placeholder="Enter city"
-                              {...form.getInputProps("billingCity")}
-                              required
-                            />
-                          </Grid.Col>
-                          <Grid.Col span={4}>
-                            <Select
-                              label="State"
-                              placeholder="Select state"
-                              data={indianStatesAndTerritory}
-                              {...form.getInputProps("billingState")}
-                              required
-                              searchable
-                            />
-                          </Grid.Col>
-                          <Grid.Col span={4}>
-                            <TextInput
-                              label="PIN code"
-                              placeholder="Enter PIN code"
-                              {...form.getInputProps("billingPinCode")}
-                              required
-                            />
-                          </Grid.Col>
-                        </Grid>
+                          <Grid gutter="md">
+                            <Grid.Col span={4}>
+                              <TextInput
+                                label="City"
+                                placeholder="Enter city"
+                                {...form.getInputProps("billingCity")}
+                                required
+                              />
+                            </Grid.Col>
+                            <Grid.Col span={4}>
+                              <Select
+                                label="State"
+                                placeholder="Select state"
+                                data={indianStatesAndTerritory}
+                                {...form.getInputProps("billingState")}
+                                required
+                                searchable
+                              />
+                            </Grid.Col>
+                            <Grid.Col span={4}>
+                              <TextInput
+                                label="PIN code"
+                                placeholder="Enter PIN code"
+                                {...form.getInputProps("billingPinCode")}
+                                required
+                              />
+                            </Grid.Col>
+                          </Grid>
 
-                        <TextInput
-                          label="Phone"
-                          placeholder="Enter phone number"
-                          {...form.getInputProps("billingPhone")}
-                          required
-                        />
-                      </Stack>
-                    </Collapse>
-                  )}
-                </Box>
+                          <TextInput
+                            label="Phone"
+                            placeholder="Enter phone number"
+                            {...form.getInputProps("billingPhone")}
+                            required
+                          />
+                        </Stack>
+                      </Collapse>
+                    )}
+                  </Box>
+                </Stack>
               </Stack>
             </Stack>
           </Stack>
-
-          <Button type="submit" display={"none"} ref={buttonRef}>
-            Dummy button to submit the form
-          </Button>
         </form>
       </Box>
     );
