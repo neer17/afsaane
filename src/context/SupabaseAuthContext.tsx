@@ -2,6 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient, SupabaseClient, User } from "@supabase/supabase-js";
+import {
+  loadUserState,
+  saveUserState,
+  clearUserState,
+} from "@/utils/idb/user.idb";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -10,34 +15,100 @@ const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 type AuthContextType = {
   user: User | null;
   supabase: SupabaseClient;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   supabase,
+  logout: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+
+  // Logout function
+  const logout = async (): Promise<void> => {
+    try {
+      // Sign out from Supabase
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Supabase logout error:", error);
+        throw error;
+      }
+
+      // Clear user from IDB
+      await clearUserState();
+
+      // Clear local state
+      setUser(null);
+
+      console.log("✅ User logged out successfully");
+    } catch (error) {
+      console.error("❌ Failed to logout user:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
-    // Get current session
-    supabase.auth.getUser().then(({ data }) => {
-      if (data?.user) setUser(data.user);
-    });
+    const initializeAuth = async () => {
+      try {
+        // First, try to load user from IDB
+        const cachedUser = await loadUserState();
+        if (cachedUser) {
+          console.log("✅ Loaded user from IDB:", cachedUser.email);
+          setUser(cachedUser);
+          setIsUserLoaded(true);
+          return;
+        }
+
+        // If no cached user, get current session from Supabase
+        const { data } = await supabase.auth.getUser();
+        if (data?.user) {
+          setUser(data.user);
+          // Save to IDB for future use
+          await saveUserState(data.user);
+        }
+      } catch (error) {
+        console.error("Failed to initialize auth:", error);
+      } finally {
+        setIsUserLoaded(true);
+      }
+    };
+
+    initializeAuth();
 
     // Listen for auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        const newUser = session?.user ?? null;
+        setUser(newUser);
+
+        if (newUser) {
+          // Save user to IDB when authenticated
+          await saveUserState(newUser);
+        } else {
+          // Clear IDB when user logs out
+          await clearUserState();
+        }
+      },
+    );
 
     return () => {
       listener.subscription.unsubscribe();
     };
   }, []);
 
-  // 👇 Google One Tap integration
+  // 👇 Google One Tap integration - only show if no user in IDB
   useEffect(() => {
+    // Don't show Google One Tap if:
+    // 1. User data is still loading
+    // 2. User is already authenticated (from IDB or Supabase)
+    if (!isUserLoaded || user) {
+      return;
+    }
+
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
     if (!clientId) return;
 
@@ -59,8 +130,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             token: credential,
           });
 
-          if (error) console.error("Google sign-in error:", error);
-          else setUser(data.user);
+          if (error) {
+            console.error("Google sign-in error:", error);
+          } else if (data.user) {
+            setUser(data.user);
+            // Save to IDB after successful Google sign-in
+            await saveUserState(data.user);
+          }
         },
       });
       // Show the prompt
@@ -68,10 +144,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       window.google.accounts.id.prompt();
     };
     document.body.appendChild(script);
-  }, []);
+
+    // Cleanup script on unmount
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [isUserLoaded, user]);
 
   return (
-    <AuthContext.Provider value={{ user, supabase }}>
+    <AuthContext.Provider value={{ user, supabase, logout }}>
       {children}
     </AuthContext.Provider>
   );

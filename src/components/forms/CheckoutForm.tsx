@@ -1,13 +1,12 @@
 "use client";
 
-import React, {
+import {
   useState,
   forwardRef,
   useImperativeHandle,
   useEffect,
   useRef,
 } from "react";
-import Image from "next/image";
 import { useForm } from "@mantine/form";
 import {
   TextInput,
@@ -28,10 +27,7 @@ import { notifications } from "@mantine/notifications";
 import styles from "./CheckoutForm.module.css";
 import { IndianStatesList, API_ENDPOINTS } from "@/utils/constants";
 import { useAuth } from "@/context/SupabaseAuthContext";
-import {
-  loadCheckoutState,
-  saveCheckoutState,
-} from "@/utils/idb/checkout_idb";
+import { loadCheckoutState, saveCheckoutState } from "@/utils/idb/checkout.idb";
 
 interface DeliveryFormProps {
   isVerificationCodeSent: boolean;
@@ -53,6 +49,7 @@ export interface DeliveryFormValues {
   country: string;
   shippingFirstName: string;
   shippingLastName: string;
+  email: string;
   shippingAddress: string;
   shippingApartment?: string;
   shippingCity: string;
@@ -95,9 +92,9 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
     },
     ref,
   ) => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [useDifferentBilling, setUseDifferentBilling] = useState(false);
-    const [opened, {  open, close }] = useDisclosure(false);
+    const [opened, { open, close }] = useDisclosure(false);
 
     const [sendingOtp, setSendingOtp] = useState(false);
     const [verifyingOtp, setVerifyingOtp] = useState(false);
@@ -114,6 +111,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
         country: "India",
         shippingFirstName: "",
         shippingLastName: "",
+        email: user?.email || "",
         shippingAddress: "",
         shippingApartment: "",
         shippingCity: "",
@@ -137,6 +135,8 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
           v.trim().length < 2 ? "First name required" : null,
         shippingLastName: (v) =>
           v.trim().length < 2 ? "Last name required" : null,
+        email: (v) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? null : "Valid email required",
         shippingAddress: (v) =>
           v.trim().length < 5 ? "Valid address required" : null,
         shippingCity: (v) =>
@@ -242,6 +242,18 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
       loadSavedFormData();
     }, []); // Empty dependency array - only run once on mount
 
+    // Autofill user's email from GoogleOneTap Dialog
+    useEffect(() => {
+      if (user?.email && user.email !== form.values.email) {
+        form.setFieldValue("email", user.email);
+      }
+    }, [user?.email, form.setFieldValue]);
+
+    // TODO: Hack to logout user
+    //   useEffect(() => {
+    //   logout()
+    // }, [])
+
     // Save form data to IDB whenever form values change (only after initial load)
     useEffect(() => {
       // Skip saving during initial load
@@ -303,6 +315,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
           title: "Error",
           message: "Failed to send OTP. Please try again.",
           color: "red",
+          position: "top-right",
         });
       } finally {
         setSendingOtp(false);
@@ -325,6 +338,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
           title: "Error",
           message: "Failed to verify OTP. Please try again.",
           color: "red",
+          position: "top-right",
         });
       } finally {
         setVerifyingOtp(false);
@@ -339,6 +353,8 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
           title: "Phone verification required",
           message: "Please verify your phone number before placing the order.",
           color: "red",
+          position: "top-right",
+          styles: { root: { top: "100px" } }, // TODO: Make it dynamic and according to NavBar
         });
         return;
       }
@@ -438,6 +454,14 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                   />
                 </Grid.Col>
               </Grid>
+
+              <TextInput
+                label="Email address"
+                placeholder="Enter your email address"
+                {...form.getInputProps("email")}
+                required
+                type="email"
+              />
 
               <TextInput
                 label="Address"

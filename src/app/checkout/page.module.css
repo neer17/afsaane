@@ -1,5 +1,5 @@
 .container {
-  /* margin-top: var(--pageTopMargin); */
+  margin-top: var(--pageTopMargin);
   padding-left: 1rem;
   padding-right: 1rem;
 }

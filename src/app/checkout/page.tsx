@@ -26,7 +26,9 @@ import {
   saveCheckoutState,
   loadCheckoutState,
   clearCheckoutState,
-} from "@/utils/idb/checkout_idb";
+} from "@/utils/idb/checkout.idb";
+import { OtpService } from "@/lib/services/otpService";
+import { DiscountService } from "@/lib/services/discountService";
 
 export default function Checkout() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
@@ -189,26 +191,14 @@ export default function Checkout() {
 
   // TODO: remove
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const applyDiscountCode = async (
-    discountCode: string | undefined,
-  ): Promise<any> => {
-    if (!discountCode) return;
-
-    // Validate input parameters
-    if (!discountCode || discountCode.trim().length === 0) {
-      throw new Error("Discount code is required");
+  const applyDiscountCode = async (discountCode: string | undefined) => {
+    let response;
+    try {
+      response = await DiscountService.applyDiscount(discountCode);
+    } catch (error) {
+      console.error("Error in applying discount code: ", { error });
+      throw error;
     }
-
-    const DISCOUNT_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.APPLY_DISCOUNT_CODE.URL}`;
-    const response = await fetch(DISCOUNT_ENDPOINT, {
-      method: API_ENDPOINTS.APPLY_DISCOUNT_CODE.METHOD,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        discountCode: discountCode.trim(),
-      }),
-    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -217,28 +207,18 @@ export default function Checkout() {
       );
     }
 
-    return response.json();
+    // return response.json();
   };
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  const handleSendOtp = async (phoneNumber: string): Promise<void> => {
-    if (!phoneNumber) return Promise.reject();
-
-    // Validate input parameters
-    if (!phoneNumber || phoneNumber.trim().length !== 10) {
-      throw new Error("Phone number should be 10 digits long");
+  const handleSendOtp = async (phoneNumber: string) => {
+    let response;
+    try {
+      response = await OtpService.sendOtp(phoneNumber);
+    } catch (error) {
+      console.error("Error in sending OTP: ", { error });
+      throw error;
     }
-
-    const SEND_OTP_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.SEND_OTP.URL}`;
-    const response = await fetch(SEND_OTP_ENDPOINT, {
-      method: API_ENDPOINTS.SEND_OTP.METHOD,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phone: `91${phoneNumber}`, // TODO: FO how to make it dynamic
-      }),
-    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -262,32 +242,20 @@ export default function Checkout() {
     setTimeRemaining(120); // 2 minutes in seconds
     setIsVerificationCodeSent(true);
 
-    return response.json();
+    // return response.json();
   };
 
   const handleOtpVerification = async (
     phoneNumber: string,
     verificationCode: string,
-  ): Promise<void> => {
-    if (!verificationCode || !phoneNumber)
-      throw new Error("Verification code and phone number should be present");
-
-    // Validate input parameters
-    if (!verificationCode || verificationCode.trim().length !== 6) {
-      throw new Error("verification code should be 6 digits long");
+  ) => {
+    let response;
+    try {
+      response = await OtpService.verifyOtp(phoneNumber, verificationCode);
+    } catch (error) {
+      console.error("Error in verifying OTP: ", { error });
+      throw error;
     }
-
-    const VERIFY_OTP_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.VERIFY_OTP.URL}`;
-    const response = await fetch(VERIFY_OTP_ENDPOINT, {
-      method: API_ENDPOINTS.VERIFY_OTP.METHOD,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phone: `91${phoneNumber}`,
-        otp: verificationCode,
-      }),
-    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -300,8 +268,6 @@ export default function Checkout() {
     setIsVerificationCodeVerified(true);
     setOtpExpiryTime(null);
     setTimeRemaining(0);
-
-    return response.json();
   };
 
   const handleOtpExpired = () => {
@@ -311,8 +277,31 @@ export default function Checkout() {
   };
 
   const handlePayNow = async (data: any) => {
-    console.log("Payment data:", data);
-    await clearCheckoutState();
+    console.log("Payment data:", data, {
+      cartData,
+    });
+
+    // const orderData: OrderRequest = {
+    //   userId:
+    // }
+
+    // let response
+    // try {
+    //   response = await OrderService.createOrder(orderData)
+    // } catch (error) {
+    //   console.error("Error in verifying OTP: ", {error})
+    //   throw error
+    // }
+
+    //  if (!response.ok) {
+    //   const errorData = await response.json().catch(() => ({}));
+    //   throw new Error(
+    //     errorData.message || `HTTP error! status: ${response.status}`,
+    //   );
+    // }
+
+    // TODO: makePayment()
+    // await clearCheckoutState();
     // Implement your payment processing logic here
   };
 

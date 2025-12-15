@@ -6,9 +6,8 @@ import CoupleCards from "@/components/couple_cards/CoupleCards";
 import DetailCard from "@/components/detail_card/DetailCard";
 import Footer from "@/components/footer/Footer";
 import ScrollingText from "@/components/scrolling_banner/ScrollingBanner";
-import { images } from "./helpers/constants";
-// TODO: UUID remove all occurences
-import { v4 as uuid } from "uuid";
+import { images } from "@/utils/constants";
+// import SyncedCarousels from "@/components/carousels/SyncedCarousels";
 
 export default function Home() {
   return (
@@ -32,6 +31,8 @@ export default function Home() {
         />
       </section>
 
+      <section>{/* <SyncedCarousels/> */}</section>
+
       {/* Favorites section */}
       <section className={styles.bestSellersSection}>
         <Banner title="a few of our" description="Favorites" />
@@ -39,7 +40,7 @@ export default function Home() {
         <div className={styles.cardsContainer}>
           {images.map((value) => (
             <Card
-              key={uuid()}
+              key={value}
               productDescription="SeggsY tshirt"
               price={1000}
               sizes="20vw"

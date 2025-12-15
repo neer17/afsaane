@@ -25,6 +25,7 @@ interface EntireFormData {
   billingPhone?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface CheckoutFormData extends Omit<EntireFormData, keyof ExclusionList> {}
 
 interface CheckoutState {
@@ -49,7 +50,9 @@ const DB_NAME = "CheckoutDB";
 const DB_VERSION = 1;
 const STORE_NAME = "checkoutState";
 const STATE_KEY = "current";
-const EXPIRY_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+const EXPIRY_DURATION = Number(
+  process.env["NEXT_PUBLIC_CHECKOUT_DATA_EXPIRATION_DURATION_IN_MILLISECONDS"]!,
+);
 
 let dbInstance: IDBPDatabase<CheckoutDB> | null = null;
 

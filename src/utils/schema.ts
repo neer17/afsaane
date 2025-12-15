@@ -6,6 +6,10 @@ const envSchema = Joi.object({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: Joi.string().required(),
   NEXT_PUBLIC_GOOGLE_CLIENT_ID: Joi.string().required(),
   NEXT_PUBLIC_BACKEND_BASE_URL: Joi.string().required(),
+  NEXT_PUBLIC_CHECKOUT_DATA_EXPIRATION_DURATION_IN_MILLISECONDS:
+    Joi.string().default(60 * 60 * 1000), // 1 hour in milliseconds
+  NEXT_PUBLIC_USER_DATA_EXPIRATION_DURATION_IN_MILLISECONDS:
+    Joi.string().default(60 * 60 * 1000), // 1 hour in milliseconds
 })
   .unknown() // This allows Joi to accept other environment variables if they exist
   .required();

@@ -4,12 +4,13 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 import Navbar from "@/components/navbar/Navbar";
 import SlidingBanner from "@/components/banner/SlidingBanner";
 import CartProvider from "@/context/CartContext";
-import AuthProvider from "@/context/AuthContext";
 import { validateEnv } from "@/utils/schema";
+import { Notifications } from "@mantine/notifications";
 
 // Validate all the env variables
 validateEnv();
@@ -58,6 +59,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider>
           <CartProvider>
+            <Notifications />
             <div>
               <SlidingBanner />
               <Navbar />

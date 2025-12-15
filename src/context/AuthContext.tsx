@@ -1,3 +1,4 @@
+// TODO: This is not needed I guess
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
