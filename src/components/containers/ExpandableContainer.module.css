@@ -1,56 +1,56 @@
 .headingContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 8px;
-  padding-bottom: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 8px;
+	padding-bottom: 1rem;
 }
 
 .headingContainer ul {
-  list-style-position: inside;
+	list-style-position: inside;
 }
 
 .headingContainer li {
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .headingContainer > span {
-  font-size: 12px;
-  color: var(--accentColor);
-  cursor: pointer;
+	font-size: 12px;
+	color: var(--accentColor);
+	cursor: pointer;
 }
 
 .containerHeading {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 .expandableContainer {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition:
-    max-height 0.5s ease-in-out,
-    opacity 0.5s ease-in-out;
-  border-radius: 4px;
-  margin-top: 0.5rem;
+	overflow: hidden;
+	max-height: 0;
+	opacity: 0;
+	transition:
+		max-height 0.5s ease-in-out,
+		opacity 0.5s ease-in-out;
+	border-radius: 4px;
+	margin-top: 0.5rem;
 }
 
 .expandableContainerExpanded {
-  max-height: 500px; /* Adjust based on content */
-  opacity: 1;
-  transition:
-    max-height 0.5s ease-in-out,
-    opacity 0.5s ease-in-out;
-  margin-top: 0.5rem;
+	max-height: 500px; /* Adjust based on content */
+	opacity: 1;
+	transition:
+		max-height 0.5s ease-in-out,
+		opacity 0.5s ease-in-out;
+	margin-top: 0.5rem;
 }
 
 .expandableContainer > div,
 .expandableContainerExpanded > div {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 .expandableContainer li,
 .expandableContainerExpanded li {
-  font-size: 13px;
-  color: var(--label);
+	font-size: 13px;
+	color: var(--label);
 }

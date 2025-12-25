@@ -1,68 +1,68 @@
 .footerContainer {
-  display: flex;
-  padding: 3rem;
+	display: flex;
+	padding: 3rem;
 }
 
 .infoContainer {
-  flex: 1 1;
-  display: flex;
+	flex: 1 1;
+	display: flex;
 }
 
 .signupContainer {
-  flex: 1 1;
+	flex: 1 1;
 }
 
 .signupContainer h3 {
-  font-size: 36px;
-  margin-bottom: 1rem;
+	font-size: 36px;
+	margin-bottom: 1rem;
 }
 .signupContainer h5 {
-  font-size: 12px;
-  margin-bottom: 1rem;
-  font-weight: 400;
+	font-size: 12px;
+	margin-bottom: 1rem;
+	font-weight: 400;
 }
 .emailAddressContainer {
-  display: flex;
+	display: flex;
 }
 .emailAddressContainer input {
-  flex: 1 1;
-  height: 56px;
-  background-color: #f7f0ea;
-  border: 1px solid black;
-  padding: 0 1rem;
-  margin-bottom: 1rem;
+	flex: 1 1;
+	height: 56px;
+	background-color: #f7f0ea;
+	border: 1px solid black;
+	padding: 0 1rem;
+	margin-bottom: 1rem;
 }
 
 .emailAddressContainer button {
-  width: 56px;
-  height: 56px;
-  background-color: black;
-  color: white;
-  border: 0px;
+	width: 56px;
+	height: 56px;
+	background-color: black;
+	color: white;
+	border: 0px;
 }
 
 .infoContainer > div {
-  flex: 1 1;
+	flex: 1 1;
 }
 
 .signupContainer {
-  flex: 1 1;
+	flex: 1 1;
 }
 
 .infoContainer h4 {
-  font-size: 18px;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
+	font-size: 18px;
+	text-transform: uppercase;
+	margin-bottom: 1rem;
 }
 
 .infoContainer h5 {
-  margin-bottom: 1rem;
-  font-weight: 400;
+	margin-bottom: 1rem;
+	font-weight: 400;
 }
 
 @media screen and (max-width: 1024px) {
-  .footerContainer {
-    display: flex;
-    flex-direction: column-reverse;
-  }
+	.footerContainer {
+		display: flex;
+		flex-direction: column-reverse;
+	}
 }

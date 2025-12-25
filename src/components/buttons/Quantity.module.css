@@ -1,14 +1,14 @@
 .quantityButtonContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2px 0 2px;
-  width: 50%;
-  border: 0.5px solid grey;
-  margin-bottom: 4px;
-  padding: 4px 8px 4px 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 2px 0 2px;
+	width: 50%;
+	border: 0.5px solid grey;
+	margin-bottom: 4px;
+	padding: 4px 8px 4px 8px;
 }
 
 .quantityButtonContainer > span {
-  cursor: pointer;
+	cursor: pointer;
 }

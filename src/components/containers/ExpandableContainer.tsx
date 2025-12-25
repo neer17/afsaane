@@ -5,58 +5,62 @@ import styles from "./ExpandableContainer.module.css";
 import { v4 as uuid } from "uuid";
 
 interface ExpandableContainerProps {
-  title: string;
-  contents: string[];
-  isExpandable?: boolean;
-  isExpandedInitially?: boolean;
-  children?: React.ReactNode;
+	title: string;
+	contents: string[];
+	isExpandable?: boolean;
+	isExpandedInitially?: boolean;
+	children?: React.ReactNode;
 }
 
 const ExpandableContainer: React.FC<ExpandableContainerProps> = ({
-  title,
-  contents,
-  children,
-  isExpandedInitially = false,
-  isExpandable = true,
+	title,
+	contents,
+	children,
+	isExpandedInitially = false,
+	isExpandable = true,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(isExpandedInitially);
+	const [isExpanded, setIsExpanded] = useState(isExpandedInitially);
 
-  const handleExpandContainer = () => {
-    setIsExpanded(!isExpanded);
-  };
+	const handleExpandContainer = () => {
+		setIsExpanded(!isExpanded);
+	};
 
-  const getSpanValue = () => {
-    return isExpanded ? "See less" : "See more";
-  };
+	const getSpanValue = () => {
+		return isExpanded ? "See less" : "See more";
+	};
 
-  return (
-    <>
-      <div className={styles.headingContainer}>
-        <h1 className={styles.containerHeading}>{title}</h1>
-        {isExpandable && (
-          <span onClick={handleExpandContainer}>{getSpanValue()}</span>
-        )}
-      </div>
+	return (
+		<>
+			<div className={styles.headingContainer}>
+				<h1 className={styles.containerHeading}>{title}</h1>
+				{isExpandable && (
+					<span onClick={handleExpandContainer}>
+						{getSpanValue()}
+					</span>
+				)}
+			</div>
 
-      <div
-        className={
-          isExpanded
-            ? styles.expandableContainerExpanded
-            : styles.expandableContainer
-        }
-      >
-        <div className={styles.ownContent}>
-          <ul>
-            {contents.map((text) => (
-              <li key={uuid()}>{text}</li>
-            ))}
-          </ul>
-        </div>
+			<div
+				className={
+					isExpanded
+						? styles.expandableContainerExpanded
+						: styles.expandableContainer
+				}
+			>
+				<div className={styles.ownContent}>
+					<ul>
+						{contents.map((text) => (
+							<li key={uuid()}>{text}</li>
+						))}
+					</ul>
+				</div>
 
-        {children && <div className={styles.childrenContainer}>{children}</div>}
-      </div>
-    </>
-  );
+				{children && (
+					<div className={styles.childrenContainer}>{children}</div>
+				)}
+			</div>
+		</>
+	);
 };
 
 export default ExpandableContainer;

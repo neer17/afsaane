@@ -1,159 +1,158 @@
 .modalBody {
-  padding: 0;
-  height: 600px;
+	padding: 0;
+	height: 600px;
 }
 
 .modalHeader {
-  border: none;
+	border: none;
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 30px 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px 30px 30px;
 }
 
 .logo {
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 3px;
-  text-align: center;
-  margin-bottom: 24px;
-  color: #333;
+	font-size: 14px;
+	font-weight: 400;
+	letter-spacing: 3px;
+	text-align: center;
+	margin-bottom: 24px;
+	color: #333;
 }
 
 .heading {
-  font-size: 32px;
-  font-weight: 400;
-  font-family: "Playfair Display", serif;
-  text-align: center;
-  margin-bottom: 12px;
-  color: #1a1a1a;
+	font-size: 32px;
+	font-weight: 400;
+	font-family: "Playfair Display", serif;
+	text-align: center;
+	margin-bottom: 12px;
+	color: #1a1a1a;
 }
 
 .subheading {
-  font-size: 14px;
-  font-weight: 400;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #666;
-  line-height: 1.6;
+	font-size: 14px;
+	font-weight: 400;
+	text-align: center;
+	margin-bottom: 20px;
+	color: #666;
+	line-height: 1.6;
 }
 
 .phoneContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-bottom: 30px;
 }
 
 .phoneNumber {
-  font-size: 16px;
-  font-weight: 500;
-  color: #00a8a8;
+	font-size: 16px;
+	font-weight: 500;
+	color: #00a8a8;
 }
 
 .editButton {
-  background: none;
-  border: none;
-  color: #00a8a8;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-  transition: color 0.2s ease;
+	background: none;
+	border: none;
+	color: #00a8a8;
+	font-size: 14px;
+	font-weight: 400;
+	cursor: pointer;
+	text-decoration: underline;
+	padding: 0;
+	transition: color 0.2s ease;
 }
 
 .editButton:hover {
-  color: #008888;
+	color: #008888;
 }
 
 .otpContainer {
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+	margin-bottom: 20px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .otpInput {
-  width: 45px !important;
-  height: 55px !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: 4px !important;
-  font-size: 20px !important;
-  font-weight: 500 !important;
-  text-align: center !important;
-  color: #333 !important;
+	width: 45px !important;
+	height: 55px !important;
+	border: 1px solid #e0e0e0 !important;
+	border-radius: 4px !important;
+	font-size: 20px !important;
+	font-weight: 500 !important;
+	text-align: center !important;
+	color: #333 !important;
 }
 
 .otpInput:focus {
-  border-color: #333 !important;
+	border-color: #333 !important;
 }
 
 .otpInputError {
-  width: 45px !important;
-  height: 55px !important;
-  border: 1px solid #e74c3c !important;
-  border-radius: 4px !important;
-  font-size: 20px !important;
-  font-weight: 500 !important;
-  text-align: center !important;
-  color: #333 !important;
+	width: 45px !important;
+	height: 55px !important;
+	border: 1px solid #e74c3c !important;
+	border-radius: 4px !important;
+	font-size: 20px !important;
+	font-weight: 500 !important;
+	text-align: center !important;
+	color: #333 !important;
 }
 
 .errorText {
-  font-size: 13px;
-  color: #e74c3c;
-  text-align: center;
-  margin-bottom: 20px;
-  line-height: 1.6;
+	font-size: 13px;
+	color: #e74c3c;
+	text-align: center;
+	margin-bottom: 20px;
+	line-height: 1.6;
 }
 
 .continueButton {
-  background-color: #d4d4d4;
-  color: #999;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  padding: 14px;
-  height: auto;
-  margin-bottom: 24px;
-  transition: background-color 0.2s ease;
+	background-color: #d4d4d4;
+	color: #999;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 1px;
+	padding: 14px;
+	height: auto;
+	margin-bottom: 24px;
+	transition: background-color 0.2s ease;
 }
 
 .continueButton:hover {
-  background-color: #c0c0c0;
+	background-color: #c0c0c0;
 }
 
 .goBackButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.2s ease;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: none;
+	border: none;
+	color: #333;
+	font-size: 14px;
+	font-weight: 400;
+	cursor: pointer;
+	padding: 0;
+	transition: color 0.2s ease;
 }
 
 .goBackButton:hover {
-  color: #000;
+	color: #000;
 }
 
 .goBackButton span {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 .validButton {
-  background-color: black !important;
-  color: white;
+	background-color: black !important;
+	color: white;
 }
-
