@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged --config tooling-config/lintstagedrc.mjs
+yarn prettier:fix
+yarn lint
 yarn run build
