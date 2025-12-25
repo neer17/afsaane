@@ -6,8 +6,12 @@ import styles from "./Navbar.module.css";
 import Link from "next/link";
 import CartSVG from "@/app/svgs/cart.svg";
 import WishlistSVG from "@/app/svgs/wishlist.svg";
+import UserSVG from "@/app/svgs/user.svg";
 import { useCart, useWishlist } from "@/context/CartContext";
 import { v4 as uuid } from "uuid";
+import SignInModal from "@/components/modal/SignIn";
+import OTPModal from "@/components/modal/OTPVerification";
+import { OtpService } from "@/lib/services/otpService";
 
 interface MenuItem {
   name: string;
@@ -22,6 +26,9 @@ const menuItems: MenuItem[] = [
 ];
 
 const NavigationBar: React.FC = () => {
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const { cartData } = useCart();
   const { wishlistData } = useWishlist();
 
@@ -56,6 +63,70 @@ const NavigationBar: React.FC = () => {
     setDesktopMenuItemHovered(null);
   };
 
+  const handleUserSignIn = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    setShowSignInModal(true);
+  };
+
+  const handleInputChange = (input: string) => {
+    setPhoneNumber(input);
+  };
+
+  const handleSendOtp = async (phoneNumber: string) => {
+    let response;
+    try {
+      response = await OtpService.sendOtp(phoneNumber);
+    } catch (error) {
+      console.error("Error in sending OTP: ", { error });
+      throw error;
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+
+      // Show error message to wait certain minutes before requesting for OTP again
+      if (
+        response.status == 400 &&
+        String(errorData.error).includes("Please wait")
+      ) {
+
+      }
+
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`
+      );
+    }
+
+    setShowOTPModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowSignInModal(false);
+  };
+
+  const handleVerifyOtp = async (otp: string) => {
+    let response;
+    try {
+      response = await OtpService.verifyOtp(phoneNumber, otp);
+    } catch (error) {
+      console.error("Error in verifying OTP: ", { error });
+      throw error;
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
+    }
+
+    // TODO: fetch user and save in local storage
+
+    setShowSignInModal(false)
+    setShowOTPModal(false)
+  };
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -74,7 +145,7 @@ const NavigationBar: React.FC = () => {
           </button>
 
           <div className={styles.brandName}>
-            <Link href="/">Afsaane</Link>
+            <Link href="/">Qala Chowk</Link>
           </div>
 
           {/* Desktop navbar menu items */}
@@ -154,6 +225,16 @@ const NavigationBar: React.FC = () => {
             </div>
           </div>
 
+          <Link href="/signin" className={styles.signinContainer}>
+            <Image
+              src={UserSVG}
+              alt="Sign In"
+              width={25}
+              height={25}
+              onClick={handleUserSignIn}
+            />
+          </Link>
+
           <Link href="/wishlist" className={styles.wishlistContainer}>
             <Image src={WishlistSVG} alt="Wishlist" width={25} height={25} />
             <span className={styles.cartItemsIndicator}>
@@ -232,6 +313,23 @@ const NavigationBar: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Modals */}
+      {showSignInModal && (
+        <SignInModal
+          onClose={handleModalClose}
+          inputChangeCallback={handleInputChange}
+          sendOTPCallback={handleSendOtp}
+        />
+      )}
+      {showOTPModal && (
+        <OTPModal
+          opened={true}
+          handleCloseModal={() => setShowOTPModal(false)}
+          phoneNumber={phoneNumber}
+          verifyOtpCallback={handleVerifyOtp}
+        />
+      )}
     </>
   );
 };
