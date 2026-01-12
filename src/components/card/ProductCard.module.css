@@ -1,97 +1,97 @@
 .productContainer {
-	width: 100%;
-	overflow: hidden;
-	background-color: inherit;
-	padding-right: 0.5rem;
-	padding-bottom: 0.5rem;
-	color: black;
+  width: 100%;
+  overflow: hidden;
+  background-color: inherit;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  color: black;
 }
 
 .imageContainer {
-	position: relative;
+  position: relative;
 }
 
 .embla {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .emblaContainer {
-	display: flex;
+  display: flex;
 }
 
 .emblaSlide {
-	flex: 0 0 100%;
-	min-width: 0;
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 .productImage {
-	object-fit: contain;
-	cursor: grab;
+  object-fit: contain;
+  cursor: grab;
 }
 
 .productImage:active {
-	cursor: grabbing;
+  cursor: grabbing;
 }
 
 .emblaDots {
-	position: absolute;
-	bottom: 1.4rem;
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	gap: 0.5rem;
-	margin-left: auto;
-	margin-right: auto;
+  position: absolute;
+  bottom: 1.4rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .emblaDot {
-	background-color: rgba(0, 0, 0, 0.3);
-	border: none;
-	border-radius: 50%;
-	width: 8px;
-	height: 8px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .emblaDot:hover {
-	background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .emblaDotSelected {
-	background-color: #294a70;
+  background-color: #294a70;
 }
 
 .textContainer {
-	flex-basis: 80%;
-	display: flex;
-	flex-direction: column;
+  flex-basis: 80%;
+  display: flex;
+  flex-direction: column;
 }
 
 .productTitle {
-	font-weight: bold;
-	font-size: 12px;
-	margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 10px;
 }
 
 .productPrice {
-	font-size: 11px;
+  font-size: 11px;
 }
 
 .buyContainer {
-	flex-basis: 20%;
-	display: flex;
-	justify-content: flex-end;
+  flex-basis: 20%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .productDetailsContainer {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .wishlistSvgContainer {
 }
 
 .bagSvgContainer {
-	margin-left: 0.5rem;
+  margin-left: 0.5rem;
 }

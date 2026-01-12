@@ -1,125 +1,125 @@
 .modalBody {
-	padding: 0;
-	height: 600px;
+  padding: 0;
+  height: 600px;
 }
 
 .modalHeader {
-	border: none;
+  border: none;
 }
 
 .container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 30px 30px;
 }
 
 .logo {
-	font-size: 14px;
-	font-weight: 400;
-	letter-spacing: 3px;
-	text-align: center;
-	margin-bottom: 24px;
-	color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
 }
 
 .heading {
-	font-size: 32px;
-	font-weight: 400;
-	font-family: "Playfair Display", serif;
-	text-align: center;
-	margin-bottom: 12px;
-	color: #1a1a1a;
+  font-size: 32px;
+  font-weight: 400;
+  font-family: "Playfair Display", serif;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #1a1a1a;
 }
 
 .subheading {
-	font-size: 14px;
-	font-weight: 400;
-	text-align: center;
-	margin-bottom: 30px;
-	color: #666;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #666;
 }
 
 .form {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .input {
-	border: 1px solid #e0e0e0;
-	border-radius: 4px;
-	padding: 12px 16px;
-	font-size: 14px;
-	color: #666;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #666;
 }
 
 .input::placeholder {
-	color: #999;
+  color: #999;
 }
 
 .input:focus {
-	border-color: #333;
+  border-color: #333;
 }
 
 .continueButton {
-	background-color: #d4d4d4;
-	color: #999;
-	border: none;
-	border-radius: 4px;
-	font-size: 14px;
-	font-weight: 500;
-	letter-spacing: 1px;
-	padding: 14px;
-	height: auto;
-	transition: background-color 0.2s ease;
+  background-color: #d4d4d4;
+  color: #999;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 14px;
+  height: auto;
+  transition: background-color 0.2s ease;
 }
 
 .continueButton:hover {
-	background-color: #c0c0c0;
+  background-color: #c0c0c0;
 }
 
 .dividerLabel {
-	font-size: 13px;
-	color: #999;
-	font-weight: 400;
+  font-size: 13px;
+  color: #999;
+  font-weight: 400;
 }
 
 .googleButton {
-	border: 1px solid #e0e0e0;
-	color: #333;
-	border-radius: 4px;
-	font-size: 14px;
-	font-weight: 500;
-	padding: 14px;
-	height: auto;
-	transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
+  color: #333;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px;
+  height: auto;
+  transition: all 0.2s ease;
 }
 
 .googleButton:hover {
-	background-color: #f8f8f8;
-	border-color: #333;
+  background-color: #f8f8f8;
+  border-color: #333;
 }
 
 .terms {
-	font-size: 12px;
-	text-align: center;
-	color: #666;
-	margin-top: 24px;
-	line-height: 1.6;
+  font-size: 12px;
+  text-align: center;
+  color: #666;
+  margin-top: 24px;
+  line-height: 1.6;
 }
 
 .link {
-	color: #333;
-	text-decoration: underline;
-	transition: color 0.2s ease;
+  color: #333;
+  text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
 .link:hover {
-	color: #000;
+  color: #000;
 }
 .validButton {
-	background-color: black !important;
-	color: white;
+  background-color: black !important;
+  color: white;
 }

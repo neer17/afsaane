@@ -1,48 +1,48 @@
 .cardContainer {
-	width: 100%;
-	/* flex-basis: 20%; */
-	display: flex;
-	flex-direction: column;
-	/* padding-bottom: 2.5rem; */
+  width: 100%;
+  /* flex-basis: 20%; */
+  display: flex;
+  flex-direction: column;
+  /* padding-bottom: 2.5rem; */
 }
 
 .imageContainer img {
-	width: 100%;
-	height: auto;
-	border-radius: 2px;
-	overflow: hidden;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  overflow: hidden;
 }
 .textContainer {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .productDescription {
-	width: 100%;
-	font-size: 1rem;
-	margin-bottom: 1rem;
+  width: 100%;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .productPrice {
-	width: 100%;
-	font-size: 12px;
+  width: 100%;
+  font-size: 12px;
 }
 @media (max-width: 1024px) {
-	.cardContainer {
-		width: 100%;
-		/* flex-basis: 50%; */
-		/* display: flex;
+  .cardContainer {
+    width: 100%;
+    /* flex-basis: 50%; */
+    /* display: flex;
         flex-direction: column;
         padding-bottom: 2.5rem;
         height: 436px; */
-	}
-	.textContainer {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+  }
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-	.productDescription {
-		font-size: 1rem;
-	}
+  .productDescription {
+    font-size: 1rem;
+  }
 }

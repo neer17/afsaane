@@ -1,112 +1,112 @@
 body.no-scroll {
-	overflow: hidden;
-	position: fixed;
-	width: 100%;
-	height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 .slidePanel {
-	position: fixed;
-	top: 0;
-	right: -31vw;
-	width: 30vw;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	background-color: white;
-	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-	transition: right 0.3s ease-in-out;
-	z-index: 1000;
-	overflow-y: auto;
+  position: fixed;
+  top: 0;
+  right: -31vw;
+  width: 30vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+  overflow-y: auto;
 }
 
 .slidePanel > div {
-	padding: 20px 20px 0 20px;
+  padding: 20px 20px 0 20px;
 }
 
 .open {
-	right: 0;
+  right: 0;
 }
 
 .overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 999;
-	/* overflow: hidden; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  /* overflow: hidden; */
 }
 
 .panelHeader {
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 3px solid var(--backgroundGrey);
-	margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--backgroundGrey);
+  margin-bottom: 0.5rem;
 }
 .panelHeader h1 {
-	width: 100%;
-	text-align: center;
+  width: 100%;
+  text-align: center;
 }
 .panelHeader > div {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .productsList {
-	overflow: hidden;
-	overflow-y: auto;
-	flex: 1 1;
+  overflow: hidden;
+  overflow-y: auto;
+  flex: 1 1;
 }
 
 .checkoutContainer {
-	width: 100%;
-	height: 15%;
-	padding: 2rem !important;
-	border: 1px solid red;
+  width: 100%;
+  height: 15%;
+  padding: 2rem !important;
+  border: 1px solid red;
 }
 
 .checkoutButton {
-	width: 100%;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	border: none;
-	font-size: 1rem;
-	padding: 1rem;
-	text-transform: uppercase;
-	cursor: pointer;
-	background-color: var(--buttonBackgroundDark);
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: none;
+  font-size: 1rem;
+  padding: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: var(--buttonBackgroundDark);
 }
 
 .checkoutButton > span {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* For iPad */
 
 @media (min-width: 769px) and (max-width: 1025px) {
-	.slidePanel {
-		right: -51vw;
-		width: 50vw;
-	}
-	.open {
-		right: 0px;
-	}
+  .slidePanel {
+    right: -51vw;
+    width: 50vw;
+  }
+  .open {
+    right: 0px;
+  }
 }
 
 /* For mobile */
 @media (max-width: 768px) {
-	.slidePanel {
-		right: -100vw;
-		width: 100vw;
-	}
-	.open {
-		right: 0;
-	}
+  .slidePanel {
+    right: -100vw;
+    width: 100vw;
+  }
+  .open {
+    right: 0;
+  }
 }

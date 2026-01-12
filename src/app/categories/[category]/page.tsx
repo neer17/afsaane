@@ -9,93 +9,89 @@ import { SimpleGrid } from "@mantine/core";
 import { Product } from "@/utils/types";
 
 const ProductCatalog = () => {
-	const { category } = useParams();
-	const [products, setProducts] = useState<Product[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+  const { category } = useParams();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			if (!category) return;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!category) return;
 
-			try {
-				setLoading(true);
-				setError(null);
+      try {
+        setLoading(true);
+        setError(null);
 
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${API_ENDPOINTS.PRODUCTS_BY_CATEGORY.URL}/${category}`,
-					{
-						method: API_ENDPOINTS.PRODUCTS_BY_CATEGORY.METHOD,
-						headers: {
-							"Content-Type": "application/json",
-						},
-					},
-				);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${API_ENDPOINTS.PRODUCTS_BY_CATEGORY.URL}/${category}`,
+          {
+            method: API_ENDPOINTS.PRODUCTS_BY_CATEGORY.METHOD,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
-				if (!response.ok) {
-					throw new Error(
-						`Failed to fetch products: ${response.status}`,
-					);
-				}
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
 
-				const data = await response.json();
-				setProducts(data.data);
-			} catch (err) {
-				setError(
-					err instanceof Error
-						? err.message
-						: "Failed to fetch products",
-				);
-				console.error("Error fetching products:", err);
-			} finally {
-				setLoading(false);
-			}
-		};
+        const data = await response.json();
+        setProducts(data.data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch products",
+        );
+        console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-		fetchProducts();
-	}, [category]);
+    fetchProducts();
+  }, [category]);
 
-	if (loading) {
-		return (
-			<div className={styles.productCatalogContainer}>
-				<div>Loading products...</div>
-			</div>
-		);
-	}
+  if (loading) {
+    return (
+      <div className={styles.productCatalogContainer}>
+        <div>Loading products...</div>
+      </div>
+    );
+  }
 
-	if (error) {
-		return (
-			<div className={styles.productCatalogContainer}>
-				<div>Error: {error}</div>
-			</div>
-		);
-	}
+  if (error) {
+    return (
+      <div className={styles.productCatalogContainer}>
+        <div>Error: {error}</div>
+      </div>
+    );
+  }
 
-	return (
-		<div className={`page ${styles.productCatalogContainer}`}>
-			<SimpleGrid
-				cols={{ base: 2, md: 3, xl: 4 }}
-				spacing={{ base: 10, sm: "xl" }}
-				verticalSpacing={{ base: "md", sm: "xl" }}
-			>
-				{products.map((product) => (
-					<ProductCard
-						key={product.id}
-						slug={product.slug}
-						images={product.images}
-						name={product.name}
-						imageSizes="(max-width: 768px) 50vw, 33.3vw"
-						price={product.price}
-						description={product.description}
-						category={product.category}
-						id={product.id}
-						material={product.material}
-						quantity={product.quantity}
-					/>
-				))}
-			</SimpleGrid>
-		</div>
-	);
+  return (
+    <div className={`page ${styles.productCatalogContainer}`}>
+      <SimpleGrid
+        cols={{ base: 2, md: 3, xl: 4 }}
+        spacing={{ base: 10, sm: "xl" }}
+        verticalSpacing={{ base: "md", sm: "xl" }}
+      >
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            slug={product.slug}
+            images={product.images}
+            name={product.name}
+            imageSizes="(max-width: 768px) 50vw, 33.3vw"
+            price={product.price}
+            description={product.description}
+            category={product.category}
+            id={product.id}
+            material={product.material}
+            quantity={product.quantity}
+          />
+        ))}
+      </SimpleGrid>
+    </div>
+  );
 };
 
 export default ProductCatalog;

@@ -1,0 +1,14 @@
+import { API_ENDPOINTS } from "@/utils/constants";
+
+export async function refreshSession(): Promise<boolean> {
+  try {
+    const res = await fetch(API_ENDPOINTS.REFRESH_TOKEN.URL, {
+      method: API_ENDPOINTS.REFRESH_TOKEN.METHOD,
+      credentials: "include",
+    });
+
+    return res.ok;
+  } catch {
+    return false;
+  }
+}

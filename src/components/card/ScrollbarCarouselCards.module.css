@@ -1,32 +1,32 @@
 .carouselContainer {
-	position: relative;
-	width: 100%;
-	padding-bottom: 2rem;
+  position: relative;
+  width: 100%;
+  padding-bottom: 2rem;
 }
 
 /* CHANGE: Replace Swiper container with Embla carousel styles */
 .emblaContainer {
-	overflow: hidden;
-	width: 100%;
+  overflow: hidden;
+  width: 100%;
 }
 
 .emblaSlides {
-	display: flex;
-	gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .emblaSlide {
-	flex: 0 0 83.33%; /* CHANGE: Equivalent to slidesPerView: 1.2 */
-	min-width: 0;
+  flex: 0 0 83.33%; /* CHANGE: Equivalent to slidesPerView: 1.2 */
+  min-width: 0;
 }
 
 .productCard {
-	background: white;
-	border-radius: 2px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
-	transition: transform 0.3s ease;
-	height: 100%;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  height: 100%;
 }
 
 /* .productCard:hover {
@@ -34,47 +34,47 @@
 } */
 
 .productImage {
-	width: 100%;
+  width: 100%;
 }
 
 .productImage img {
-	width: 100%;
-	height: auto;
+  width: 100%;
+  height: auto;
 }
 
 .productInfo {
-	padding: 15px;
+  padding: 15px;
 }
 
 .productInfo h3 {
-	margin: 0;
-	font-size: 1.1rem;
-	color: #333;
-	margin-bottom: 8px;
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 .price {
-	margin: 0;
-	font-size: 1.2rem;
-	font-weight: bold;
-	color: #2c5282;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c5282;
 }
 
 /* CHANGE: Responsive breakpoints using CSS media queries instead of Swiper breakpoints */
 @media (min-width: 640px) {
-	.emblaSlide {
-		flex: 0 0 calc(50% - 10px); /* 2 slides per view */
-	}
+  .emblaSlide {
+    flex: 0 0 calc(50% - 10px); /* 2 slides per view */
+  }
 }
 
 @media (min-width: 768px) {
-	.emblaSlide {
-		flex: 0 0 calc(33.333% - 13.33px); /* 3 slides per view */
-	}
+  .emblaSlide {
+    flex: 0 0 calc(33.333% - 13.33px); /* 3 slides per view */
+  }
 }
 
 @media (min-width: 1024px) {
-	.emblaSlide {
-		flex: 0 0 calc(25% - 15px); /* 4 slides per view */
-	}
+  .emblaSlide {
+    flex: 0 0 calc(25% - 15px); /* 4 slides per view */
+  }
 }

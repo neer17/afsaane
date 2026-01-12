@@ -11,119 +11,116 @@ import { useRouter } from "next/navigation";
 import LeftArrow from "@/app/svgs/left_arrow.svg";
 
 export default function page() {
-	const router = useRouter();
-	const {
-		cartData,
-		setCartData,
-		getTotalPrice,
-		removeCartData,
-		deleteCartData,
-	} = useCart();
+  const router = useRouter();
+  const {
+    cartData,
+    setCartData,
+    getTotalPrice,
+    removeCartData,
+    deleteCartData,
+  } = useCart();
 
-	const handleQuantityIncrement = async (id: string) => {
-		const item = cartData.get(id);
+  const handleQuantityIncrement = async (id: string) => {
+    const item = cartData.get(id);
 
-		if (item !== undefined) {
-			await setCartData(item);
-		}
-	};
+    if (item !== undefined) {
+      await setCartData(item);
+    }
+  };
 
-	const handleQuantityDecrement = async (id: string) => {
-		await removeCartData(id);
-	};
+  const handleQuantityDecrement = async (id: string) => {
+    await removeCartData(id);
+  };
 
-	const handleDeleteItem = async (id: string) => {
-		await deleteCartData(id);
-	};
+  const handleDeleteItem = async (id: string) => {
+    await deleteCartData(id);
+  };
 
-	const handleGoBack = () => {
-		router.back();
-	};
+  const handleGoBack = () => {
+    router.back();
+  };
 
-	const navigateToCheckoutPage = () => {
-		router.push("/checkout");
-	};
+  const navigateToCheckoutPage = () => {
+    router.push("/checkout");
+  };
 
-	return (
-		<div className={styles.cartDetailsContainer}>
-			<div
-				className={styles.goBackToShoppingContainer}
-				onClick={handleGoBack}
-			>
-				<Image
-					height={25}
-					width={25}
-					src={LeftArrow}
-					alt="Go back to shopping"
-				/>
-				<span>Go back to shopping</span>
-			</div>
-			<div
-				style={{
-					display: "flex",
-				}}
-			>
-				<div className={styles.productsContainer}>
-					{Array.from(cartData.values()).map(
-						({
-							id,
-							name,
-							price,
-							quantity,
-							category,
-							images,
-							material,
-							slug,
-							description,
-						}) => (
-							<CartProductCard
-								key={id}
-								id={id}
-								name={name}
-								price={price}
-								quantity={quantity}
-								images={images}
-								slug={slug}
-								material={material}
-								description={description}
-								category={category}
-								imageSizes="10vw"
-								incrementCallback={handleQuantityIncrement}
-								decrementCallback={handleQuantityDecrement}
-								deleteCartItem={handleDeleteItem}
-							/>
-						),
-					)}
-				</div>
+  return (
+    <div className={styles.cartDetailsContainer}>
+      <div className={styles.goBackToShoppingContainer} onClick={handleGoBack}>
+        <Image
+          height={25}
+          width={25}
+          src={LeftArrow}
+          alt="Go back to shopping"
+        />
+        <span>Go back to shopping</span>
+      </div>
+      <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <div className={styles.productsContainer}>
+          {Array.from(cartData.values()).map(
+            ({
+              id,
+              name,
+              price,
+              quantity,
+              category,
+              images,
+              material,
+              slug,
+              description,
+            }) => (
+              <CartProductCard
+                key={id}
+                id={id}
+                name={name}
+                price={price}
+                quantity={quantity}
+                images={images}
+                slug={slug}
+                material={material}
+                description={description}
+                category={category}
+                imageSizes="10vw"
+                incrementCallback={handleQuantityIncrement}
+                decrementCallback={handleQuantityDecrement}
+                deleteCartItem={handleDeleteItem}
+              />
+            ),
+          )}
+        </div>
 
-				<div className={styles.checkoutContainer}>
-					<div className={styles.shippingDetailsContainer}></div>
-					<div className={styles.orderDetailsContainer}>
-						<h3>Order Summary</h3>
-						<span className={styles.totalPriceContainer}>
-							<h3>Total</h3> <span>{getTotalPrice()}</span>
-						</span>
-					</div>
-					<button
-						className={styles.checkoutButton}
-						onClick={navigateToCheckoutPage}
-					>
-						Checkout
-					</button>
+        <div className={styles.checkoutContainer}>
+          <div className={styles.shippingDetailsContainer}></div>
+          <div className={styles.orderDetailsContainer}>
+            <h3>Order Summary</h3>
+            <span className={styles.totalPriceContainer}>
+              <h3>Total</h3> <span>{getTotalPrice()}</span>
+            </span>
+          </div>
+          <button
+            className={styles.checkoutButton}
+            onClick={navigateToCheckoutPage}
+          >
+            Checkout
+          </button>
 
-					<div className={styles.queryContainer}></div>
-				</div>
-			</div>
+          <div className={styles.queryContainer}></div>
+        </div>
+      </div>
 
-			<div className={styles.checkoutContainerMobile}>
-				<span>{getTotalPrice()}</span>
-				<button
-					className={styles.checkoutButton}
-					onClick={navigateToCheckoutPage}
-				>
-					Checkout
-				</button>
-			</div>
-		</div>
-	);
+      <div className={styles.checkoutContainerMobile}>
+        <span>{getTotalPrice()}</span>
+        <button
+          className={styles.checkoutButton}
+          onClick={navigateToCheckoutPage}
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+  );
 }
