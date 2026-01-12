@@ -22,11 +22,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import CartProductCard from "@/components/card/CartProductCard";
 import { ACTIVE_COUNTRIES, environments, USER_ROLES } from "@/utils/constants";
-import {
-  saveCheckoutState,
-  loadCheckoutState,
-  clearCheckoutState,
-} from "@/utils/idb/checkout.idb";
+import { saveCheckoutState, loadCheckoutState } from "@/utils/idb/checkout.idb";
 import { OtpService } from "@/lib/api/otpService";
 import { DiscountService } from "@/lib/api/discountService";
 import { UserCreationData } from "@/types/user.types";
@@ -35,13 +31,8 @@ import { OrderService } from "@/lib/api/orderService";
 import { AddressType, PaymentMethod, PaymentStatus } from "@/lib/dtos/order";
 
 export default function Checkout() {
-  const {
-    cartData,
-    deleteCartData,
-    getTotalPrice,
-    getTotalQuantity,
-    clearCart,
-  } = useCart();
+  const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
+    useCart();
   const [appliedDiscountCode, setAppliedDiscountCode] = useState<string>("");
 
   const [appliedDiscountResponse, setAppliedDiscountResponse] = useState<{
@@ -209,7 +200,7 @@ export default function Checkout() {
     const categoryIds: string[] = [];
     let orderAmount = 0;
 
-    for (let item of cartDataValues) {
+    for (const item of cartDataValues) {
       // Both product and category ids should be present
       productIds.push(item.id);
       if (item.category && item.category.id) {
