@@ -492,8 +492,8 @@ export default function Checkout() {
     try {
       const response = await OrderService.createOrder(orderData);
       console.info({
-        response
-      })
+        response,
+      });
     } catch (error) {
       console.error("Error in order creation: ", { error });
       throw error;
