@@ -1,4 +1,7 @@
 import { API_ENDPOINTS } from "@/utils/constants";
+import { components } from "@/types/api";
+
+export type DiscountResult = components["schemas"]["DiscountResult"];
 
 export const DiscountService = {
   applyDiscountCode: async ({
@@ -11,9 +14,7 @@ export const DiscountService = {
     appliedProductIds: string[];
     appliedCategoryIds: string[];
     orderAmount: number;
-  }): Promise<Response> => {
-    if (!discountCode) throw new Error("Discount code cannot be empty");
-
+  }): Promise<DiscountResult> => {
     // Validate input parameters
     if (!discountCode || discountCode.trim().length === 0) {
       throw new Error("Discount code is required");
@@ -33,6 +34,11 @@ export const DiscountService = {
       }),
     });
 
-    return response;
+    if (!response.ok) {
+      throw new Error(`Failed to apply discount: ${response.statusText}`);
+    }
+
+    const data: DiscountResult = await response.json();
+    return data;
   },
 };

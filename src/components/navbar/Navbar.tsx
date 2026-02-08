@@ -75,27 +75,11 @@ const NavigationBar: React.FC = () => {
   };
 
   const handleSendOtp = async (phoneNumber: string) => {
-    let response;
     try {
-      response = await OtpService.sendOtp(phoneNumber);
+      await OtpService.sendOtp({ phone: phoneNumber });
     } catch (error) {
       console.error("Error in sending OTP: ", { error });
       throw error;
-    }
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-
-      // Show error message to wait certain minutes before requesting for OTP again
-      if (
-        response.status == 400 &&
-        String(errorData.error).includes("Please wait")
-      ) {
-      }
-
-      throw new Error(
-        errorData.error || `HTTP error! status: ${response.status}`,
-      );
     }
 
     setShowOTPModal(true);
@@ -106,19 +90,11 @@ const NavigationBar: React.FC = () => {
   };
 
   const handleVerifyOtp = async (otp: string) => {
-    let response;
     try {
-      response = await OtpService.verifyOtp(phoneNumber, otp);
+      await OtpService.verifyOtp({ phone: phoneNumber, otp: otp });
     } catch (error) {
       console.error("Error in verifying OTP: ", { error });
       throw error;
-    }
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
     }
 
     let signInResponse;
@@ -127,13 +103,6 @@ const NavigationBar: React.FC = () => {
     } catch (error) {
       console.error("Error in signing in user: ", { error });
       throw error;
-    }
-
-    if (!signInResponse.ok) {
-      const errorData = await signInResponse.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${signInResponse.status}`,
-      );
     }
 
     console.info({

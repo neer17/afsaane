@@ -7,7 +7,6 @@ import { DeliveryFormRef } from "@/components/forms/CheckoutForm";
 import Rupee from "@/components/symbols/Rupee";
 import { useMediaQuery } from "@mantine/hooks";
 import { AuthProvider as SupabaseAuthProvider } from "@/context/SupabaseAuthContext";
-
 import {
   Paper,
   Grid,
@@ -24,24 +23,22 @@ import CartProductCard from "@/components/card/CartProductCard";
 import { ACTIVE_COUNTRIES, environments, USER_ROLES } from "@/utils/constants";
 import { saveCheckoutState, loadCheckoutState } from "@/utils/idb/checkout.idb";
 import { OtpService } from "@/lib/api/otpService";
-import { DiscountService } from "@/lib/api/discountService";
-import { UserCreationData } from "@/types/user.types";
-import { UserService } from "@/lib/api/userService";
+import { DiscountService, DiscountResult } from "@/lib/api/discountService";
+import {
+  CreateUserRequest,
+  CreateUserResponse,
+  UserService,
+} from "@/lib/api/userService";
 import { OrderService } from "@/lib/api/orderService";
-import { AddressType, PaymentMethod, PaymentStatus } from "@/lib/dtos/order";
+import { DeliveryFormValues } from "@/types/ui/checkoutForm";
 
 export default function Checkout() {
   const { cartData, deleteCartData, getTotalPrice, getTotalQuantity } =
     useCart();
   const [appliedDiscountCode, setAppliedDiscountCode] = useState<string>("");
 
-  const [appliedDiscountResponse, setAppliedDiscountResponse] = useState<{
-    couponId: string;
-    isValid: boolean;
-    discountAmount: number;
-    finalAmount: number;
-    message?: string;
-  }>();
+  const [appliedDiscountResponse, setAppliedDiscountResponse] =
+    useState<DiscountResult>();
 
   const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
 
@@ -218,13 +215,7 @@ export default function Checkout() {
     )
       return;
 
-    let discountResponse: {
-      couponId: string;
-      isValid: boolean;
-      discountAmount: number;
-      finalAmount: number;
-      message?: string;
-    } = { couponId: "", isValid: false, discountAmount: 0, finalAmount: 0 };
+    let discountResponse: DiscountResult = { isValid: false };
     try {
       discountResponse = await applyDiscountCode({
         discountCode: appliedDiscountCode,
@@ -249,13 +240,7 @@ export default function Checkout() {
     appliedProductIds: string[];
     appliedCategoryIds: string[];
     orderAmount: number;
-  }): Promise<{
-    couponId: string;
-    isValid: boolean;
-    discountAmount: number;
-    finalAmount: number;
-    message?: string;
-  }> => {
+  }): Promise<DiscountResult> => {
     let response;
     try {
       response = await DiscountService.applyDiscountCode({
@@ -269,14 +254,7 @@ export default function Checkout() {
       throw error;
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
-    }
-
-    return response.json();
+    return response;
   };
 
   const handleSendOtp = async (phoneNumber: string) => {
@@ -297,7 +275,7 @@ export default function Checkout() {
 
     let response;
     try {
-      response = await OtpService.sendOtp(phoneNumber);
+      response = await OtpService.sendOtp({ phone: phoneNumber });
     } catch (error) {
       console.error("Error in sending OTP: ", { error });
       throw error;
@@ -345,7 +323,10 @@ export default function Checkout() {
 
     let response;
     try {
-      response = await OtpService.verifyOtp(phoneNumber, verificationCode);
+      response = await OtpService.verifyOtp({
+        phone: phoneNumber,
+        otp: verificationCode,
+      });
     } catch (error) {
       console.error("Error in verifying OTP: ", { error });
       throw error;
@@ -371,14 +352,8 @@ export default function Checkout() {
   };
 
   const createUser = async (
-    userData: UserCreationData,
-  ): Promise<{
-    email: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    userId: string;
-  }> => {
+    userData: CreateUserRequest,
+  ): Promise<CreateUserResponse> => {
     let response;
     try {
       response = await UserService.createUser(userData);
@@ -387,18 +362,10 @@ export default function Checkout() {
       throw error;
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-
-      throw new Error(
-        errorData.error || `HTTP error! status: ${response.status}`,
-      );
-    }
-
-    return response.json();
+    return response;
   };
 
-  const handlePayNow = async (data: any) => {
+  const handlePayNow = async (data: DeliveryFormValues) => {
     // TODO: makePayment()
 
     console.log("Payment data:", data, {
@@ -409,7 +376,6 @@ export default function Checkout() {
       shippingFirstName,
       shippingLastName,
       email,
-      country,
       userId,
       shippingAddress,
       shippingLandmark,
@@ -431,37 +397,38 @@ export default function Checkout() {
     // TODO: can be user id when user is created
     const supabaseId = userId;
 
+    const addresses = [];
     const shippingAddressObj = {
       firstName: shippingFirstName,
       lastName: shippingLastName,
-      address: shippingAddress,
-      city: shippingCity,
+      address: shippingAddress!,
+      city: shippingCity!,
       street: shippingLandmark,
-      state: shippingState,
+      state: shippingState || "",
       country: ACTIVE_COUNTRIES.INDIA,
-      pinCode: shippingPinCode,
+      pinCode: shippingPinCode || "",
       phone: shippingPhone,
     };
+    addresses.push(shippingAddressObj);
 
-    const billingAddressObj = {
-      firstName: billingFirstName,
-      lastName: billingLastName,
-      address: billingAddress,
-      city: billingCity,
-      street: billingLandmark,
-      state: billingState,
-      country: ACTIVE_COUNTRIES.INDIA,
-      pinCode: billingPinCode,
-      phone: billingPhone,
-    };
+    let billingAddressObj;
+    if (useDifferentBilling === true) {
+      billingAddressObj = {
+        firstName: billingFirstName!,
+        lastName: billingLastName!,
+        address: billingAddress!,
+        city: billingCity!,
+        street: billingLandmark || "",
+        state: billingState!,
+        country: ACTIVE_COUNTRIES.INDIA,
+        pinCode: billingPinCode!,
+        phone: billingPhone!,
+      };
+      addresses.push(billingAddressObj);
+    }
 
-    let user: {
-      email: string;
-      firstName: string;
-      lastName: string;
-      phone: string;
-      userId: string;
-    };
+    let user: CreateUserResponse;
+
     try {
       user = await createUser({
         ...(supabaseId && { supabaseId: supabaseId }),
@@ -469,10 +436,10 @@ export default function Checkout() {
         lastName: shippingLastName,
         email: email,
         phone: shippingPhone,
-        country: country,
+        country: "INDIA",
         role: USER_ROLES.CUSTOMER,
         phoneVerified: isPhoneVerified,
-        addresses: [shippingAddressObj, billingAddressObj],
+        addresses: addresses,
       });
     } catch (error) {
       console.error("Error in user creation: ", { error });
@@ -496,45 +463,40 @@ export default function Checkout() {
     console.info({ items });
 
     const orderData = {
-      userId: user.userId,
+      userId: user.userId!,
       items,
       paymentId: "PAYMENT_ID_PLACEHOLDER",
       ...(appliedDiscountResponse?.isValid && {
         discountCode: appliedDiscountCode,
       }),
-      paymentMethod: "PREPAID" as PaymentMethod,
-      paymentStatus: "PAID" as PaymentStatus,
+      paymentMethod: "PREPAID" as const,
+      paymentStatus: "PAID" as const,
       shippingAddress: {
-        countryCode: "+91",
-        isDefault: true,
-        addressType: (useDifferentBilling === true
-          ? "SHIPPING"
-          : "BOTH") as AddressType,
-        ...shippingAddressObj,
+        address: shippingAddressObj.address,
+        city: shippingAddressObj.city,
+        state: shippingAddressObj.state,
+        country: shippingAddressObj.country,
+        pinCode: shippingAddressObj.pinCode,
       },
       ...(useDifferentBilling === true && {
         billingAddress: {
-          countryCode: "+91",
-          isDefault: false,
-          addressType: "BILLING" as AddressType,
-          ...billingAddressObj,
+          address: billingAddressObj!.address,
+          city: billingAddressObj!.city,
+          state: billingAddressObj!.state,
+          country: billingAddressObj!.country,
+          pinCode: billingAddressObj!.pinCode,
         },
       }),
     };
 
-    let response;
     try {
-      response = await OrderService.createOrder(orderData);
+      const response = await OrderService.createOrder(orderData);
+      console.info({
+        response
+      })
     } catch (error) {
       console.error("Error in order creation: ", { error });
       throw error;
-    }
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
     }
 
     // Clear saved checkout form and cart data on successful order creation

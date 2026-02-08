@@ -1,15 +1,16 @@
 import { API_ENDPOINTS } from "@/utils/constants";
-import { UserCreationData } from "@/types/user.types";
+
+import type { components } from "@/types/api";
+export type CreateUserRequest = components["schemas"]["CreateUserRequest"];
+export type CreateUserResponse = components["schemas"]["User"];
+
+export type UserSignInRequest = components["schemas"]["SignInRequest"];
+export type UserSignInResponse = components["schemas"]["UserAuthResponse"];
 
 export const UserService = {
-  createUser: async (userData: UserCreationData): Promise<Response> => {
-    // if (!phoneNumber) return Promise.reject();
-
-    // Validate input parameters
-    // if (!phoneNumber || phoneNumber.trim().length !== 10) {
-    //   throw new Error("Phone number should be 10 digits long");
-    // }
-
+  createUser: async (
+    userData: CreateUserRequest,
+  ): Promise<CreateUserResponse> => {
     const CREATE_USER_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.USER_CREATE.URL}`;
     const response = await fetch(CREATE_USER_ENDPOINT, {
       method: API_ENDPOINTS.USER_CREATE.METHOD,
@@ -20,12 +21,15 @@ export const UserService = {
       body: JSON.stringify(userData),
     });
 
-    return response;
+    if (!response.ok) {
+      throw new Error(`Error creating user: ${response.statusText}`);
+    }
+
+    return response.json();
   },
-  signIn: async (userCredentials: {
-    phone?: string;
-    googleAuthId?: string;
-  }): Promise<Response> => {
+  signIn: async (
+    userCredentials: UserSignInRequest,
+  ): Promise<UserSignInResponse> => {
     const SIGNIN_USER_ENDPOINT = `${process.env["NEXT_PUBLIC_BACKEND_BASE_URL"]}${API_ENDPOINTS.USER_SIGNIN.URL}`;
     const response = await fetch(SIGNIN_USER_ENDPOINT, {
       method: API_ENDPOINTS.USER_SIGNIN.METHOD,
@@ -36,6 +40,10 @@ export const UserService = {
       body: JSON.stringify(userCredentials),
     });
 
-    return response;
+    if (!response.ok) {
+      throw new Error(`Error signing in user: ${response.statusText}`);
+    }
+
+    return response.json();
   },
 };
