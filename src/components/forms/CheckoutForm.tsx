@@ -165,90 +165,54 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
     // Load saved form data on component mount
     useEffect(() => {
       // Prevent double-loading in React Strict Mode
-      if (hasLoadedRef.current) {
-        console.log("⏭️ Skipping duplicate load (React Strict Mode)");
-        return;
-      }
+      if (hasLoadedRef.current) return;
 
       hasLoadedRef.current = true;
 
       const loadSavedFormData = async () => {
         try {
-          console.log("🔍 Attempting to load checkout state from IndexedDB...");
           const savedState = await loadCheckoutState();
-          console.log("📦 Loaded state from IndexedDB:", savedState);
 
           if (savedState && savedState.formData) {
-            console.log("✅ Found saved form data, restoring...");
-            console.log("Form data to restore:", savedState.formData);
-
-            // Restore form values
             form.setValues(savedState.formData);
 
-            // Restore billing preference
             const savedUseDifferentBilling =
               savedState.useDifferentBilling || false;
             setUseDifferentBilling(savedUseDifferentBilling);
-            console.log(
-              "Billing preference restored:",
-              savedUseDifferentBilling,
-            );
 
-            // Open billing collapse if it was previously opened
             if (savedUseDifferentBilling) {
               open();
             } else {
               close();
             }
-
-            console.log("✅ Form hydration complete");
-          } else {
-            console.log("ℹ️ No saved form data found in IndexedDB");
           }
         } catch (error) {
-          console.error("❌ Failed to load saved form data:", error);
+          console.error("Failed to load saved form data:", error);
         } finally {
           setIsFormLoaded(true);
           // Allow saving after a short delay to ensure form is fully hydrated
           setTimeout(() => {
             isLoadingRef.current = false;
-            console.log("✅ Form is now ready for auto-save");
           }, 100);
         }
       };
 
       loadSavedFormData();
-    }, []); // Empty dependency array - only run once on mount
+    }, []);
 
     // Autofill user's email from GoogleOneTap Dialog
     useEffect(() => {
-      console.log("============== i am ALSO running ===========");
       if (user) {
         form.setFieldValue("email", user.email ?? "");
       }
     }, [user]);
 
-    // TODO: Hack to logout user
-    //   useEffect(() => {
-    //   logout()
-    // }, [])
-
     // Save form data to IDB whenever form values change (only after initial load)
     useEffect(() => {
-      console.log("==============   i am running =============");
-      // Skip saving during initial load
-      if (isLoadingRef.current || !isFormLoaded) {
-        console.log("⏸️ Skipping save - form is loading");
-        return;
-      }
+      if (isLoadingRef.current || !isFormLoaded) return;
 
       const timeoutId = setTimeout(async () => {
         try {
-          console.log("💾 Saving form data to IndexedDB...");
-          console.log("Form values being saved:", form.values);
-          console.log("useDifferentBilling:", useDifferentBilling);
-
-          // Create the data object with both form values and billing preference
           const dataToSave = {
             ...form.values,
             verificationCode: "",
@@ -256,21 +220,16 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
 
           await saveCheckoutState(
             dataToSave,
-            false, // isVerificationCodeSent - handled by parent
-            false, // isVerificationCodeVerified - handled by parent
-            null, // otpExpiryTime - handled by parent
-            0, // timeRemaining - handled by parent
+            false,
+            false,
+            null,
+            0,
             useDifferentBilling,
           );
-          console.log("✅ Form data saved to IndexedDB successfully");
-
-          // Verify the save by reading it back
-          const verification = await loadCheckoutState();
-          console.log("🔍 Verification read:", verification);
         } catch (error) {
-          console.error("❌ Failed to save form data:", error);
+          console.error("Failed to save form data:", error);
         }
-      }, 500); // Debounce saves by 500ms
+      }, 500);
 
       return () => clearTimeout(timeoutId);
     }, [form.values, useDifferentBilling, isFormLoaded]);
@@ -285,6 +244,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
     // Send OTP
     const handleSendOtp = async () => {
       const result = form.validateField("shippingPhone");
+
       if (result.hasError) return;
 
       try {
@@ -399,10 +359,6 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
       );
     }
 
-    console.info({
-      user,
-    });
-
     return (
       <Box>
         <form onSubmit={form.onSubmit(handleFormSubmit)}>
@@ -421,7 +377,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
               />
 
               <Grid gutter="md">
-                <Grid.Col span={6}>
+                <Grid.Col span={{ base: 12, sm: 6 }}>
                   <TextInput
                     label="First name"
                     placeholder="Enter first name"
@@ -429,7 +385,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                     required
                   />
                 </Grid.Col>
-                <Grid.Col span={6}>
+                <Grid.Col span={{ base: 12, sm: 6 }}>
                   <TextInput
                     label="Last name"
                     placeholder="Enter last name"
@@ -461,7 +417,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
               />
 
               <Grid gutter="md">
-                <Grid.Col span={4}>
+                <Grid.Col span={{ base: 12, sm: 4 }}>
                   <TextInput
                     label="City"
                     placeholder="Enter city"
@@ -469,7 +425,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                     required
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={{ base: 12, sm: 4 }}>
                   <Select
                     label="State"
                     placeholder="Select state"
@@ -479,7 +435,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                     searchable
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={{ base: 12, sm: 4 }}>
                   <TextInput
                     label="PIN code"
                     placeholder="Enter PIN code"
@@ -607,7 +563,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                           />
 
                           <Grid gutter="md">
-                            <Grid.Col span={6}>
+                            <Grid.Col span={{ base: 12, sm: 6 }}>
                               <TextInput
                                 label="First name"
                                 placeholder="Enter first name"
@@ -615,7 +571,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                                 required
                               />
                             </Grid.Col>
-                            <Grid.Col span={6}>
+                            <Grid.Col span={{ base: 12, sm: 6 }}>
                               <TextInput
                                 label="Last name"
                                 placeholder="Enter last name"
@@ -639,7 +595,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                           />
 
                           <Grid gutter="md">
-                            <Grid.Col span={4}>
+                            <Grid.Col span={{ base: 12, sm: 4 }}>
                               <TextInput
                                 label="City"
                                 placeholder="Enter city"
@@ -647,7 +603,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                                 required
                               />
                             </Grid.Col>
-                            <Grid.Col span={4}>
+                            <Grid.Col span={{ base: 12, sm: 4 }}>
                               <Select
                                 label="State"
                                 placeholder="Select state"
@@ -657,7 +613,7 @@ const DeliveryForm = forwardRef<DeliveryFormRef, DeliveryFormProps>(
                                 searchable
                               />
                             </Grid.Col>
-                            <Grid.Col span={4}>
+                            <Grid.Col span={{ base: 12, sm: 4 }}>
                               <TextInput
                                 label="PIN code"
                                 placeholder="Enter PIN code"

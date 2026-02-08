@@ -66,10 +66,7 @@ export default function Checkout() {
       try {
         const savedState = await loadCheckoutState();
         if (savedState) {
-          setIsVerificationCodeSent(savedState.isVerificationCodeSent);
-          setIsVerificationCodeVerified(savedState.isVerificationCodeVerified);
-          setOtpExpiryTime(savedState.otpExpiryTime);
-          setTimeRemaining(savedState.timeRemaining);
+          // OTP state is intentionally NOT restored on refresh
 
           // Set form data in the form ref if available
           if (formRef.current && savedState.formData) {
@@ -100,23 +97,17 @@ export default function Checkout() {
 
         await saveCheckoutState(
           { ...formData },
-          isVerificationCodeSent,
-          isVerificationCodeVerified,
-          otpExpiryTime,
-          timeRemaining,
+          false,
+          false,
+          null,
+          0,
           useDifferentBilling,
         );
       }
     };
 
     saveState();
-  }, [
-    isVerificationCodeSent,
-    isVerificationCodeVerified,
-    otpExpiryTime,
-    timeRemaining,
-    isStateLoaded,
-  ]);
+  }, [isStateLoaded]);
 
   // Timer effect
   useEffect(() => {
@@ -142,42 +133,30 @@ export default function Checkout() {
     };
   }, [otpExpiryTime, timeRemaining]);
 
-  // Clear state on successful payment or when leaving
+  // Save form state when tab becomes hidden
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Don't clear on page refresh, only on navigation away
-    };
-
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden" && formRef.current) {
-        // Save current state when tab becomes hidden
         const formData = formRef.current.getFormData();
         const useDifferentBilling = formRef.current.getUseDifferentBilling();
 
         saveCheckoutState(
           { ...formData },
-          isVerificationCodeSent,
-          isVerificationCodeVerified,
-          otpExpiryTime,
-          timeRemaining,
+          false,
+          false,
+          null,
+          0,
           useDifferentBilling,
         );
       }
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [
-    isVerificationCodeSent,
-    isVerificationCodeVerified,
-    otpExpiryTime,
-    timeRemaining,
-  ]);
+  }, []);
 
   const handleDeleteItem = async (id: string) => {
     await deleteCartData(id);
@@ -260,9 +239,8 @@ export default function Checkout() {
   const handleSendOtp = async (phoneNumber: string) => {
     // For development purposes
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const skipOtpVerification = Boolean(
-      process.env.NEXT_PUBLIC_SKIP_OTP_VERIFICATION,
-    );
+    const skipOtpVerification =
+      process.env.NEXT_PUBLIC_SKIP_OTP_VERIFICATION === "true";
 
     if (
       environment === environments.DEVELOPMENT &&
@@ -368,10 +346,6 @@ export default function Checkout() {
   const handlePayNow = async (data: DeliveryFormValues) => {
     // TODO: makePayment()
 
-    console.log("Payment data:", data, {
-      cartData,
-    });
-
     const {
       shippingFirstName,
       shippingLastName,
@@ -446,10 +420,6 @@ export default function Checkout() {
       return;
     }
 
-    console.info({
-      user,
-    });
-
     const cartValues = cartData.values();
 
     const items: { productId: string; quantity: number }[] = [];
@@ -459,8 +429,6 @@ export default function Checkout() {
         quantity,
       });
     });
-
-    console.info({ items });
 
     const orderData = {
       userId: user.userId!,
@@ -490,10 +458,7 @@ export default function Checkout() {
     };
 
     try {
-      const response = await OrderService.createOrder(orderData);
-      console.info({
-        response,
-      });
+      await OrderService.createOrder(orderData);
     } catch (error) {
       console.error("Error in order creation: ", { error });
       throw error;
@@ -511,10 +476,6 @@ export default function Checkout() {
     }
   };
 
-  console.info({
-    appliedDiscountResponse,
-  });
-
   // Don't render until state is loaded
   if (!isStateLoaded) {
     return (
@@ -531,8 +492,8 @@ export default function Checkout() {
   return (
     <SupabaseAuthProvider>
       <div className={styles.container}>
-        <Paper p="xl" pb={50}>
-          <Grid overflow="hidden">
+        <Paper p={{ base: "sm", md: "xl" }} pb={isSmallerThan1024 ? 80 : 50}>
+          <Grid gutter={{ base: "sm", md: "md" }}>
             <Grid.Col span={{ base: 12, lg: 7 }}>
               <CheckoutForm
                 ref={formRef}

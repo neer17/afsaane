@@ -27,7 +27,6 @@
     "@supabase/supabase-js": "^2.76.1",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "firebase": "^11.1.0",
     "google-one-tap": "^1.0.6",
     "idb": "^8.0.1",
     "joi": "^18.0.1",

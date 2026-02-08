@@ -39,7 +39,7 @@ Pre-commit hook runs: `yarn format && yarn lint && yarn run build`
 
 - `src/app/` - Next.js App Router pages and layouts
 - `src/components/` - React components organized by feature (banner/, card/, forms/, modal/, navbar/)
-- `src/context/` - React context providers (CartContext, AuthContext, SupabaseAuthContext)
+- `src/context/` - React context providers (CartContext, SupabaseAuthContext)
 - `src/lib/api/` - API service modules (orderService, userService, otpService, discountService)
 - `src/lib/supabase/` - Supabase client setup
 - `src/types/` - TypeScript types
@@ -75,5 +75,4 @@ export type CreateOrderRequest = components["schemas"]["OrderInput"];
 
 - **Supabase**: Database and auth infrastructure (images stored in Supabase storage)
 - **Mantine**: UI component library with notifications
-- **Firebase**: Google Sign-In integration
 - **Backend API**: Separate service for orders, products, users, auth (API endpoints defined in `src/utils/constants.tsx`)
